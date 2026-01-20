@@ -56,12 +56,15 @@ This project aims to clearly record and display purchase prices, current market 
 ## Planned Folder Structure
 PreciousMetalsManager/
 │
-├─ docs/                  
-├─ src/                   
-│  ├─ Models/             
-│  ├─ Views/              
-│  ├─ ViewModels/        
-│  ├─ Services/           
-│  └─ App.xaml            
-├─ tests/                
-└─ README.md
+├─ docs/                   
+├─ tests/                  
+├─ README.md
+├─ .gitignore
+│
+└─ PreciousMetalsManager/  
+   ├─ Models/              
+   ├─ Views/               
+   ├─ ViewModels/          
+   ├─ Services/            
+   ├─ App.xaml             
+   └─ MainWindow.xaml
