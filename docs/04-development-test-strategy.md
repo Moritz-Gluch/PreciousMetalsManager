@@ -1,4 +1,4 @@
-# Development & Test Strategy: Precious Metals Portfolio Manager
+# Development & Test Strategy: 
 
 This document outlines the development and testing approach to ensure reliable implementation of features.
 

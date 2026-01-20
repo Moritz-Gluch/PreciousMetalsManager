@@ -1,4 +1,4 @@
-# Quality Assurance: Precious Metals Portfolio Manager
+# Quality Assurance: 
 
 This document outlines the testing and QA measures to ensure the quality of the application.
 

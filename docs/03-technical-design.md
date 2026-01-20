@@ -1,24 +1,41 @@
-# Technical Design – Edelmetallverwaltung
+# Technical Design: 
 
-## Architektur
-- MVVM-Pattern
-- Layers: UI → ViewModel → Services → Repository → DB
+## 1. Architecture
+- WPF application using MVVM pattern
+- Separation of concerns:
+  - Models → data representation (Metal, Portfolio)
+  - ViewModels → handle business logic, UI binding, calculations
+  - Views → XAML UI, DataGrids, dialogs, charts
 
-## Datenbankmodell
-| Feld | Typ | Beschreibung |
-|------|-----|-------------|
-| Id   | int | Primärschlüssel |
-| Typ  | string | Edelmetalltyp (Gold/Silber/Platin) |
-| Menge | decimal | Anzahl / Gewicht |
-| Kaufpreis | decimal | Preis beim Kauf |
-| Datum | DateTime | Kaufdatum |
+## 2. Folder Structure
+Refer to `00-project-overview.md` for the complete folder structure of the project.
 
-## UI-Konzept
-- Tabellenansicht für alle Edelmetalle
-- Diagramme für Historie
-- Buttons für CRUD-Funktionen
-- Menü für Export / Optionen
+## 3. Database Design (for Local Storage)
+- SQLite local database
+- Table: Metals
+  - Id (Primary Key)
+  - MetalType (string)
+  - Variant (string)
+  - Purity (decimal)
+  - Weight (decimal)
+  - Quantity (decimal)
+  - PurchasePrice (decimal)
+  - PurchaseDate (date)
+  - CurrentValue (decimal)
+  - TotalValue (decimal)
 
-## Logging & Fehlerbehandlung
-- Exceptions werden geloggt
-- Fehler werden dem Nutzer in einer MessageBox angezeigt
+## 4. Services
+- DatabaseService → handles CRUD operations to SQLite
+- CalculationService → computes CurrentValue and TotalValue
+- ApiService → fetches current market prices (optional)
+- ExportService → CSV/Excel export
+
+## 5. UI Design
+- Main window:
+  - DataGrid for holdings (columns as defined in STORY-01)
+  - Add/Edit/Delete buttons
+  - Filter/Sort controls (STORY-02)
+- Dialog windows:
+  - Add/Edit dialogs for holdings
+- Charts: LiveCharts2 / OxyPlot (future enhancement)
+- Styling: MahApps.Metro or MaterialDesignInXAML
