@@ -6,7 +6,37 @@
         xmlns:local="clr-namespace:PreciousMetalsManager"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
 
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Left" Margin="0,0,0,10">
+            <Button Content="Add" Width="80" Click="AddButton_Click" Margin="0,0,5,0"/>
+            <Button Content="Edit" Width="80" Click="EditButton_Click" Margin="0,0,5,0"/>
+            <Button Content="Delete" Width="80" Click="DeleteButton_Click"/>
+        </StackPanel>
+
+        <DataGrid x:Name="MainDataGrid" 
+                  ItemsSource="{Binding Holdings}" 
+                  AutoGenerateColumns="False" 
+                  Grid.Row="1" 
+                  CanUserAddRows="False"
+                  IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Metal Type" Binding="{Binding MetalType}" />
+                <DataGridTextColumn Header="Form" Binding="{Binding Form}" />
+                <DataGridTextColumn Header="Purity" Binding="{Binding Purity}" />
+                <DataGridTextColumn Header="Weight" Binding="{Binding Weight}" />
+                <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" />
+                <DataGridTextColumn Header="Purchase Price" Binding="{Binding PurchasePrice}" />
+                <DataGridTextColumn Header="Purchase Date" Binding="{Binding PurchaseDate}" />
+                <DataGridTextColumn Header="Current Value" Binding="{Binding CurrentValue}" />
+                <DataGridTextColumn Header="Total Value" Binding="{Binding TotalValue}" />
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
+
 </Window>
