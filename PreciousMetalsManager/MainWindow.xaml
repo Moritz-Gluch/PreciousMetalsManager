@@ -19,7 +19,12 @@
             <Button Content="Delete" Width="80" Click="DeleteButton_Click"/>
         </StackPanel>
 
-        <DataGrid x:Name="MainDataGrid" ItemsSource="{Binding Holdings}" AutoGenerateColumns="False" Grid.Row="1" CanUserAddRows="False">
+        <DataGrid x:Name="MainDataGrid" 
+                  ItemsSource="{Binding Holdings}" 
+                  AutoGenerateColumns="False" 
+                  Grid.Row="1" 
+                  CanUserAddRows="False"
+                  IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Metal Type" Binding="{Binding MetalType}" />
                 <DataGridTextColumn Header="Form" Binding="{Binding Form}" />
