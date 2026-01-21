@@ -14,13 +14,13 @@ using PreciousMetalsManager.Models;
 namespace PreciousMetalsManager.Views
 {
     /// <summary>
-    /// Interaktionslogik für AddHoldingWindow.xaml
+    /// Interaktionslogik für HoldingDialog.xaml
     /// </summary>
-    public partial class AddHoldingWindow : Window
+    public partial class HoldingDialog : Window
     {
         public MetalHolding NewHolding { get; private set; }
 
-        public AddHoldingWindow()
+        public HoldingDialog()
         {
             InitializeComponent();
 
