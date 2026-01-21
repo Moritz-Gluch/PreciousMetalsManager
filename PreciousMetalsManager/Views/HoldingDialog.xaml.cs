@@ -14,7 +14,8 @@ using PreciousMetalsManager.Models;
 namespace PreciousMetalsManager.Views
 {
     /// <summary>
-    /// Interaktionslogik für HoldingDialog.xaml
+    /// Performs basic UI-level input validation.
+    /// Business-level validation may be moved to the ViewModel in later iterations.
     /// </summary>
     public partial class HoldingDialog : Window
     {
@@ -31,6 +32,8 @@ namespace PreciousMetalsManager.Views
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
+
+            // Goes sure no field is empty or unvalid
             if (MetalTypeComboBox.SelectedItem == null)
             {
                 MessageBox.Show("Please select a metal type.");
@@ -73,6 +76,7 @@ namespace PreciousMetalsManager.Views
                 return;
             }
 
+            // Saves new values
             NewHolding = new MetalHolding
             {
                 MetalType = (MetalType)MetalTypeComboBox.SelectedItem,
