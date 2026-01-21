@@ -4,11 +4,11 @@ using PreciousMetalsManager.Models;
 
 namespace PreciousMetalsManager.ViewModels
 {
-    public class MainViewModel
+    public class ViewModel
     {
         public ObservableCollection<MetalHolding> Holdings { get; }
 
-        public MainViewModel()
+        public ViewModel()
         {
             Holdings = new ObservableCollection<MetalHolding>();
 
