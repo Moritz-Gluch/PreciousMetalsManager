@@ -75,5 +75,31 @@ namespace PreciousMetalsManager
                 }
             }
         }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ViewModel vm)
+            {
+                if (MainDataGrid.SelectedItem is Models.MetalHolding selected)
+                {
+                    // Confirmation box
+                    var result = MessageBox.Show(
+                        "Are you sure you want to delete this holding?",
+                        "Confirm Delete",
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Warning
+                    );
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        vm.Holdings.Remove(selected); 
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Please select a holding to delete.");
+                }
+            }
+        }
     }
 }
