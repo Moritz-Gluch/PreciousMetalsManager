@@ -1,4 +1,5 @@
 ﻿using PreciousMetalsManager.ViewModels;
+using PreciousMetalsManager.Views;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,6 +22,18 @@ namespace PreciousMetalsManager
         {
             InitializeComponent();
             DataContext = new ViewModel();
+        }
+
+        private void AddButton_Click(object sender, RoutedEventArgs e)
+        {
+            var addWindow = new AddHoldingWindow();
+            if (addWindow.ShowDialog() == true)
+            {
+                if (DataContext is ViewModel vm)
+                {
+                    vm.Holdings.Add(addWindow.NewHolding);
+                }
+            }
         }
     }
 }
