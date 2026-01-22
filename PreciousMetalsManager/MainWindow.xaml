@@ -4,11 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PreciousMetalsManager"
+        xmlns:models="clr-namespace:PreciousMetalsManager.Models"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
 
     <Grid Margin="10">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
@@ -19,10 +21,24 @@
             <Button Content="Delete" Width="80" Click="DeleteButton_Click"/>
         </StackPanel>
 
-        <DataGrid x:Name="MainDataGrid" 
-                  ItemsSource="{Binding Holdings}" 
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,10">
+            <Label Content="Metal Type:" VerticalAlignment="Center"/>
+            <ComboBox x:Name="MetalTypeFilterComboBox"
+                      Width="120"
+                      Margin="5,0"
+                      ItemsSource="{x:Static models:MetalTypeHelper.GetValues}"
+                      SelectedItem="{Binding SelectedMetalTypeFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Content="Form/Variant:" VerticalAlignment="Center"/>
+            <TextBox x:Name="FormFilterTextBox"
+                     Width="120"
+                     Margin="5,0"
+                     Text="{Binding FormFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+
+        <DataGrid x:Name="MainDataGrid"
+          ItemsSource="{Binding FilteredHoldings}"
                   AutoGenerateColumns="False" 
-                  Grid.Row="1" 
+                  Grid.Row="2" 
                   CanUserAddRows="False"
                   IsReadOnly="True">
             <DataGrid.Columns>
