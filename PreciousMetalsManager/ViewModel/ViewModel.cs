@@ -59,6 +59,45 @@ namespace PreciousMetalsManager.ViewModels
                 TotalValue = 6000m
             });
 
+            Holdings.Add(new MetalHolding
+            {
+                MetalType = MetalType.Silver,
+                Form = "Bar",
+                Purity = 625m,
+                Weight = 100m,
+                Quantity = 1,
+                PurchasePrice = 25m,
+                PurchaseDate = DateTime.Now,
+                CurrentValue = 30m,
+                TotalValue = 30m
+            });
+
+            Holdings.Add(new MetalHolding
+            {
+                MetalType = MetalType.Palladium,
+                Form = "Coin",
+                Purity = 999.9m,
+                Weight = 50m,
+                Quantity = 1,
+                PurchasePrice = 5800m,
+                PurchaseDate = DateTime.Now,
+                CurrentValue = 500m,
+                TotalValue = 6400m
+            });
+
+            Holdings.Add(new MetalHolding
+            {
+                MetalType = MetalType.Platinum,
+                Form = "Coin",
+                Purity = 999.9m,
+                Weight = 190m,
+                Quantity = 1,
+                PurchasePrice = 500m,
+                PurchaseDate = DateTime.Now,
+                CurrentValue = 600m,
+                TotalValue = 600m
+            });
+
             FilteredHoldings = CollectionViewSource.GetDefaultView(Holdings);
             FilteredHoldings.Filter = FilterPredicate;
         }

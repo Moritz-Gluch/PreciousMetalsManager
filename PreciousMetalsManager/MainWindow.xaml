@@ -40,11 +40,22 @@
         </StackPanel>
 
         <DataGrid x:Name="MainDataGrid"
-          ItemsSource="{Binding FilteredHoldings}"
-                  AutoGenerateColumns="False" 
-                  Grid.Row="2" 
+                  ItemsSource="{Binding FilteredHoldings}"
+                  AutoGenerateColumns="False"
+                  Grid.Row="2"
                   CanUserAddRows="False"
-                  IsReadOnly="True">
+                  IsReadOnly="True"
+                  AlternationCount="2">
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="Background" Value="White"/>
+                    <Style.Triggers>
+                        <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                            <Setter Property="Background" Value="#FFF0F0F0"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Metal Type" Binding="{Binding MetalType}" />
                 <DataGridTextColumn Header="Form" Binding="{Binding Form}" />
