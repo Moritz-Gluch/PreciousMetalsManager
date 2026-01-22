@@ -8,6 +8,10 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
 
+    <Window.Resources>
+        <models:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </Window.Resources>
+
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -53,6 +57,14 @@
                 <DataGridTextColumn Header="Total Value" Binding="{Binding TotalValue}" />
             </DataGrid.Columns>
         </DataGrid>
+
+        <TextBlock Grid.Row="2"
+                   Text="No holdings match your criteria."
+                   Foreground="Gray"
+                   FontStyle="Italic"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Visibility="{Binding FilteredHoldings.IsEmpty, Converter={StaticResource BoolToVisibilityConverter}}"/>
     </Grid>
 
 </Window>
