@@ -3,6 +3,8 @@ using System.Collections.ObjectModel;
 using PreciousMetalsManager.Models;
 using System.ComponentModel;
 using System.Windows.Data;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PreciousMetalsManager.ViewModels
 {
@@ -26,8 +28,8 @@ namespace PreciousMetalsManager.ViewModels
             }
         }
 
-        private MetalType? _selectedMetalTypeFilter;
-        public MetalType? SelectedMetalTypeFilter
+        private object _selectedMetalTypeFilter;
+        public object SelectedMetalTypeFilter
         {
             get => _selectedMetalTypeFilter;
             set
@@ -40,6 +42,9 @@ namespace PreciousMetalsManager.ViewModels
                 }
             }
         }
+
+        public IEnumerable<object> MetalTypeFilterOptions { get; } =
+            new object[] { "All" }.Concat(Enum.GetValues(typeof(MetalType)).Cast<object>());
 
         public ViewModel()
         {
@@ -107,7 +112,7 @@ namespace PreciousMetalsManager.ViewModels
             if (obj is not MetalHolding holding)
                 return false;
 
-            if (SelectedMetalTypeFilter != null && holding.MetalType != SelectedMetalTypeFilter)
+            if (SelectedMetalTypeFilter is MetalType type && holding.MetalType != type)
                 return false;
 
             if (!string.IsNullOrWhiteSpace(FormFilter) &&

@@ -30,7 +30,7 @@
             <ComboBox x:Name="MetalTypeFilterComboBox"
                       Width="120"
                       Margin="5,0"
-                      ItemsSource="{x:Static models:MetalTypeHelper.GetValues}"
+                      ItemsSource="{Binding MetalTypeFilterOptions}"
                       SelectedItem="{Binding SelectedMetalTypeFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <Label Content="Form/Variant:" VerticalAlignment="Center"/>
             <TextBox x:Name="FormFilterTextBox"
