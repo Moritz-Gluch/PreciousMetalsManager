@@ -28,7 +28,7 @@
             <Button Content="Add" Width="80" Click="AddButton_Click" Margin="0,0,5,0"/>
             <Button Content="Edit" Width="80" Click="EditButton_Click" Margin="0,0,5,0"/>
             <Button Content="Delete" Width="80" Click="DeleteButton_Click" Margin="0,0,5,0"/>
-            <Button Content="Preise ändern" Width="100" Click="EditPricesButton_Click" Margin="0,0,5,0"/>
+            <Button Content="Edit Prices" Width="100" Click="EditPricesButton_Click" Margin="0,0,5,0"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,10" Grid.ColumnSpan="2">
