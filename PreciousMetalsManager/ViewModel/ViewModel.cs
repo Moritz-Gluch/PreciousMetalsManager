@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Windows.Data;
 using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Specialized;
 
 namespace PreciousMetalsManager.ViewModels
 {
@@ -46,9 +47,30 @@ namespace PreciousMetalsManager.ViewModels
         public IEnumerable<object> MetalTypeFilterOptions { get; } =
             new object[] { "All" }.Concat(Enum.GetValues(typeof(MetalType)).Cast<object>());
 
+        private readonly Dictionary<MetalType, decimal> _currentMarketPrices = new();
+
+        public decimal this[MetalType type]
+        {
+            get => _currentMarketPrices.TryGetValue(type, out var price) ? price : 0m;
+            set
+            {
+                if (_currentMarketPrices.ContainsKey(type) && _currentMarketPrices[type] == value)
+                    return;
+                _currentMarketPrices[type] = value;
+                OnPropertyChanged($"Item[{type}]");
+                UpdateCalculatedValues();
+            }
+        }
+
+        public IEnumerable<MetalType> AllMetalTypes => Enum.GetValues(typeof(MetalType)).Cast<MetalType>();
+
         public ViewModel()
         {
             Holdings = new ObservableCollection<MetalHolding>();
+            Holdings.CollectionChanged += Holdings_CollectionChanged;
+
+            FilteredHoldings = CollectionViewSource.GetDefaultView(Holdings);
+            FilteredHoldings.Filter = FilterPredicate;
 
             // Example-Data for In-Memory-CRUD
             Holdings.Add(new MetalHolding
@@ -60,8 +82,6 @@ namespace PreciousMetalsManager.ViewModels
                 Quantity = 1,
                 PurchasePrice = 5800m,
                 PurchaseDate = DateTime.Now,
-                CurrentValue = 6000m,
-                TotalValue = 6000m
             });
 
             Holdings.Add(new MetalHolding
@@ -73,8 +93,6 @@ namespace PreciousMetalsManager.ViewModels
                 Quantity = 1,
                 PurchasePrice = 25m,
                 PurchaseDate = DateTime.Now,
-                CurrentValue = 30m,
-                TotalValue = 30m
             });
 
             Holdings.Add(new MetalHolding
@@ -86,8 +104,6 @@ namespace PreciousMetalsManager.ViewModels
                 Quantity = 1,
                 PurchasePrice = 5800m,
                 PurchaseDate = DateTime.Now,
-                CurrentValue = 500m,
-                TotalValue = 6400m
             });
 
             Holdings.Add(new MetalHolding
@@ -99,12 +115,24 @@ namespace PreciousMetalsManager.ViewModels
                 Quantity = 1,
                 PurchasePrice = 500m,
                 PurchaseDate = DateTime.Now,
-                CurrentValue = 600m,
-                TotalValue = 600m
             });
 
-            FilteredHoldings = CollectionViewSource.GetDefaultView(Holdings);
-            FilteredHoldings.Filter = FilterPredicate;
+            foreach (var holding in Holdings)
+                holding.PropertyChanged += Holding_PropertyChanged;
+
+            UpdateCalculatedValues();
+        }
+
+        private void Holdings_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems != null)
+                foreach (MetalHolding h in e.NewItems)
+                    h.PropertyChanged += Holding_PropertyChanged;
+            if (e.OldItems != null)
+                foreach (MetalHolding h in e.OldItems)
+                    h.PropertyChanged -= Holding_PropertyChanged;
+
+            UpdateCalculatedValues();
         }
 
         private bool FilterPredicate(object obj)
@@ -120,6 +148,119 @@ namespace PreciousMetalsManager.ViewModels
                 return false;
 
             return true;
+        }
+
+        private void UpdateCalculatedValues()
+        {
+            foreach (var holding in Holdings)
+            {
+                var price = GetMarketPrice(holding.MetalType);
+                // A Purity of 999.9 is considered as highest purity (100%) 
+                holding.CurrentValue = holding.Weight * (holding.Purity / 999.9m) * price;
+                holding.TotalValue = holding.CurrentValue * holding.Quantity;
+            }
+            OnPropertyChanged(nameof(Holdings));
+            if (FilteredHoldings != null)
+                FilteredHoldings.Refresh();
+        }
+
+        private decimal _goldPrice = 72.50m;
+        public decimal GoldPrice
+        {
+            get => _goldPrice;
+            set
+            {
+                if (_goldPrice != value)
+                {
+                    _goldPrice = value;
+                    OnPropertyChanged(nameof(GoldPrice));
+                    UpdateCalculatedValues();
+                }
+            }
+        }
+
+        private decimal _silverPrice = 0.85m;
+        public decimal SilverPrice
+        {
+            get => _silverPrice;
+            set
+            {
+                if (_silverPrice != value)
+                {
+                    _silverPrice = value;
+                    OnPropertyChanged(nameof(SilverPrice));
+                    UpdateCalculatedValues();
+                }
+            }
+        }
+
+        private decimal _platinumPrice = 32.10m;
+        public decimal PlatinumPrice
+        {
+            get => _platinumPrice;
+            set
+            {
+                if (_platinumPrice != value)
+                {
+                    _platinumPrice = value;
+                    OnPropertyChanged(nameof(PlatinumPrice));
+                    UpdateCalculatedValues();
+                }
+            }
+        }
+
+        private decimal _palladiumPrice = 41.00m;
+        public decimal PalladiumPrice
+        {
+            get => _palladiumPrice;
+            set
+            {
+                if (_palladiumPrice != value)
+                {
+                    _palladiumPrice = value;
+                    OnPropertyChanged(nameof(PalladiumPrice));
+                    UpdateCalculatedValues();
+                }
+            }
+        }
+
+        private decimal _broncePrice = 0.10m;
+        public decimal BroncePrice
+        {
+            get => _broncePrice;
+            set
+            {
+                if (_broncePrice != value)
+                {
+                    _broncePrice = value;
+                    OnPropertyChanged(nameof(BroncePrice));
+                    UpdateCalculatedValues();
+                }
+            }
+        }
+
+        private decimal GetMarketPrice(MetalType type)
+        {
+            return type switch
+            {
+                MetalType.Gold => GoldPrice,
+                MetalType.Silver => SilverPrice,
+                MetalType.Platinum => PlatinumPrice,
+                MetalType.Palladium => PalladiumPrice,
+                MetalType.Bronce => BroncePrice,
+                _ => 0m
+            };
+        }
+
+        private void Holding_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(MetalHolding.Weight) ||
+                e.PropertyName == nameof(MetalHolding.Purity) ||
+                e.PropertyName == nameof(MetalHolding.Quantity) ||
+                e.PropertyName == nameof(MetalHolding.MetalType))
+            {
+                UpdateCalculatedValues();
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

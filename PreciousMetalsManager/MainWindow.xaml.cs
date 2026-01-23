@@ -10,6 +10,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Collections.Specialized;
+using System.ComponentModel;
 
 namespace PreciousMetalsManager
 {
@@ -55,7 +57,7 @@ namespace PreciousMetalsManager
 
                     if (editWindow.ShowDialog() == true)
                     {
-                        // Adopt changes
+                        // Adopt changes 
                         selected.MetalType = editWindow.NewHolding.MetalType;
                         selected.Form = editWindow.NewHolding.Form;
                         selected.Purity = editWindow.NewHolding.Purity;
@@ -63,8 +65,6 @@ namespace PreciousMetalsManager
                         selected.Quantity = editWindow.NewHolding.Quantity;
                         selected.PurchasePrice = editWindow.NewHolding.PurchasePrice;
                         selected.PurchaseDate = editWindow.NewHolding.PurchaseDate;
-                        selected.CurrentValue = editWindow.NewHolding.CurrentValue;
-                        selected.TotalValue = editWindow.NewHolding.TotalValue;
 
                         MainDataGrid.Items.Refresh();
                     }
@@ -98,6 +98,23 @@ namespace PreciousMetalsManager
                 else
                 {
                     MessageBox.Show("Please select a holding to delete.");
+                }
+            }
+        }
+
+        private void EditPricesButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ViewModel vm)
+            {
+                var dlg = new Views.EditPricesDialog(vm.GoldPrice, vm.SilverPrice, vm.PlatinumPrice, vm.PalladiumPrice, vm.BroncePrice);
+                dlg.Owner = this;
+                if (dlg.ShowDialog() == true)
+                {
+                    vm.GoldPrice = dlg.GoldPrice;
+                    vm.SilverPrice = dlg.SilverPrice;
+                    vm.PlatinumPrice = dlg.PlatinumPrice;
+                    vm.PalladiumPrice = dlg.PalladiumPrice;
+                    vm.BroncePrice = dlg.BroncePrice;
                 }
             }
         }
