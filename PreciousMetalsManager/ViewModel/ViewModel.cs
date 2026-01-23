@@ -239,7 +239,7 @@ namespace PreciousMetalsManager.ViewModels
             ReloadHoldings();
         }
 
-        // Reloads the Holdings collection from the database to fix visual bug in UI after adding an entry
+        // Reloads data from the database to fix visual bug in UI after adding an entry
         private void ReloadHoldings()
         {
             System.Diagnostics.Debug.WriteLine($"ReloadHoldings() called. Holdings before clear: {Holdings.Count}");
