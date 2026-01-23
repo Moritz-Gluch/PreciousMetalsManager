@@ -74,6 +74,7 @@ namespace PreciousMetalsManager.Services
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("DB error: " + ex.Message);
+                LogError("DB error", ex);
                 MessageBox.Show("Error loading from the database:\n" + ex.Message, "Database Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             return holdings;
@@ -103,6 +104,7 @@ namespace PreciousMetalsManager.Services
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("DB error: " + ex.Message);
+                LogError("DB error", ex);
                 MessageBox.Show("Error saving to the database:\n" + ex.Message, "Database Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -131,6 +133,7 @@ namespace PreciousMetalsManager.Services
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("DB error: " + ex.Message);
+                LogError("DB error", ex);
                 MessageBox.Show("Error updating the database:\n" + ex.Message, "Database Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -149,8 +152,16 @@ namespace PreciousMetalsManager.Services
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("DB error: " + ex.Message);
+                LogError("DB error", ex);
                 MessageBox.Show("Error deleting from the database:\n" + ex.Message, "Database Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void LogError(string message, Exception ex)
+        {
+            var logPath = "error.log";
+            var logEntry = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} | {message} | {ex}\n";
+            File.AppendAllText(logPath, logEntry);
         }
     }
 }
