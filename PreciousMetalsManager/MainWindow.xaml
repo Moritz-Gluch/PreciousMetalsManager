@@ -10,6 +10,7 @@
 
     <Window.Resources>
         <models:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <models:DecimalConverter x:Key="DecimalConverter"/>
     </Window.Resources>
 
     <Grid Margin="10">
@@ -27,23 +28,16 @@
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,10">
-            <ItemsControl ItemsSource="{Binding AllMetalTypes}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Margin="5,0">
-                            <Label Content="{Binding}" VerticalAlignment="Center"/>
-                            <TextBox Width="80"
-                                     Margin="2,0"
-                                     Text="{Binding DataContext[{Binding}], RelativeSource={RelativeSource AncestorType=Window}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+            <Label Content="Gold:" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding GoldPrice}" Width="80" Margin="2,0"/>
+            <Label Content="Silver:" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding SilverPrice}" Width="80" Margin="2,0"/>
+            <Label Content="Platinum:" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding PlatinumPrice}" Width="80" Margin="2,0"/>
+            <Label Content="Palladium:" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding PalladiumPrice}" Width="80" Margin="2,0"/>
+            <Label Content="Bronce:" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding BroncePrice}" Width="80" Margin="2,0"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0,0,0,10">

@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Windows.Data;
 using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Specialized;
 
 namespace PreciousMetalsManager.ViewModels
 {
@@ -66,6 +67,10 @@ namespace PreciousMetalsManager.ViewModels
         public ViewModel()
         {
             Holdings = new ObservableCollection<MetalHolding>();
+            Holdings.CollectionChanged += Holdings_CollectionChanged;
+
+            FilteredHoldings = CollectionViewSource.GetDefaultView(Holdings);
+            FilteredHoldings.Filter = FilterPredicate;
 
             // Example-Data for In-Memory-CRUD
             Holdings.Add(new MetalHolding
@@ -77,8 +82,6 @@ namespace PreciousMetalsManager.ViewModels
                 Quantity = 1,
                 PurchasePrice = 5800m,
                 PurchaseDate = DateTime.Now,
-                CurrentValue = 6000m,
-                TotalValue = 6000m
             });
 
             Holdings.Add(new MetalHolding
@@ -90,8 +93,6 @@ namespace PreciousMetalsManager.ViewModels
                 Quantity = 1,
                 PurchasePrice = 25m,
                 PurchaseDate = DateTime.Now,
-                CurrentValue = 30m,
-                TotalValue = 30m
             });
 
             Holdings.Add(new MetalHolding
@@ -103,8 +104,6 @@ namespace PreciousMetalsManager.ViewModels
                 Quantity = 1,
                 PurchasePrice = 5800m,
                 PurchaseDate = DateTime.Now,
-                CurrentValue = 500m,
-                TotalValue = 6400m
             });
 
             Holdings.Add(new MetalHolding
@@ -116,12 +115,24 @@ namespace PreciousMetalsManager.ViewModels
                 Quantity = 1,
                 PurchasePrice = 500m,
                 PurchaseDate = DateTime.Now,
-                CurrentValue = 600m,
-                TotalValue = 600m
             });
 
-            FilteredHoldings = CollectionViewSource.GetDefaultView(Holdings);
-            FilteredHoldings.Filter = FilterPredicate;
+            foreach (var holding in Holdings)
+                holding.PropertyChanged += Holding_PropertyChanged;
+
+            UpdateCalculatedValues();
+        }
+
+        private void Holdings_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems != null)
+                foreach (MetalHolding h in e.NewItems)
+                    h.PropertyChanged += Holding_PropertyChanged;
+            if (e.OldItems != null)
+                foreach (MetalHolding h in e.OldItems)
+                    h.PropertyChanged -= Holding_PropertyChanged;
+
+            UpdateCalculatedValues();
         }
 
         private bool FilterPredicate(object obj)
@@ -149,7 +160,8 @@ namespace PreciousMetalsManager.ViewModels
                 holding.TotalValue = holding.CurrentValue * holding.Quantity;
             }
             OnPropertyChanged(nameof(Holdings));
-            FilteredHoldings.Refresh();
+            if (FilteredHoldings != null)
+                FilteredHoldings.Refresh();
         }
 
         public decimal GoldPrice => 72.50m;
@@ -169,6 +181,17 @@ namespace PreciousMetalsManager.ViewModels
                 MetalType.Bronce => BroncePrice,
                 _ => 0m
             };
+        }
+
+        private void Holding_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(MetalHolding.Weight) ||
+                e.PropertyName == nameof(MetalHolding.Purity) ||
+                e.PropertyName == nameof(MetalHolding.Quantity) ||
+                e.PropertyName == nameof(MetalHolding.MetalType))
+            {
+                UpdateCalculatedValues();
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
