@@ -143,13 +143,32 @@ namespace PreciousMetalsManager.ViewModels
         {
             foreach (var holding in Holdings)
             {
-                var price = this[holding.MetalType];
+                var price = GetMarketPrice(holding.MetalType);
                 // A Purity of 999.9 is considered as highest purity (100%) 
                 holding.CurrentValue = holding.Weight * (holding.Purity / 999.9m) * price;
                 holding.TotalValue = holding.CurrentValue * holding.Quantity;
             }
             OnPropertyChanged(nameof(Holdings));
             FilteredHoldings.Refresh();
+        }
+
+        public decimal GoldPrice => 72.50m;
+        public decimal SilverPrice => 0.85m;
+        public decimal PlatinumPrice => 32.10m;
+        public decimal PalladiumPrice => 41.00m;
+        public decimal BroncePrice => 0.10m;
+
+        private decimal GetMarketPrice(MetalType type)
+        {
+            return type switch
+            {
+                MetalType.Gold => GoldPrice,
+                MetalType.Silver => SilverPrice,
+                MetalType.Platinum => PlatinumPrice,
+                MetalType.Palladium => PalladiumPrice,
+                MetalType.Bronce => BroncePrice,
+                _ => 0m
+            };
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
