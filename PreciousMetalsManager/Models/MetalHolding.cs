@@ -14,6 +14,8 @@ namespace PreciousMetalsManager.Models
 
     public class MetalHolding : INotifyPropertyChanged
     {
+        public int Id { get; set; }
+
         private MetalType _metalType;
         public MetalType MetalType
         {

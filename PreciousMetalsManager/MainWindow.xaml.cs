@@ -33,7 +33,7 @@ namespace PreciousMetalsManager
             {
                 if (DataContext is ViewModel vm)
                 {
-                    vm.Holdings.Add(addWindow.NewHolding);
+                    vm.AddHolding(addWindow.NewHolding); 
                 }
             }
         }
@@ -66,6 +66,8 @@ namespace PreciousMetalsManager
                         selected.PurchasePrice = editWindow.NewHolding.PurchasePrice;
                         selected.PurchaseDate = editWindow.NewHolding.PurchaseDate;
 
+                        vm.UpdateHolding(selected); 
+
                         MainDataGrid.Items.Refresh();
                     }
                 }
@@ -92,7 +94,7 @@ namespace PreciousMetalsManager
 
                     if (result == MessageBoxResult.Yes)
                     {
-                        vm.Holdings.Remove(selected); 
+                        vm.DeleteHolding(selected); 
                     }
                 }
                 else
