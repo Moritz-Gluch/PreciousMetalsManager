@@ -6,13 +6,17 @@
         xmlns:local="clr-namespace:PreciousMetalsManager"
         xmlns:models="clr-namespace:PreciousMetalsManager.Models"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="750">
 
     <Window.Resources>
         <models:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </Window.Resources>
 
     <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="375*"/>
+            <ColumnDefinition Width="202*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>  <!-- Buttons -->
             <RowDefinition Height="Auto"/>  <!-- Current Market Price of Metals -->
@@ -26,20 +30,20 @@
             <Button Content="Delete" Width="80" Click="DeleteButton_Click"/>
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,10">
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,10" Grid.ColumnSpan="2">
             <Label Content="Gold:" VerticalAlignment="Center"/>
-            <TextBlock Text="{Binding GoldPrice}" Width="80" Margin="2,0"/>
+            <TextBlock Text="{Binding GoldPrice}" Width="80" Margin="2,0" VerticalAlignment="Center"/>
             <Label Content="Silver:" VerticalAlignment="Center"/>
-            <TextBlock Text="{Binding SilverPrice}" Width="80" Margin="2,0"/>
+            <TextBlock Text="{Binding SilverPrice}" Width="80" Margin="2,0" VerticalAlignment="Center"/>
             <Label Content="Platinum:" VerticalAlignment="Center"/>
-            <TextBlock Text="{Binding PlatinumPrice}" Width="80" Margin="2,0"/>
+            <TextBlock Text="{Binding PlatinumPrice}" Width="80" Margin="2,0" VerticalAlignment="Center"/>
             <Label Content="Palladium:" VerticalAlignment="Center"/>
-            <TextBlock Text="{Binding PalladiumPrice}" Width="80" Margin="2,0"/>
+            <TextBlock Text="{Binding PalladiumPrice}" Width="80" Margin="2,0" VerticalAlignment="Center"/>
             <Label Content="Bronce:" VerticalAlignment="Center"/>
-            <TextBlock Text="{Binding BroncePrice}" Width="80" Margin="2,0"/>
+            <TextBlock Text="{Binding BroncePrice}" Width="80" Margin="2,0" VerticalAlignment="Center"/>
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0,0,0,10">
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0,0,0,10" Grid.ColumnSpan="2">
             <Label Content="Metal Type:" VerticalAlignment="Center"/>
             <ComboBox x:Name="MetalTypeFilterComboBox"
                       Width="120"
@@ -53,7 +57,7 @@
                      Text="{Binding FormFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="3" Margin="0,0,0,10">
+        <StackPanel Orientation="Horizontal" Grid.Row="3" Margin="0,0,0,10" Grid.ColumnSpan="2">
             <DataGrid x:Name="MainDataGrid"
                       ItemsSource="{Binding FilteredHoldings}"
                       AutoGenerateColumns="False"
