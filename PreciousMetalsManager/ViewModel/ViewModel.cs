@@ -164,11 +164,80 @@ namespace PreciousMetalsManager.ViewModels
                 FilteredHoldings.Refresh();
         }
 
-        public decimal GoldPrice => 72.50m;
-        public decimal SilverPrice => 0.85m;
-        public decimal PlatinumPrice => 32.10m;
-        public decimal PalladiumPrice => 41.00m;
-        public decimal BroncePrice => 0.10m;
+        private decimal _goldPrice = 72.50m;
+        public decimal GoldPrice
+        {
+            get => _goldPrice;
+            set
+            {
+                if (_goldPrice != value)
+                {
+                    _goldPrice = value;
+                    OnPropertyChanged(nameof(GoldPrice));
+                    UpdateCalculatedValues();
+                }
+            }
+        }
+
+        private decimal _silverPrice = 0.85m;
+        public decimal SilverPrice
+        {
+            get => _silverPrice;
+            set
+            {
+                if (_silverPrice != value)
+                {
+                    _silverPrice = value;
+                    OnPropertyChanged(nameof(SilverPrice));
+                    UpdateCalculatedValues();
+                }
+            }
+        }
+
+        private decimal _platinumPrice = 32.10m;
+        public decimal PlatinumPrice
+        {
+            get => _platinumPrice;
+            set
+            {
+                if (_platinumPrice != value)
+                {
+                    _platinumPrice = value;
+                    OnPropertyChanged(nameof(PlatinumPrice));
+                    UpdateCalculatedValues();
+                }
+            }
+        }
+
+        private decimal _palladiumPrice = 41.00m;
+        public decimal PalladiumPrice
+        {
+            get => _palladiumPrice;
+            set
+            {
+                if (_palladiumPrice != value)
+                {
+                    _palladiumPrice = value;
+                    OnPropertyChanged(nameof(PalladiumPrice));
+                    UpdateCalculatedValues();
+                }
+            }
+        }
+
+        private decimal _broncePrice = 0.10m;
+        public decimal BroncePrice
+        {
+            get => _broncePrice;
+            set
+            {
+                if (_broncePrice != value)
+                {
+                    _broncePrice = value;
+                    OnPropertyChanged(nameof(BroncePrice));
+                    UpdateCalculatedValues();
+                }
+            }
+        }
 
         private decimal GetMarketPrice(MetalType type)
         {

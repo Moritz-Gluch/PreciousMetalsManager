@@ -101,5 +101,22 @@ namespace PreciousMetalsManager
                 }
             }
         }
+
+        private void EditPricesButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ViewModel vm)
+            {
+                var dlg = new Views.EditPricesDialog(vm.GoldPrice, vm.SilverPrice, vm.PlatinumPrice, vm.PalladiumPrice, vm.BroncePrice);
+                dlg.Owner = this;
+                if (dlg.ShowDialog() == true)
+                {
+                    vm.GoldPrice = dlg.GoldPrice;
+                    vm.SilverPrice = dlg.SilverPrice;
+                    vm.PlatinumPrice = dlg.PlatinumPrice;
+                    vm.PalladiumPrice = dlg.PalladiumPrice;
+                    vm.BroncePrice = dlg.BroncePrice;
+                }
+            }
+        }
     }
 }
