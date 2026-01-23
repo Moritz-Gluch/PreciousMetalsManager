@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.Data.Sqlite;
 using PreciousMetalsManager.Models;
+using System.Windows;
 
 namespace PreciousMetalsManager.Services
 {
@@ -40,76 +41,116 @@ namespace PreciousMetalsManager.Services
         public List<MetalHolding> LoadHoldings()
         {
             var holdings = new List<MetalHolding>();
-            using var connection = new SqliteConnection($"Data Source={_dbPath}");
-            connection.Open();
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = "SELECT Id, MetalType, Form, Purity, Weight, Quantity, PurchasePrice, PurchaseDate FROM Holdings";
-            using var reader = cmd.ExecuteReader();
-            while (reader.Read())
+            try
             {
-                holdings.Add(new MetalHolding
+                using var connection = new SqliteConnection($"Data Source={_dbPath}");
+                connection.Open();
+                var cmd = connection.CreateCommand();
+                cmd.CommandText = "SELECT Id, MetalType, Form, Purity, Weight, Quantity, PurchasePrice, PurchaseDate FROM Holdings";
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
                 {
-                    Id = reader.GetInt32(0),
-                    MetalType = (MetalType)reader.GetInt32(1),
-                    Form = reader.GetString(2),
-                    Purity = reader.GetDecimal(3),
-                    Weight = reader.GetDecimal(4),
-                    Quantity = reader.GetInt32(5),
-                    PurchasePrice = reader.GetDecimal(6),
-                    PurchaseDate = DateTime.Parse(reader.GetString(7))
-                });
+                    try
+                    {
+                        holdings.Add(new MetalHolding
+                        {
+                            Id = reader.GetInt32(0),
+                            MetalType = (MetalType)reader.GetInt32(1),
+                            Form = reader.GetString(2),
+                            Purity = reader.GetDecimal(3),
+                            Weight = reader.GetDecimal(4),
+                            Quantity = reader.GetInt32(5),
+                            PurchasePrice = reader.GetDecimal(6),
+                            PurchaseDate = DateTime.Parse(reader.GetString(7))
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Corrupt record ignored: " + ex.Message);
+                        MessageBox.Show("Corrupt record ignored:\n" + ex.Message, "Database Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("DB error: " + ex.Message);
+                MessageBox.Show("Error loading from the database:\n" + ex.Message, "Database Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             return holdings;
         }
 
         public void AddHolding(MetalHolding holding)
         {
-            using var connection = new SqliteConnection($"Data Source={_dbPath}");
-            connection.Open();
-            var cmd = connection.CreateCommand();
-            cmd.CommandText =
-                @"INSERT INTO Holdings (MetalType, Form, Purity, Weight, Quantity, PurchasePrice, PurchaseDate)
-                  VALUES (@type, @form, @purity, @weight, @quantity, @price, @date);
-                  SELECT last_insert_rowid();";
-            cmd.Parameters.AddWithValue("@type", (int)holding.MetalType);
-            cmd.Parameters.AddWithValue("@form", holding.Form);
-            cmd.Parameters.AddWithValue("@purity", holding.Purity);
-            cmd.Parameters.AddWithValue("@weight", holding.Weight);
-            cmd.Parameters.AddWithValue("@quantity", holding.Quantity);
-            cmd.Parameters.AddWithValue("@price", holding.PurchasePrice);
-            cmd.Parameters.AddWithValue("@date", holding.PurchaseDate.ToString("o"));
+            try
+            {
+                using var connection = new SqliteConnection($"Data Source={_dbPath}");
+                connection.Open();
+                var cmd = connection.CreateCommand();
+                cmd.CommandText =
+                    @"INSERT INTO Holdings (MetalType, Form, Purity, Weight, Quantity, PurchasePrice, PurchaseDate)
+                      VALUES (@type, @form, @purity, @weight, @quantity, @price, @date);
+                      SELECT last_insert_rowid();";
+                cmd.Parameters.AddWithValue("@type", (int)holding.MetalType);
+                cmd.Parameters.AddWithValue("@form", holding.Form);
+                cmd.Parameters.AddWithValue("@purity", holding.Purity);
+                cmd.Parameters.AddWithValue("@weight", holding.Weight);
+                cmd.Parameters.AddWithValue("@quantity", holding.Quantity);
+                cmd.Parameters.AddWithValue("@price", holding.PurchasePrice);
+                cmd.Parameters.AddWithValue("@date", holding.PurchaseDate.ToString("o"));
 
-            holding.Id = Convert.ToInt32(cmd.ExecuteScalar());
+                holding.Id = Convert.ToInt32(cmd.ExecuteScalar());
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("DB error: " + ex.Message);
+                MessageBox.Show("Error saving to the database:\n" + ex.Message, "Database Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         public void UpdateHolding(MetalHolding holding, int id)
         {
-            using var connection = new SqliteConnection($"Data Source={_dbPath}");
-            connection.Open();
-            var cmd = connection.CreateCommand();
-            cmd.CommandText =
-                @"UPDATE Holdings SET
-                    MetalType=@type, Form=@form, Purity=@purity, Weight=@weight, Quantity=@quantity, PurchasePrice=@price, PurchaseDate=@date
-                  WHERE Id=@id";
-            cmd.Parameters.AddWithValue("@type", (int)holding.MetalType);
-            cmd.Parameters.AddWithValue("@form", holding.Form);
-            cmd.Parameters.AddWithValue("@purity", holding.Purity);
-            cmd.Parameters.AddWithValue("@weight", holding.Weight);
-            cmd.Parameters.AddWithValue("@quantity", holding.Quantity);
-            cmd.Parameters.AddWithValue("@price", holding.PurchasePrice);
-            cmd.Parameters.AddWithValue("@date", holding.PurchaseDate.ToString("o"));
-            cmd.Parameters.AddWithValue("@id", id);
-            cmd.ExecuteNonQuery();
+            try
+            {
+                using var connection = new SqliteConnection($"Data Source={_dbPath}");
+                connection.Open();
+                var cmd = connection.CreateCommand();
+                cmd.CommandText =
+                    @"UPDATE Holdings SET
+                        MetalType=@type, Form=@form, Purity=@purity, Weight=@weight, Quantity=@quantity, PurchasePrice=@price, PurchaseDate=@date
+                      WHERE Id=@id";
+                cmd.Parameters.AddWithValue("@type", (int)holding.MetalType);
+                cmd.Parameters.AddWithValue("@form", holding.Form);
+                cmd.Parameters.AddWithValue("@purity", holding.Purity);
+                cmd.Parameters.AddWithValue("@weight", holding.Weight);
+                cmd.Parameters.AddWithValue("@quantity", holding.Quantity);
+                cmd.Parameters.AddWithValue("@price", holding.PurchasePrice);
+                cmd.Parameters.AddWithValue("@date", holding.PurchaseDate.ToString("o"));
+                cmd.Parameters.AddWithValue("@id", id);
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("DB error: " + ex.Message);
+                MessageBox.Show("Error updating the database:\n" + ex.Message, "Database Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         public void DeleteHolding(int id)
         {
-            using var connection = new SqliteConnection($"Data Source={_dbPath}");
-            connection.Open();
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = "DELETE FROM Holdings WHERE Id=@id";
-            cmd.Parameters.AddWithValue("@id", id);
-            cmd.ExecuteNonQuery();
+            try
+            {
+                using var connection = new SqliteConnection($"Data Source={_dbPath}");
+                connection.Open();
+                var cmd = connection.CreateCommand();
+                cmd.CommandText = "DELETE FROM Holdings WHERE Id=@id";
+                cmd.Parameters.AddWithValue("@id", id);
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("DB error: " + ex.Message);
+                MessageBox.Show("Error deleting from the database:\n" + ex.Message, "Database Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }
