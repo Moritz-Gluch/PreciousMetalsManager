@@ -224,18 +224,38 @@ namespace PreciousMetalsManager.ViewModels
         public void AddHolding(MetalHolding holding)
         {
             _storage.AddHolding(holding);
-            Holdings.Add(holding);
+            ReloadHoldings();
         }
 
         public void UpdateHolding(MetalHolding holding)
         {
             _storage.UpdateHolding(holding, holding.Id);
+            ReloadHoldings();
         }
 
         public void DeleteHolding(MetalHolding holding)
         {
             _storage.DeleteHolding(holding.Id);
-            Holdings.Remove(holding);
+            ReloadHoldings();
+        }
+
+        // Reloads the Holdings collection from the database to fix visual bug in UI after adding an entry
+        private void ReloadHoldings()
+        {
+            System.Diagnostics.Debug.WriteLine($"ReloadHoldings() called. Holdings before clear: {Holdings.Count}");
+
+            var view = CollectionViewSource.GetDefaultView(Holdings);
+            var oldFilter = view.Filter;
+            view.Filter = null;
+
+            Holdings.Clear();
+            var loaded = _storage.LoadHoldings();
+            System.Diagnostics.Debug.WriteLine($"ReloadHoldings() loaded {loaded.Count} entries from DB.");
+            foreach (var h in loaded)
+                Holdings.Add(h);
+
+            view.Filter = oldFilter; 
+            System.Diagnostics.Debug.WriteLine($"ReloadHoldings() after add: {Holdings.Count}");
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
