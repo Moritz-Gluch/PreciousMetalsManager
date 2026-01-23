@@ -43,19 +43,20 @@ namespace PreciousMetalsManager.Services
             using var connection = new SqliteConnection($"Data Source={_dbPath}");
             connection.Open();
             var cmd = connection.CreateCommand();
-            cmd.CommandText = "SELECT MetalType, Form, Purity, Weight, Quantity, PurchasePrice, PurchaseDate FROM Holdings";
+            cmd.CommandText = "SELECT Id, MetalType, Form, Purity, Weight, Quantity, PurchasePrice, PurchaseDate FROM Holdings";
             using var reader = cmd.ExecuteReader();
             while (reader.Read())
             {
                 holdings.Add(new MetalHolding
                 {
-                    MetalType = (MetalType)reader.GetInt32(0),
-                    Form = reader.GetString(1),
-                    Purity = reader.GetDecimal(2),
-                    Weight = reader.GetDecimal(3),
-                    Quantity = reader.GetInt32(4),
-                    PurchasePrice = reader.GetDecimal(5),
-                    PurchaseDate = DateTime.Parse(reader.GetString(6))
+                    Id = reader.GetInt32(0),
+                    MetalType = (MetalType)reader.GetInt32(1),
+                    Form = reader.GetString(2),
+                    Purity = reader.GetDecimal(3),
+                    Weight = reader.GetDecimal(4),
+                    Quantity = reader.GetInt32(5),
+                    PurchasePrice = reader.GetDecimal(6),
+                    PurchaseDate = DateTime.Parse(reader.GetString(7))
                 });
             }
             return holdings;
@@ -68,7 +69,8 @@ namespace PreciousMetalsManager.Services
             var cmd = connection.CreateCommand();
             cmd.CommandText =
                 @"INSERT INTO Holdings (MetalType, Form, Purity, Weight, Quantity, PurchasePrice, PurchaseDate)
-                  VALUES (@type, @form, @purity, @weight, @quantity, @price, @date)";
+                  VALUES (@type, @form, @purity, @weight, @quantity, @price, @date);
+                  SELECT last_insert_rowid();";
             cmd.Parameters.AddWithValue("@type", (int)holding.MetalType);
             cmd.Parameters.AddWithValue("@form", holding.Form);
             cmd.Parameters.AddWithValue("@purity", holding.Purity);
@@ -76,7 +78,8 @@ namespace PreciousMetalsManager.Services
             cmd.Parameters.AddWithValue("@quantity", holding.Quantity);
             cmd.Parameters.AddWithValue("@price", holding.PurchasePrice);
             cmd.Parameters.AddWithValue("@date", holding.PurchaseDate.ToString("o"));
-            cmd.ExecuteNonQuery();
+
+            holding.Id = Convert.ToInt32(cmd.ExecuteScalar());
         }
 
         public void UpdateHolding(MetalHolding holding, int id)

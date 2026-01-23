@@ -6,6 +6,7 @@ using System.Windows.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Collections.Specialized;
+using PreciousMetalsManager.Services;
 
 namespace PreciousMetalsManager.ViewModels
 {
@@ -64,58 +65,15 @@ namespace PreciousMetalsManager.ViewModels
 
         public IEnumerable<MetalType> AllMetalTypes => Enum.GetValues(typeof(MetalType)).Cast<MetalType>();
 
+        private readonly LocalStorageService _storage = new LocalStorageService();
+
         public ViewModel()
         {
-            Holdings = new ObservableCollection<MetalHolding>();
+            Holdings = new ObservableCollection<MetalHolding>(_storage.LoadHoldings());
             Holdings.CollectionChanged += Holdings_CollectionChanged;
 
             FilteredHoldings = CollectionViewSource.GetDefaultView(Holdings);
             FilteredHoldings.Filter = FilterPredicate;
-
-            // Example-Data for In-Memory-CRUD
-            Holdings.Add(new MetalHolding
-            {
-                MetalType = MetalType.Gold,
-                Form = "Bar",
-                Purity = 999.9m,
-                Weight = 100m,
-                Quantity = 1,
-                PurchasePrice = 5800m,
-                PurchaseDate = DateTime.Now,
-            });
-
-            Holdings.Add(new MetalHolding
-            {
-                MetalType = MetalType.Silver,
-                Form = "Bar",
-                Purity = 625m,
-                Weight = 100m,
-                Quantity = 1,
-                PurchasePrice = 25m,
-                PurchaseDate = DateTime.Now,
-            });
-
-            Holdings.Add(new MetalHolding
-            {
-                MetalType = MetalType.Palladium,
-                Form = "Coin",
-                Purity = 999.9m,
-                Weight = 50m,
-                Quantity = 1,
-                PurchasePrice = 5800m,
-                PurchaseDate = DateTime.Now,
-            });
-
-            Holdings.Add(new MetalHolding
-            {
-                MetalType = MetalType.Platinum,
-                Form = "Coin",
-                Purity = 999.9m,
-                Weight = 190m,
-                Quantity = 1,
-                PurchasePrice = 500m,
-                PurchaseDate = DateTime.Now,
-            });
 
             foreach (var holding in Holdings)
                 holding.PropertyChanged += Holding_PropertyChanged;
@@ -261,6 +219,23 @@ namespace PreciousMetalsManager.ViewModels
             {
                 UpdateCalculatedValues();
             }
+        }
+
+        public void AddHolding(MetalHolding holding)
+        {
+            _storage.AddHolding(holding);
+            Holdings.Add(holding);
+        }
+
+        public void UpdateHolding(MetalHolding holding)
+        {
+            _storage.UpdateHolding(holding, holding.Id);
+        }
+
+        public void DeleteHolding(MetalHolding holding)
+        {
+            _storage.DeleteHolding(holding.Id);
+            Holdings.Remove(holding);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
