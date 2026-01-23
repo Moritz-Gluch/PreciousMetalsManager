@@ -46,6 +46,23 @@ namespace PreciousMetalsManager.ViewModels
         public IEnumerable<object> MetalTypeFilterOptions { get; } =
             new object[] { "All" }.Concat(Enum.GetValues(typeof(MetalType)).Cast<object>());
 
+        private readonly Dictionary<MetalType, decimal> _currentMarketPrices = new();
+
+        public decimal this[MetalType type]
+        {
+            get => _currentMarketPrices.TryGetValue(type, out var price) ? price : 0m;
+            set
+            {
+                if (_currentMarketPrices.ContainsKey(type) && _currentMarketPrices[type] == value)
+                    return;
+                _currentMarketPrices[type] = value;
+                OnPropertyChanged($"Item[{type}]");
+                UpdateCalculatedValues();
+            }
+        }
+
+        public IEnumerable<MetalType> AllMetalTypes => Enum.GetValues(typeof(MetalType)).Cast<MetalType>();
+
         public ViewModel()
         {
             Holdings = new ObservableCollection<MetalHolding>();
@@ -120,6 +137,19 @@ namespace PreciousMetalsManager.ViewModels
                 return false;
 
             return true;
+        }
+
+        private void UpdateCalculatedValues()
+        {
+            foreach (var holding in Holdings)
+            {
+                var price = this[holding.MetalType];
+                // A Purity of 999.9 is considered as highest purity (100%) 
+                holding.CurrentValue = holding.Weight * (holding.Purity / 999.9m) * price;
+                holding.TotalValue = holding.CurrentValue * holding.Quantity;
+            }
+            OnPropertyChanged(nameof(Holdings));
+            FilteredHoldings.Refresh();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
