@@ -58,11 +58,10 @@
                      Text="{Binding FormFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="3" Margin="0,0,0,10" Grid.ColumnSpan="2">
+        <Grid Grid.Row="3" Grid.ColumnSpan="2">
             <DataGrid x:Name="MainDataGrid"
                       ItemsSource="{Binding FilteredHoldings}"
                       AutoGenerateColumns="False"
-                      Grid.Row="2"
                       CanUserAddRows="False"
                       IsReadOnly="True"
                       AlternationCount="2">
@@ -89,14 +88,17 @@
                 </DataGrid.Columns>
             </DataGrid>
 
-            <TextBlock Grid.Row="2"
-                       Text="No holdings match your criteria."
-                       Foreground="Gray"
-                       FontStyle="Italic"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Visibility="{Binding FilteredHoldings.IsEmpty, Converter={StaticResource BoolToVisibilityConverter}}"/>
-        </StackPanel>
+            <TextBlock
+                Text="No holdings match your criteria."
+                Foreground="Gray"
+                FontStyle="Italic"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Visibility="{Binding FilteredHoldings.IsEmpty, Converter={StaticResource BoolToVisibilityConverter}}"
+                IsHitTestVisible="False"
+                FontSize="16"
+                Padding="20"/>
+        </Grid>
     </Grid>
 
 </Window>
