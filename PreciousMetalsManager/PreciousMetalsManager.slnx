@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="../tests/PreciousMetalsManager.Tests.csproj" />
   <Project Path="PreciousMetalsManager.csproj" />
 </Solution>
