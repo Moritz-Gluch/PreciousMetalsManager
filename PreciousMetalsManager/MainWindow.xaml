@@ -82,7 +82,7 @@
                     <DataGridTextColumn Header="Weight" Binding="{Binding Weight}" />
                     <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" />
                     <DataGridTextColumn Header="Purchase Price" Binding="{Binding PurchasePrice}" />
-                    <DataGridTextColumn Header="Purchase Date" Binding="{Binding PurchaseDate}" />
+                    <DataGridTextColumn Header="Purchase Date" Binding="{Binding PurchaseDate, StringFormat='dd.MM.yyyy'}" />
                     <DataGridTextColumn Header="Current Value" Binding="{Binding CurrentValue, StringFormat=F2}" />
                     <DataGridTextColumn Header="Total Value" Binding="{Binding TotalValue, StringFormat=F2}" />
                 </DataGrid.Columns>
