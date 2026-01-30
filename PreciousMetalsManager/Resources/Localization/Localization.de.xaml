@@ -15,5 +15,5 @@
     <sys:String x:Key="Msg_ConfirmDeleteTitle">Löschen bestätigen</sys:String>
 
     <!-- Language Button -->
-    <sys:String x:Key="LanguageButtonShort">DE</sys:String>
+    <sys:String x:Key="LanguageButtonShort">EN</sys:String>
 </ResourceDictionary>
