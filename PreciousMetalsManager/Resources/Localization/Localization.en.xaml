@@ -63,4 +63,10 @@
     <sys:String x:Key="HoldingDialog_Msg_QuantityPositiveWhole">Quantity must be a positive whole number.</sys:String>
     <sys:String x:Key="HoldingDialog_Msg_PurchasePriceNonNegative">Purchase price must be zero or greater.</sys:String>
     <sys:String x:Key="HoldingDialog_Msg_SelectPurchaseDate">Please select a purchase date.</sys:String>
+
+    <!-- EditPricesDialog -->
+    <sys:String x:Key="EditPricesDialog_Title">Edit metal prices</sys:String>
+    <sys:String x:Key="EditPricesDialog_HintText">Please enter the current prices:</sys:String>
+    <sys:String x:Key="EditPricesDialog_Btn_Save">Save</sys:String>
+    <sys:String x:Key="EditPricesDialog_Btn_Cancel">Cancel</sys:String>
 </ResourceDictionary>
