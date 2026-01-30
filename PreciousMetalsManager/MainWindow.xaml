@@ -100,6 +100,12 @@
                 FontSize="16"
                 Padding="20"/>
         </Grid>
+
+        <Button x:Name="LanguageButton"
+                Content="{Binding LanguageButtonText}"
+                Height="20"
+                VerticalAlignment="Top"
+                Click="LanguageButton_Click" Grid.Column="1" Margin="0,0,10,0" HorizontalAlignment="Right" Width="30"/>
     </Grid>
 
 </Window>

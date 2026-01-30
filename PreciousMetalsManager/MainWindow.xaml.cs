@@ -121,5 +121,13 @@ namespace PreciousMetalsManager
                 }
             }
         }
+
+        private void LanguageButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ViewModel vm)
+            {
+                vm.ToggleLanguage();
+            }
+        }
     }
 }

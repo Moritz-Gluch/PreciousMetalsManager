@@ -258,6 +258,34 @@ namespace PreciousMetalsManager.ViewModels
             System.Diagnostics.Debug.WriteLine($"ReloadHoldings() after add: {Holdings.Count}");
         }
 
+        private string _languageButtonText = "EN";
+        public string LanguageButtonText
+        {
+            get => _languageButtonText;
+            set
+            {
+                if (_languageButtonText != value)
+                {
+                    _languageButtonText = value;
+                    OnPropertyChanged(nameof(LanguageButtonText));
+                }
+            }
+        }
+
+        public void ToggleLanguage()
+        {
+            if (LanguageButtonText == "EN")
+            {
+                PreciousMetalsManager.Resources.Localization.SetLanguage("de");
+                LanguageButtonText = "DE";
+            }
+            else
+            {
+                PreciousMetalsManager.Resources.Localization.SetLanguage("en");
+                LanguageButtonText = "EN";
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)
         {
