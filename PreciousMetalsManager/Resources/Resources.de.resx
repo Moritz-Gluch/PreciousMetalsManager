@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <data name="MainWindow_Title" xml:space="preserve">
+        <value>Edelmetalle</value>
+    </data>
+    <data name="AddButton" xml:space="preserve">
+        <value>Hinzufügen</value>
+    </data>
+</root>
