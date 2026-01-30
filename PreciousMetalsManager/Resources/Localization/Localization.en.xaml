@@ -72,4 +72,20 @@
 
     <!-- EditPricesDialog (validation) -->
     <sys:String x:Key="EditPricesDialog_Msg_InvalidPrice">Please enter a valid, non-negative price for all metals.</sys:String>
+
+    <!-- Window titles -->
+    <sys:String x:Key="MainWindow_Title">Precious Metals Manager</sys:String>
+
+    <!-- Filters -->
+    <sys:String x:Key="Filter_All">All</sys:String>
+
+    <!-- Database messages -->
+    <sys:String x:Key="Db_Title_Error">Database Error</sys:String>
+    <sys:String x:Key="Db_Title_Warning">Database Warning</sys:String>
+
+    <sys:String x:Key="Db_Msg_CorruptRecordIgnored">Corrupt record ignored:</sys:String>
+    <sys:String x:Key="Db_Msg_LoadError">Error loading from the database:</sys:String>
+    <sys:String x:Key="Db_Msg_SaveError">Error saving to the database:</sys:String>
+    <sys:String x:Key="Db_Msg_UpdateError">Error updating the database:</sys:String>
+    <sys:String x:Key="Db_Msg_DeleteError">Error deleting from the database:</sys:String>
 </ResourceDictionary>

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Collections.Specialized;
 using PreciousMetalsManager.Services;
+using System.Windows;
 
 namespace PreciousMetalsManager.ViewModels
 {
@@ -14,6 +15,9 @@ namespace PreciousMetalsManager.ViewModels
     {
         public ObservableCollection<MetalHolding> Holdings { get; }
         public ICollectionView FilteredHoldings { get; }
+
+        private static string L(string key)
+            => Application.Current.TryFindResource(key) as string ?? key;
 
         private string _formFilter = string.Empty;
         public string FormFilter
@@ -46,7 +50,7 @@ namespace PreciousMetalsManager.ViewModels
         }
 
         public IEnumerable<object> MetalTypeFilterOptions { get; } =
-            new object[] { "All" }.Concat(Enum.GetValues(typeof(MetalType)).Cast<object>());
+            new object[] { L("Filter_All") }.Concat(Enum.GetValues(typeof(MetalType)).Cast<object>());
 
         private readonly Dictionary<MetalType, decimal> _currentMarketPrices = new();
 

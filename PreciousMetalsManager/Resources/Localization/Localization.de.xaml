@@ -72,4 +72,20 @@
 
     <!-- EditPricesDialog (validation) -->
     <sys:String x:Key="EditPricesDialog_Msg_InvalidPrice">Bitte geben Sie für alle Metalle einen gültigen, nicht-negativen Preis ein.</sys:String>
+
+    <!-- Window titles -->
+    <sys:String x:Key="MainWindow_Title">Edelmetall-Manager</sys:String>
+
+    <!-- Filters -->
+    <sys:String x:Key="Filter_All">Alle</sys:String>
+
+    <!-- Database messages -->
+    <sys:String x:Key="Db_Title_Error">Datenbankfehler</sys:String>
+    <sys:String x:Key="Db_Title_Warning">Datenbankwarnung</sys:String>
+
+    <sys:String x:Key="Db_Msg_CorruptRecordIgnored">Beschädigter Datensatz ignoriert:</sys:String>
+    <sys:String x:Key="Db_Msg_LoadError">Fehler beim Laden aus der Datenbank:</sys:String>
+    <sys:String x:Key="Db_Msg_SaveError">Fehler beim Speichern in die Datenbank:</sys:String>
+    <sys:String x:Key="Db_Msg_UpdateError">Fehler beim Aktualisieren der Datenbank:</sys:String>
+    <sys:String x:Key="Db_Msg_DeleteError">Fehler beim Löschen aus der Datenbank:</sys:String>
 </ResourceDictionary>
