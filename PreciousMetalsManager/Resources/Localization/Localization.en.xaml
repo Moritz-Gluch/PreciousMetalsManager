@@ -69,4 +69,7 @@
     <sys:String x:Key="EditPricesDialog_HintText">Please enter the current prices:</sys:String>
     <sys:String x:Key="EditPricesDialog_Btn_Save">Save</sys:String>
     <sys:String x:Key="EditPricesDialog_Btn_Cancel">Cancel</sys:String>
+
+    <!-- EditPricesDialog (validation) -->
+    <sys:String x:Key="EditPricesDialog_Msg_InvalidPrice">Please enter a valid, non-negative price for all metals.</sys:String>
 </ResourceDictionary>
