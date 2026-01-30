@@ -40,4 +40,18 @@
 
     <!-- Language Button -->
     <sys:String x:Key="LanguageButtonShort">EN</sys:String>
+
+    <!-- HoldingDialog -->
+    <sys:String x:Key="HoldingDialog_Title">Eintrag</sys:String>
+
+    <sys:String x:Key="HoldingDialog_Lbl_MetalType">Metalltyp</sys:String>
+    <sys:String x:Key="HoldingDialog_Lbl_FormVariant">Form / Variante</sys:String>
+    <sys:String x:Key="HoldingDialog_Lbl_Purity">Feingehalt</sys:String>
+    <sys:String x:Key="HoldingDialog_Lbl_Weight">Gewicht</sys:String>
+    <sys:String x:Key="HoldingDialog_Lbl_Quantity">Menge</sys:String>
+    <sys:String x:Key="HoldingDialog_Lbl_PurchasePrice">Kaufpreis</sys:String>
+    <sys:String x:Key="HoldingDialog_Lbl_PurchaseDate">Kaufdatum</sys:String>
+
+    <sys:String x:Key="HoldingDialog_Btn_Save">Speichern</sys:String>
+    <sys:String x:Key="HoldingDialog_Btn_Cancel">Abbrechen</sys:String>
 </ResourceDictionary>
