@@ -7,9 +7,11 @@ namespace PreciousMetalsManager.Resources
     /// </summary>
     public static class Localization
     {
-        public static string MainWindow_Title => Resources.MainWindow_Title;
+        //public static string MainWindow_Title => Resources.MainWindow_Title;
 
         public static string AddButton => Resources.AddButton;
+        public static string EditButton => Resources.EditButton;
+        public static string DeleteButton => Resources.DeleteButton;
 
         /// <summary>
         /// Sets the application language at runtime.

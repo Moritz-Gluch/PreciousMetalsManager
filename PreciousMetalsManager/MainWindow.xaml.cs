@@ -22,6 +22,7 @@ namespace PreciousMetalsManager
     {
         public MainWindow()
         {
+            PreciousMetalsManager.Resources.Localization.SetLanguage("en"); 
             InitializeComponent();
             DataContext = new ViewModel();
         }

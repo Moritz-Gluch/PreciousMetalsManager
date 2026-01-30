@@ -59,5 +59,32 @@ namespace PreciousMetalsManager.Resources {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Add ähnelt.
+        /// </summary>
+        internal static string AddButton {
+            get {
+                return ResourceManager.GetString("AddButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Delete ähnelt.
+        /// </summary>
+        internal static string DeleteButton {
+            get {
+                return ResourceManager.GetString("DeleteButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Edit ähnelt.
+        /// </summary>
+        internal static string EditButton {
+            get {
+                return ResourceManager.GetString("EditButton", resourceCulture);
+            }
+        }
     }
 }
