@@ -19,13 +19,6 @@
     <sys:String x:Key="Lbl_FormVariantFilter">Form/Variant:</sys:String>
 
     <!-- MainWindow DataGrid headers -->
-    <sys:String x:Key="Col_MetalType">Metal Type</sys:String>
-    <sys:String x:Key="Col_Form">Form</sys:String>
-    <sys:String x:Key="Col_Purity">Purity</sys:String>
-    <sys:String x:Key="Col_Weight">Weight</sys:String>
-    <sys:String x:Key="Col_Quantity">Quantity</sys:String>
-    <sys:String x:Key="Col_PurchasePrice">Purchase Price</sys:String>
-    <sys:String x:Key="Col_PurchaseDate">Purchase Date</sys:String>
     <sys:String x:Key="Col_CurrentValue">Current Value</sys:String>
     <sys:String x:Key="Col_TotalValue">Total Value</sys:String>
 
@@ -43,14 +36,7 @@
 
     <!-- HoldingDialog -->
     <sys:String x:Key="HoldingDialog_Title">Holding</sys:String>
-
-    <sys:String x:Key="HoldingDialog_Lbl_MetalType">Metal Type</sys:String>
     <sys:String x:Key="HoldingDialog_Lbl_FormVariant">Form / Variant</sys:String>
-    <sys:String x:Key="HoldingDialog_Lbl_Purity">Purity</sys:String>
-    <sys:String x:Key="HoldingDialog_Lbl_Weight">Weight</sys:String>
-    <sys:String x:Key="HoldingDialog_Lbl_Quantity">Quantity</sys:String>
-    <sys:String x:Key="HoldingDialog_Lbl_PurchasePrice">Purchase Price</sys:String>
-    <sys:String x:Key="HoldingDialog_Lbl_PurchaseDate">Purchase Date</sys:String>
 
     <sys:String x:Key="HoldingDialog_Btn_Save">Save</sys:String>
     <sys:String x:Key="HoldingDialog_Btn_Cancel">Cancel</sys:String>
@@ -88,4 +74,13 @@
     <sys:String x:Key="Db_Msg_SaveError">Error saving to the database:</sys:String>
     <sys:String x:Key="Db_Msg_UpdateError">Error updating the database:</sys:String>
     <sys:String x:Key="Db_Msg_DeleteError">Error deleting from the database:</sys:String>
+
+    <!-- Common terms -->
+    <sys:String x:Key="Common_MetalType">Metal Type</sys:String>
+    <sys:String x:Key="Common_Form">Form</sys:String>
+    <sys:String x:Key="Common_Purity">Purity</sys:String>
+    <sys:String x:Key="Common_Weight">Weight</sys:String>
+    <sys:String x:Key="Common_Quantity">Quantity</sys:String>
+    <sys:String x:Key="Common_PurchasePrice">Purchase Price</sys:String>
+    <sys:String x:Key="Common_PurchaseDate">Purchase Date</sys:String>
 </ResourceDictionary>

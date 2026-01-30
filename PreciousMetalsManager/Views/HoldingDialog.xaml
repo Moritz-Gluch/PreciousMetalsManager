@@ -14,25 +14,25 @@
         </Grid.RowDefinitions>
 
         <StackPanel>
-            <Label Content="{DynamicResource HoldingDialog_Lbl_MetalType}"/>
+            <Label Content="{DynamicResource Common_MetalType}"/>
             <ComboBox Name="MetalTypeComboBox" />
 
             <Label Content="{DynamicResource HoldingDialog_Lbl_FormVariant}"/>
             <TextBox Name="FormTextBox"/>
 
-            <Label Content="{DynamicResource HoldingDialog_Lbl_Purity}"/>
+            <Label Content="{DynamicResource Common_Purity}"/>
             <TextBox Name="PurityTextBox"/>
 
-            <Label Content="{DynamicResource HoldingDialog_Lbl_Weight}"/>
+            <Label Content="{DynamicResource Common_Weight}"/>
             <TextBox Name="WeightTextBox"/>
 
-            <Label Content="{DynamicResource HoldingDialog_Lbl_Quantity}"/>
+            <Label Content="{DynamicResource Common_Quantity}"/>
             <TextBox Name="QuantityTextBox"/>
 
-            <Label Content="{DynamicResource HoldingDialog_Lbl_PurchasePrice}"/>
+            <Label Content="{DynamicResource Common_PurchasePrice}"/>
             <TextBox Name="PurchasePriceTextBox"/>
 
-            <Label Content="{DynamicResource HoldingDialog_Lbl_PurchaseDate}"/>
+            <Label Content="{DynamicResource Common_PurchaseDate}"/>
             <DatePicker Name="PurchaseDatePicker"/>
         </StackPanel>
 

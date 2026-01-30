@@ -79,7 +79,7 @@
                     <DataGridTextColumn Binding="{Binding MetalType}">
                         <DataGridTextColumn.HeaderTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{DynamicResource Col_MetalType}" />
+                                <TextBlock Text="{DynamicResource Common_MetalType}" />
                             </DataTemplate>
                         </DataGridTextColumn.HeaderTemplate>
                     </DataGridTextColumn>
@@ -87,7 +87,7 @@
                     <DataGridTextColumn Binding="{Binding Form}">
                         <DataGridTextColumn.HeaderTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{DynamicResource Col_Form}" />
+                                <TextBlock Text="{DynamicResource Common_Form}" />
                             </DataTemplate>
                         </DataGridTextColumn.HeaderTemplate>
                     </DataGridTextColumn>
@@ -95,7 +95,7 @@
                     <DataGridTextColumn Binding="{Binding Purity}">
                         <DataGridTextColumn.HeaderTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{DynamicResource Col_Purity}" />
+                                <TextBlock Text="{DynamicResource Common_Purity}" />
                             </DataTemplate>
                         </DataGridTextColumn.HeaderTemplate>
                     </DataGridTextColumn>
@@ -103,7 +103,7 @@
                     <DataGridTextColumn Binding="{Binding Weight}">
                         <DataGridTextColumn.HeaderTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{DynamicResource Col_Weight}" />
+                                <TextBlock Text="{DynamicResource Common_Weight}" />
                             </DataTemplate>
                         </DataGridTextColumn.HeaderTemplate>
                     </DataGridTextColumn>
@@ -111,7 +111,7 @@
                     <DataGridTextColumn Binding="{Binding Quantity}">
                         <DataGridTextColumn.HeaderTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{DynamicResource Col_Quantity}" />
+                                <TextBlock Text="{DynamicResource Common_Quantity}" />
                             </DataTemplate>
                         </DataGridTextColumn.HeaderTemplate>
                     </DataGridTextColumn>
@@ -119,7 +119,7 @@
                     <DataGridTextColumn Binding="{Binding PurchasePrice}">
                         <DataGridTextColumn.HeaderTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{DynamicResource Col_PurchasePrice}" />
+                                <TextBlock Text="{DynamicResource Common_PurchasePrice}" />
                             </DataTemplate>
                         </DataGridTextColumn.HeaderTemplate>
                     </DataGridTextColumn>
@@ -127,7 +127,7 @@
                     <DataGridTextColumn Binding="{Binding PurchaseDate, StringFormat='dd.MM.yyyy'}">
                         <DataGridTextColumn.HeaderTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{DynamicResource Col_PurchaseDate}" />
+                                <TextBlock Text="{DynamicResource Common_PurchaseDate}" />
                             </DataTemplate>
                         </DataGridTextColumn.HeaderTemplate>
                     </DataGridTextColumn>

@@ -19,13 +19,6 @@
     <sys:String x:Key="Lbl_FormVariantFilter">Form/Variante:</sys:String>
 
     <!-- MainWindow DataGrid headers -->
-    <sys:String x:Key="Col_MetalType">Metalltyp</sys:String>
-    <sys:String x:Key="Col_Form">Form</sys:String>
-    <sys:String x:Key="Col_Purity">Feingehalt</sys:String>
-    <sys:String x:Key="Col_Weight">Gewicht</sys:String>
-    <sys:String x:Key="Col_Quantity">Menge</sys:String>
-    <sys:String x:Key="Col_PurchasePrice">Kaufpreis</sys:String>
-    <sys:String x:Key="Col_PurchaseDate">Kaufdatum</sys:String>
     <sys:String x:Key="Col_CurrentValue">Aktueller Wert</sys:String>
     <sys:String x:Key="Col_TotalValue">Gesamtwert</sys:String>
 
@@ -43,14 +36,7 @@
 
     <!-- HoldingDialog -->
     <sys:String x:Key="HoldingDialog_Title">Eintrag</sys:String>
-
-    <sys:String x:Key="HoldingDialog_Lbl_MetalType">Metalltyp</sys:String>
     <sys:String x:Key="HoldingDialog_Lbl_FormVariant">Form / Variante</sys:String>
-    <sys:String x:Key="HoldingDialog_Lbl_Purity">Feingehalt</sys:String>
-    <sys:String x:Key="HoldingDialog_Lbl_Weight">Gewicht</sys:String>
-    <sys:String x:Key="HoldingDialog_Lbl_Quantity">Menge</sys:String>
-    <sys:String x:Key="HoldingDialog_Lbl_PurchasePrice">Kaufpreis</sys:String>
-    <sys:String x:Key="HoldingDialog_Lbl_PurchaseDate">Kaufdatum</sys:String>
 
     <sys:String x:Key="HoldingDialog_Btn_Save">Speichern</sys:String>
     <sys:String x:Key="HoldingDialog_Btn_Cancel">Abbrechen</sys:String>
@@ -88,4 +74,13 @@
     <sys:String x:Key="Db_Msg_SaveError">Fehler beim Speichern in die Datenbank:</sys:String>
     <sys:String x:Key="Db_Msg_UpdateError">Fehler beim Aktualisieren der Datenbank:</sys:String>
     <sys:String x:Key="Db_Msg_DeleteError">Fehler beim Löschen aus der Datenbank:</sys:String>
+
+    <!-- Common terms -->
+    <sys:String x:Key="Common_MetalType">Metalltyp</sys:String>
+    <sys:String x:Key="Common_Form">Form</sys:String>
+    <sys:String x:Key="Common_Purity">Feingehalt</sys:String>
+    <sys:String x:Key="Common_Weight">Gewicht</sys:String>
+    <sys:String x:Key="Common_Quantity">Menge</sys:String>
+    <sys:String x:Key="Common_PurchasePrice">Kaufpreis</sys:String>
+    <sys:String x:Key="Common_PurchaseDate">Kaufdatum</sys:String>
 </ResourceDictionary>
