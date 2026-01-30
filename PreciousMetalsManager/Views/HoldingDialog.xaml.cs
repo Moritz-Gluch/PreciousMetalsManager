@@ -30,49 +30,52 @@ namespace PreciousMetalsManager.Views
             PurchaseDatePicker.SelectedDate = DateTime.Now;
         }
 
+        private static string L(string key)
+            => Application.Current.TryFindResource(key) as string ?? key;
+
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
 
             // Goes sure no field is empty or unvalid
             if (MetalTypeComboBox.SelectedItem == null)
             {
-                MessageBox.Show("Please select a metal type.");
+                MessageBox.Show(L("HoldingDialog_Msg_SelectMetalType"));
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(FormTextBox.Text))
             {
-                MessageBox.Show("Form / Variant is required.");
+                MessageBox.Show(L("HoldingDialog_Msg_FormRequired"));
                 return;
             }
 
             if (!decimal.TryParse(PurityTextBox.Text, out var purity) || purity <= 0)
             {
-                MessageBox.Show("Purity must be a positive number.");
+                MessageBox.Show(L("HoldingDialog_Msg_PurityPositive"));
                 return;
             }
 
             if (!decimal.TryParse(WeightTextBox.Text, out var weight) || weight <= 0)
             {
-                MessageBox.Show("Weight must be a positive number.");
+                MessageBox.Show(L("HoldingDialog_Msg_WeightPositive"));
                 return;
             }
 
             if (!int.TryParse(QuantityTextBox.Text, out var quantity) || quantity <= 0)
             {
-                MessageBox.Show("Quantity must be a positive whole number.");
+                MessageBox.Show(L("HoldingDialog_Msg_QuantityPositiveWhole"));
                 return;
             }
 
             if (!decimal.TryParse(PurchasePriceTextBox.Text, out var price) || price < 0)
             {
-                MessageBox.Show("Purchase price must be zero or greater.");
+                MessageBox.Show(L("HoldingDialog_Msg_PurchasePriceNonNegative"));
                 return;
             }
 
             if (PurchaseDatePicker.SelectedDate == null)
             {
-                MessageBox.Show("Please select a purchase date.");
+                MessageBox.Show(L("HoldingDialog_Msg_SelectPurchaseDate"));
                 return;
             }
 

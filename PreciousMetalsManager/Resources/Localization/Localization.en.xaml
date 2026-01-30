@@ -54,4 +54,13 @@
 
     <sys:String x:Key="HoldingDialog_Btn_Save">Save</sys:String>
     <sys:String x:Key="HoldingDialog_Btn_Cancel">Cancel</sys:String>
+
+    <!-- HoldingDialog (validation) -->
+    <sys:String x:Key="HoldingDialog_Msg_SelectMetalType">Please select a metal type.</sys:String>
+    <sys:String x:Key="HoldingDialog_Msg_FormRequired">Form / Variant is required.</sys:String>
+    <sys:String x:Key="HoldingDialog_Msg_PurityPositive">Purity must be a positive number.</sys:String>
+    <sys:String x:Key="HoldingDialog_Msg_WeightPositive">Weight must be a positive number.</sys:String>
+    <sys:String x:Key="HoldingDialog_Msg_QuantityPositiveWhole">Quantity must be a positive whole number.</sys:String>
+    <sys:String x:Key="HoldingDialog_Msg_PurchasePriceNonNegative">Purchase price must be zero or greater.</sys:String>
+    <sys:String x:Key="HoldingDialog_Msg_SelectPurchaseDate">Please select a purchase date.</sys:String>
 </ResourceDictionary>
