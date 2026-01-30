@@ -27,6 +27,9 @@ namespace PreciousMetalsManager
             DataContext = new ViewModel();
         }
 
+        private static string L(string key)
+            => Application.Current.TryFindResource(key) as string ?? key;
+
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
             var addWindow = new HoldingDialog();
@@ -34,7 +37,7 @@ namespace PreciousMetalsManager
             {
                 if (DataContext is ViewModel vm)
                 {
-                    vm.AddHolding(addWindow.NewHolding); 
+                    vm.AddHolding(addWindow.NewHolding);
                 }
             }
         }
@@ -67,14 +70,14 @@ namespace PreciousMetalsManager
                         selected.PurchasePrice = editWindow.NewHolding.PurchasePrice;
                         selected.PurchaseDate = editWindow.NewHolding.PurchaseDate;
 
-                        vm.UpdateHolding(selected); 
+                        vm.UpdateHolding(selected);
 
                         MainDataGrid.Items.Refresh();
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Please select a holding to edit.");
+                    MessageBox.Show(L("Msg_SelectHoldingToEdit"));
                 }
             }
         }
@@ -87,20 +90,20 @@ namespace PreciousMetalsManager
                 {
                     // Confirmation box
                     var result = MessageBox.Show(
-                        "Are you sure you want to delete this holding?",
-                        "Confirm Delete",
+                        L("Msg_ConfirmDeleteText"),
+                        L("Msg_ConfirmDeleteTitle"),
                         MessageBoxButton.YesNo,
                         MessageBoxImage.Warning
                     );
 
                     if (result == MessageBoxResult.Yes)
                     {
-                        vm.DeleteHolding(selected); 
+                        vm.DeleteHolding(selected);
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Please select a holding to delete.");
+                    MessageBox.Show(L("Msg_SelectHoldingToDelete"));
                 }
             }
         }
