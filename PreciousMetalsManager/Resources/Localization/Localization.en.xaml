@@ -8,6 +8,30 @@
     <sys:String x:Key="DeleteButton">Delete</sys:String>
     <sys:String x:Key="EditPricesButton">Edit prices</sys:String>
 
+    <!-- MainWindow labels -->
+    <sys:String x:Key="Lbl_Gold">Gold:</sys:String>
+    <sys:String x:Key="Lbl_Silver">Silver:</sys:String>
+    <sys:String x:Key="Lbl_Platinum">Platinum:</sys:String>
+    <sys:String x:Key="Lbl_Palladium">Palladium:</sys:String>
+    <sys:String x:Key="Lbl_Bronce">Bronce:</sys:String>
+
+    <sys:String x:Key="Lbl_MetalTypeFilter">Metal Type:</sys:String>
+    <sys:String x:Key="Lbl_FormVariantFilter">Form/Variant:</sys:String>
+
+    <!-- MainWindow DataGrid headers -->
+    <sys:String x:Key="Col_MetalType">Metal Type</sys:String>
+    <sys:String x:Key="Col_Form">Form</sys:String>
+    <sys:String x:Key="Col_Purity">Purity</sys:String>
+    <sys:String x:Key="Col_Weight">Weight</sys:String>
+    <sys:String x:Key="Col_Quantity">Quantity</sys:String>
+    <sys:String x:Key="Col_PurchasePrice">Purchase Price</sys:String>
+    <sys:String x:Key="Col_PurchaseDate">Purchase Date</sys:String>
+    <sys:String x:Key="Col_CurrentValue">Current Value</sys:String>
+    <sys:String x:Key="Col_TotalValue">Total Value</sys:String>
+
+    <!-- MainWindow empty text -->
+    <sys:String x:Key="Txt_NoHoldingsMatch">No holdings match your criteria.</sys:String>
+
     <!-- MessageBoxes -->
     <sys:String x:Key="Msg_SelectHoldingToEdit">Please select a holding to edit.</sys:String>
     <sys:String x:Key="Msg_SelectHoldingToDelete">Please select a holding to delete.</sys:String>

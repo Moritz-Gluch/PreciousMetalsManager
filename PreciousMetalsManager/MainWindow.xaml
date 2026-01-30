@@ -32,26 +32,26 @@
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,10" Grid.ColumnSpan="2">
-            <Label Content="Gold:" VerticalAlignment="Center"/>
+            <Label Content="{DynamicResource Lbl_Gold}" VerticalAlignment="Center"/>
             <TextBlock Text="{Binding GoldPrice}" Width="80" Margin="2,0" VerticalAlignment="Center"/>
-            <Label Content="Silver:" VerticalAlignment="Center"/>
+            <Label Content="{DynamicResource Lbl_Silver}" VerticalAlignment="Center"/>
             <TextBlock Text="{Binding SilverPrice}" Width="80" Margin="2,0" VerticalAlignment="Center"/>
-            <Label Content="Platinum:" VerticalAlignment="Center"/>
+            <Label Content="{DynamicResource Lbl_Platinum}" VerticalAlignment="Center"/>
             <TextBlock Text="{Binding PlatinumPrice}" Width="80" Margin="2,0" VerticalAlignment="Center"/>
-            <Label Content="Palladium:" VerticalAlignment="Center"/>
+            <Label Content="{DynamicResource Lbl_Palladium}" VerticalAlignment="Center"/>
             <TextBlock Text="{Binding PalladiumPrice}" Width="80" Margin="2,0" VerticalAlignment="Center"/>
-            <Label Content="Bronce:" VerticalAlignment="Center"/>
+            <Label Content="{DynamicResource Lbl_Bronce}" VerticalAlignment="Center"/>
             <TextBlock Text="{Binding BroncePrice}" Width="80" Margin="2,0" VerticalAlignment="Center"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0,0,0,10" Grid.ColumnSpan="2">
-            <Label Content="Metal Type:" VerticalAlignment="Center"/>
+            <Label Content="{DynamicResource Lbl_MetalTypeFilter}" VerticalAlignment="Center"/>
             <ComboBox x:Name="MetalTypeFilterComboBox"
                       Width="120"
                       Margin="5,0"
                       ItemsSource="{Binding MetalTypeFilterOptions}"
                       SelectedItem="{Binding SelectedMetalTypeFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <Label Content="Form/Variant:" VerticalAlignment="Center"/>
+            <Label Content="{DynamicResource Lbl_FormVariantFilter}" VerticalAlignment="Center"/>
             <TextBox x:Name="FormFilterTextBox"
                      Width="120"
                      Margin="5,0"
@@ -76,20 +76,82 @@
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Metal Type" Binding="{Binding MetalType}" />
-                    <DataGridTextColumn Header="Form" Binding="{Binding Form}" />
-                    <DataGridTextColumn Header="Purity" Binding="{Binding Purity}" />
-                    <DataGridTextColumn Header="Weight" Binding="{Binding Weight}" />
-                    <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" />
-                    <DataGridTextColumn Header="Purchase Price" Binding="{Binding PurchasePrice}" />
-                    <DataGridTextColumn Header="Purchase Date" Binding="{Binding PurchaseDate, StringFormat='dd.MM.yyyy'}" />
-                    <DataGridTextColumn Header="Current Value" Binding="{Binding CurrentValue, StringFormat=F2}" />
-                    <DataGridTextColumn Header="Total Value" Binding="{Binding TotalValue, StringFormat=F2}" />
+                    <DataGridTextColumn Binding="{Binding MetalType}">
+                        <DataGridTextColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{DynamicResource Col_MetalType}" />
+                            </DataTemplate>
+                        </DataGridTextColumn.HeaderTemplate>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Binding="{Binding Form}">
+                        <DataGridTextColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{DynamicResource Col_Form}" />
+                            </DataTemplate>
+                        </DataGridTextColumn.HeaderTemplate>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Binding="{Binding Purity}">
+                        <DataGridTextColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{DynamicResource Col_Purity}" />
+                            </DataTemplate>
+                        </DataGridTextColumn.HeaderTemplate>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Binding="{Binding Weight}">
+                        <DataGridTextColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{DynamicResource Col_Weight}" />
+                            </DataTemplate>
+                        </DataGridTextColumn.HeaderTemplate>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Binding="{Binding Quantity}">
+                        <DataGridTextColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{DynamicResource Col_Quantity}" />
+                            </DataTemplate>
+                        </DataGridTextColumn.HeaderTemplate>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Binding="{Binding PurchasePrice}">
+                        <DataGridTextColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{DynamicResource Col_PurchasePrice}" />
+                            </DataTemplate>
+                        </DataGridTextColumn.HeaderTemplate>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Binding="{Binding PurchaseDate, StringFormat='dd.MM.yyyy'}">
+                        <DataGridTextColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{DynamicResource Col_PurchaseDate}" />
+                            </DataTemplate>
+                        </DataGridTextColumn.HeaderTemplate>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Binding="{Binding CurrentValue, StringFormat=F2}">
+                        <DataGridTextColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{DynamicResource Col_CurrentValue}" />
+                            </DataTemplate>
+                        </DataGridTextColumn.HeaderTemplate>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Binding="{Binding TotalValue, StringFormat=F2}">
+                        <DataGridTextColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{DynamicResource Col_TotalValue}" />
+                            </DataTemplate>
+                        </DataGridTextColumn.HeaderTemplate>
+                    </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
 
             <TextBlock
-                Text="No holdings match your criteria."
+                Text="{DynamicResource Txt_NoHoldingsMatch}"
                 Foreground="Gray"
                 FontStyle="Italic"
                 HorizontalAlignment="Center"
