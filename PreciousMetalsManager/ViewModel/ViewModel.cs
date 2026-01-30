@@ -276,12 +276,12 @@ namespace PreciousMetalsManager.ViewModels
         {
             if (LanguageButtonText == "EN")
             {
-                PreciousMetalsManager.Resources.Localization.SetLanguage("de");
+                App.SetLanguage("de");
                 LanguageButtonText = "DE";
             }
             else
             {
-                PreciousMetalsManager.Resources.Localization.SetLanguage("en");
+                App.SetLanguage("en");
                 LanguageButtonText = "EN";
             }
         }

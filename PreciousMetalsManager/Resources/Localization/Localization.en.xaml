@@ -1,0 +1,19 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+
+    <!-- Buttons -->
+    <sys:String x:Key="AddButton">Add</sys:String>
+    <sys:String x:Key="EditButton">Edit</sys:String>
+    <sys:String x:Key="DeleteButton">Delete</sys:String>
+    <sys:String x:Key="EditPricesButton">Edit prices</sys:String>
+
+    <!-- MessageBoxes -->
+    <sys:String x:Key="Msg_SelectHoldingToEdit">Please select a holding to edit.</sys:String>
+    <sys:String x:Key="Msg_SelectHoldingToDelete">Please select a holding to delete.</sys:String>
+    <sys:String x:Key="Msg_ConfirmDeleteText">Are you sure you want to delete this holding?</sys:String>
+    <sys:String x:Key="Msg_ConfirmDeleteTitle">Confirm Delete</sys:String>
+
+    <!-- Language Button -->
+    <sys:String x:Key="LanguageButtonShort">EN</sys:String>
+</ResourceDictionary>
