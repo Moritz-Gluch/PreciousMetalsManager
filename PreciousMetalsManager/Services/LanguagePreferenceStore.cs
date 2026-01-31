@@ -9,12 +9,19 @@ namespace PreciousMetalsManager.Services
         private readonly string _filePath;
 
         public LanguagePreferenceStore()
+            : this(Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "PreciousMetalsManager"))
         {
-            var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            var dir = Path.Combine(appData, "PreciousMetalsManager");
-            Directory.CreateDirectory(dir);
+        }
 
-            _filePath = Path.Combine(dir, FileName);
+        public LanguagePreferenceStore(string baseDirectory)
+        {
+            if (string.IsNullOrWhiteSpace(baseDirectory))
+                throw new ArgumentException("baseDirectory must not be null/empty.", nameof(baseDirectory));
+
+            Directory.CreateDirectory(baseDirectory);
+            _filePath = Path.Combine(baseDirectory, FileName);
         }
 
         public string? TryLoad()

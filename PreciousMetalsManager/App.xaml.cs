@@ -13,7 +13,7 @@ namespace PreciousMetalsManager
         private const string LocalizationFolder = "Resources/Localization/";
         public static string CurrentLanguage { get; private set; } = "en";
 
-        private static readonly LanguagePreferenceStore LanguageStore = new();
+        private static LanguagePreferenceStore LanguageStore = new();
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -63,6 +63,16 @@ namespace PreciousMetalsManager
             CurrentLanguage = languageCode;
 
             LanguageStore.Save(CurrentLanguage);
+        }
+
+        internal static void SetLanguagePreferenceStoreForTests(LanguagePreferenceStore store)
+        {
+            LanguageStore = store ?? throw new ArgumentNullException(nameof(store));
+        }
+
+        internal static void ResetLanguagePreferenceStoreForTests()
+        {
+            LanguageStore = new LanguagePreferenceStore();
         }
     }
 }

@@ -176,6 +176,33 @@ namespace PreciousMetalsManager.Tests
             Assert.AreEqual("All", firstEn);
         }
 
+        [TestMethod]
+        public void SetLanguage_ShouldPersistLanguageSelection()
+        {
+            var tempSettingsDir = Path.Combine(Path.GetTempPath(), "PreciousMetalsManager.Tests", Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(tempSettingsDir);
+
+            try
+            {
+                var store = new PreciousMetalsManager.Services.LanguagePreferenceStore(tempSettingsDir);
+
+                PreciousMetalsManager.App.SetLanguagePreferenceStoreForTests(store);
+
+                App.SetLanguage("de");
+                Assert.AreEqual("de", store.TryLoad());
+
+                App.SetLanguage("en");
+                Assert.AreEqual("en", store.TryLoad());
+            }
+            finally
+            {
+                if (Directory.Exists(tempSettingsDir))
+                    Directory.Delete(tempSettingsDir, recursive: true);
+
+                PreciousMetalsManager.App.ResetLanguagePreferenceStoreForTests();
+            }
+        }
+
         private static ResourceDictionary Load(string relativePathFromProjectRoot)
         {
             var baseDir = AppContext.BaseDirectory;
