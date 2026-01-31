@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
+using PreciousMetalsManager.Services;
 
 namespace PreciousMetalsManager
 {
@@ -11,6 +12,23 @@ namespace PreciousMetalsManager
     {
         private const string LocalizationFolder = "Resources/Localization/";
         public static string CurrentLanguage { get; private set; } = "en";
+
+        private static readonly LanguagePreferenceStore LanguageStore = new();
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            var savedLanguage = LanguageStore.TryLoad();
+            if (!string.IsNullOrWhiteSpace(savedLanguage))
+            {
+                SetLanguage(savedLanguage);
+            }
+            else
+            {
+                SetLanguage(CurrentLanguage);
+            }
+        }
 
         public static void SetLanguage(string languageCode)
         {
@@ -43,6 +61,8 @@ namespace PreciousMetalsManager
 
             merged.Add(newDict);
             CurrentLanguage = languageCode;
+
+            LanguageStore.Save(CurrentLanguage);
         }
     }
 }
