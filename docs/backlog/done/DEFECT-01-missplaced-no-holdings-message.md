@@ -2,10 +2,7 @@
 # DEFECT-01: Misplaced 'No holdings match your criteria' message
 
 ## User Story
-As a user,
-when I filter or search for holdings and no results are found,
-I want to see the message 'No holdings match your criteria' centered inside the DataGrid,
-so that it is clear there are no matching holdings and the message is visually associated with the grid.
+As a user, when I filter or search for holdings and no results are found, I want to see the message 'No holdings match your criteria' centered inside the DataGrid, so that it is clear there are no matching holdings and the message is visually associated with the grid.
 
 ## Current Behavior
 The message 'No holdings match your criteria' is displayed next to the DataGrid instead of inside it.
@@ -19,7 +16,3 @@ The message 'No holdings match your criteria' is displayed next to the DataGrid 
 - The message is centered and clearly visible inside the DataGrid area.
 - The message is not displayed outside or next to the DataGrid.
 
-## Status
-- [ ] Open
-- [ ] In Progress
-- [ ] Done

@@ -64,7 +64,8 @@ PreciousMetalsManager/
 └─ PreciousMetalsManager/  
    ├─ Models/              
    ├─ Views/               
-   ├─ ViewModels/          
+   ├─ ViewModel/           
    ├─ Services/            
+   ├─ Resources/           
    ├─ App.xaml             
    └─ MainWindow.xaml

@@ -18,8 +18,8 @@ This document outlines the development and testing approach to ensure reliable i
 
 ### Unit Tests
 - Test critical logic in isolation:
-  - CalculationService (Current Value, Total Value)
-  - DatabaseService CRUD operations
+  - ViewModel calculations (Current Value, Total Value)
+  - LocalStorageService CRUD operations
   - ExportService (CSV/Excel)
 - Run tests after each feature implementation
 - Coverage targets: key business logic

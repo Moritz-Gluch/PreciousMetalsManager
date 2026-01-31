@@ -3,11 +3,11 @@
 This document outlines the testing and QA measures to ensure the quality of the application.
 
 ## 1. Unit Testing
-- **CalculationService**
+- **ViewModel (calculations)**
   - Test Current Value calculation for multiple metals and edge cases
   - Test Total Value calculation
-- **DatabaseService**
-  - Test CRUD operations in an in-memory SQLite database
+- **LocalStorageService**
+  - Test CRUD operations (optionally against a dedicated test DB)
 - **ExportService**
   - Test CSV/Excel export functionality
 - All tests pass successfully before a story is marked as done

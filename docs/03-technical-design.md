@@ -12,21 +12,20 @@ Refer to `00-project-overview.md` for the complete folder structure of the proje
 
 ## 3. Database Design (for Local Storage)
 - SQLite local database
-- Table: Metals
+- Table: Holdings
   - Id (Primary Key)
-  - MetalType (string)
-  - Variant (string)
+  - MetalType (integer/enum)
+  - Form (string)
   - Purity (decimal)
   - Weight (decimal)
-  - Quantity (decimal)
+  - Quantity (integer)
   - PurchasePrice (decimal)
   - PurchaseDate (date)
-  - CurrentValue (decimal)
-  - TotalValue (decimal)
+  - CurrentValue / TotalValue are calculated in-memory (not persisted in DB)
 
 ## 4. Services
-- DatabaseService → handles CRUD operations to SQLite
-- CalculationService → computes CurrentValue and TotalValue
+- LocalStorageService → handles CRUD operations to SQLite
+- Calculations are currently performed in the ViewModel 
 - ApiService → fetches current market prices (optional)
 - ExportService → CSV/Excel export
 
