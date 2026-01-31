@@ -1,14 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using PreciousMetalsManager.Models;
 
 namespace PreciousMetalsManager.Views
@@ -19,7 +10,7 @@ namespace PreciousMetalsManager.Views
     /// </summary>
     public partial class HoldingDialog : Window
     {
-        public MetalHolding NewHolding { get; private set; }
+        public MetalHolding? NewHolding { get; private set; }
 
         public HoldingDialog()
         {
@@ -31,11 +22,10 @@ namespace PreciousMetalsManager.Views
         }
 
         private static string L(string key)
-            => Application.Current.TryFindResource(key) as string ?? key;
+            => Application.Current?.TryFindResource(key) as string ?? key;
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-
             // Goes sure no field is empty or unvalid
             if (MetalTypeComboBox.SelectedItem == null)
             {

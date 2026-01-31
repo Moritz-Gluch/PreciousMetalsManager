@@ -25,7 +25,7 @@ namespace PreciousMetalsManager.Views
         }
 
         private static string L(string key)
-            => Application.Current.TryFindResource(key) as string ?? key;
+            => Application.Current?.TryFindResource(key) as string ?? key;
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
