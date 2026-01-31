@@ -1,0 +1,86 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+
+    <!-- Buttons -->
+    <sys:String x:Key="AddButton">Hinzufügen</sys:String>
+    <sys:String x:Key="EditButton">Bearbeiten</sys:String>
+    <sys:String x:Key="DeleteButton">Löschen</sys:String>
+    <sys:String x:Key="EditPricesButton">Preise bearbeiten</sys:String>
+
+    <!-- MainWindow labels -->
+    <sys:String x:Key="Lbl_Gold">Gold:</sys:String>
+    <sys:String x:Key="Lbl_Silver">Silber:</sys:String>
+    <sys:String x:Key="Lbl_Platinum">Platin:</sys:String>
+    <sys:String x:Key="Lbl_Palladium">Palladium:</sys:String>
+    <sys:String x:Key="Lbl_Bronce">Bronze:</sys:String>
+
+    <sys:String x:Key="Lbl_MetalTypeFilter">Metalltyp:</sys:String>
+    <sys:String x:Key="Lbl_FormVariantFilter">Form/Variante:</sys:String>
+
+    <!-- MainWindow DataGrid headers -->
+    <sys:String x:Key="Col_CurrentValue">Aktueller Wert</sys:String>
+    <sys:String x:Key="Col_TotalValue">Gesamtwert</sys:String>
+
+    <!-- MainWindow empty text -->
+    <sys:String x:Key="Txt_NoHoldingsMatch">Keine Einträge passen zu deinen Kriterien.</sys:String>
+
+    <!-- MessageBoxes -->
+    <sys:String x:Key="Msg_SelectHoldingToEdit">Bitte wähle einen Eintrag zum Bearbeiten aus.</sys:String>
+    <sys:String x:Key="Msg_SelectHoldingToDelete">Bitte wähle einen Eintrag zum Löschen aus.</sys:String>
+    <sys:String x:Key="Msg_ConfirmDeleteText">Möchtest du diesen Eintrag wirklich löschen?</sys:String>
+    <sys:String x:Key="Msg_ConfirmDeleteTitle">Löschen bestätigen</sys:String>
+
+    <!-- Language Button -->
+    <sys:String x:Key="LanguageButtonShort">EN</sys:String>
+
+    <!-- HoldingDialog -->
+    <sys:String x:Key="HoldingDialog_Title">Eintrag</sys:String>
+    <sys:String x:Key="HoldingDialog_Lbl_FormVariant">Form / Variante</sys:String>
+
+    <sys:String x:Key="HoldingDialog_Btn_Save">Speichern</sys:String>
+    <sys:String x:Key="HoldingDialog_Btn_Cancel">Abbrechen</sys:String>
+
+    <!-- HoldingDialog (validation) -->
+    <sys:String x:Key="HoldingDialog_Msg_SelectMetalType">Bitte wähle einen Metalltyp aus.</sys:String>
+    <sys:String x:Key="HoldingDialog_Msg_FormRequired">Form / Variante ist erforderlich.</sys:String>
+    <sys:String x:Key="HoldingDialog_Msg_PurityPositive">Der Feingehalt muss eine positive Zahl sein.</sys:String>
+    <sys:String x:Key="HoldingDialog_Msg_WeightPositive">Das Gewicht muss eine positive Zahl sein.</sys:String>
+    <sys:String x:Key="HoldingDialog_Msg_QuantityPositiveWhole">Die Menge muss eine positive ganze Zahl sein.</sys:String>
+    <sys:String x:Key="HoldingDialog_Msg_PurchasePriceNonNegative">Der Kaufpreis muss 0 oder größer sein.</sys:String>
+    <sys:String x:Key="HoldingDialog_Msg_SelectPurchaseDate">Bitte wähle ein Kaufdatum aus.</sys:String>
+
+    <!-- EditPricesDialog -->
+    <sys:String x:Key="EditPricesDialog_Title">Metallpreise bearbeiten</sys:String>
+    <sys:String x:Key="EditPricesDialog_HintText">Bitte geben Sie die aktuellen Preise ein:</sys:String>
+    <sys:String x:Key="EditPricesDialog_Btn_Save">Speichern</sys:String>
+    <sys:String x:Key="EditPricesDialog_Btn_Cancel">Abbrechen</sys:String>
+
+    <!-- EditPricesDialog (validation) -->
+    <sys:String x:Key="EditPricesDialog_Msg_InvalidPrice">Bitte geben Sie für alle Metalle einen gültigen, nicht-negativen Preis ein.</sys:String>
+
+    <!-- Window titles -->
+    <sys:String x:Key="MainWindow_Title">Edelmetall-Manager</sys:String>
+
+    <!-- Filters -->
+    <sys:String x:Key="Filter_All">Alle</sys:String>
+
+    <!-- Database messages -->
+    <sys:String x:Key="Db_Title_Error">Datenbankfehler</sys:String>
+    <sys:String x:Key="Db_Title_Warning">Datenbankwarnung</sys:String>
+
+    <sys:String x:Key="Db_Msg_CorruptRecordIgnored">Beschädigter Datensatz ignoriert:</sys:String>
+    <sys:String x:Key="Db_Msg_LoadError">Fehler beim Laden aus der Datenbank:</sys:String>
+    <sys:String x:Key="Db_Msg_SaveError">Fehler beim Speichern in die Datenbank:</sys:String>
+    <sys:String x:Key="Db_Msg_UpdateError">Fehler beim Aktualisieren der Datenbank:</sys:String>
+    <sys:String x:Key="Db_Msg_DeleteError">Fehler beim Löschen aus der Datenbank:</sys:String>
+
+    <!-- Common terms -->
+    <sys:String x:Key="Common_MetalType">Metalltyp</sys:String>
+    <sys:String x:Key="Common_Form">Form</sys:String>
+    <sys:String x:Key="Common_Purity">Feingehalt</sys:String>
+    <sys:String x:Key="Common_Weight">Gewicht</sys:String>
+    <sys:String x:Key="Common_Quantity">Menge</sys:String>
+    <sys:String x:Key="Common_PurchasePrice">Kaufpreis</sys:String>
+    <sys:String x:Key="Common_PurchaseDate">Kaufdatum</sys:String>
+</ResourceDictionary>

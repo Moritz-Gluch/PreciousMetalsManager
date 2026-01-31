@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PreciousMetalsManager.Views"
         mc:Ignorable="d"
-        Title="Window1" Height="450" Width="800">
+        Title="{DynamicResource HoldingDialog_Title}" Height="450" Width="800">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -14,31 +14,37 @@
         </Grid.RowDefinitions>
 
         <StackPanel>
-            <Label Content="Metal Type"/>
-            <ComboBox Name="MetalTypeComboBox" />
+            <Label Content="{DynamicResource Common_MetalType}"/>
+            <ComboBox Name="MetalTypeComboBox">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Converter={StaticResource MetalTypeToLabelConverter}}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
 
-            <Label Content="Form / Variant"/>
+            <Label Content="{DynamicResource HoldingDialog_Lbl_FormVariant}"/>
             <TextBox Name="FormTextBox"/>
 
-            <Label Content="Purity"/>
+            <Label Content="{DynamicResource Common_Purity}"/>
             <TextBox Name="PurityTextBox"/>
 
-            <Label Content="Weight"/>
+            <Label Content="{DynamicResource Common_Weight}"/>
             <TextBox Name="WeightTextBox"/>
 
-            <Label Content="Quantity"/>
+            <Label Content="{DynamicResource Common_Quantity}"/>
             <TextBox Name="QuantityTextBox"/>
 
-            <Label Content="Purchase Price"/>
+            <Label Content="{DynamicResource Common_PurchasePrice}"/>
             <TextBox Name="PurchasePriceTextBox"/>
 
-            <Label Content="Purchase Date"/>
+            <Label Content="{DynamicResource Common_PurchaseDate}"/>
             <DatePicker Name="PurchaseDatePicker"/>
         </StackPanel>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
-            <Button Name="SaveButton" Content="Save" Width="80" Margin="5" Click="SaveButton_Click"/>
-            <Button Name="CancelButton" Content="Cancel" Width="80" Margin="5" Click="CancelButton_Click"/>
+            <Button Name="SaveButton" Content="{DynamicResource HoldingDialog_Btn_Save}" Width="80" Margin="5" Click="SaveButton_Click"/>
+            <Button Name="CancelButton" Content="{DynamicResource HoldingDialog_Btn_Cancel}" Width="80" Margin="5" Click="CancelButton_Click"/>
         </StackPanel>
     </Grid>
 </Window>

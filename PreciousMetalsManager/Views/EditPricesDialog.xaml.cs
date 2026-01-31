@@ -24,6 +24,9 @@ namespace PreciousMetalsManager.Views
             BroncePriceTextBox.Text = bronce.ToString("F2");
         }
 
+        private static string L(string key)
+            => Application.Current?.TryFindResource(key) as string ?? key;
+
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             if (!decimal.TryParse(GoldPriceTextBox.Text, out var gold) || gold < 0 ||
@@ -32,7 +35,7 @@ namespace PreciousMetalsManager.Views
                 !decimal.TryParse(PalladiumPriceTextBox.Text, out var palladium) || palladium < 0 ||
                 !decimal.TryParse(BroncePriceTextBox.Text, out var bronce) || bronce < 0)
             {
-                MessageBox.Show("Bitte geben Sie für alle Metalle einen gültigen, positiven Preis ein.");
+                MessageBox.Show(L("EditPricesDialog_Msg_InvalidPrice"));
                 return;
             }
 

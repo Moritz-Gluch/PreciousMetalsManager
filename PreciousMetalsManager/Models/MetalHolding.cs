@@ -79,7 +79,7 @@ namespace PreciousMetalsManager.Models
             set { if (_totalValue != value) { _totalValue = value; OnPropertyChanged(nameof(TotalValue)); } }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }

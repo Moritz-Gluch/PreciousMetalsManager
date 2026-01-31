@@ -3,10 +3,10 @@ using System.Collections.ObjectModel;
 using PreciousMetalsManager.Models;
 using System.ComponentModel;
 using System.Windows.Data;
-using System.Collections.Generic;
 using System.Linq;
 using System.Collections.Specialized;
 using PreciousMetalsManager.Services;
+using System.Windows;
 
 namespace PreciousMetalsManager.ViewModels
 {
@@ -14,6 +14,9 @@ namespace PreciousMetalsManager.ViewModels
     {
         public ObservableCollection<MetalHolding> Holdings { get; }
         public ICollectionView FilteredHoldings { get; }
+
+        private static string L(string key)
+            => Application.Current?.TryFindResource(key) as string ?? key;
 
         private string _formFilter = string.Empty;
         public string FormFilter
@@ -30,8 +33,8 @@ namespace PreciousMetalsManager.ViewModels
             }
         }
 
-        private object _selectedMetalTypeFilter;
-        public object SelectedMetalTypeFilter
+        private object? _selectedMetalTypeFilter;
+        public object? SelectedMetalTypeFilter
         {
             get => _selectedMetalTypeFilter;
             set
@@ -46,24 +49,7 @@ namespace PreciousMetalsManager.ViewModels
         }
 
         public IEnumerable<object> MetalTypeFilterOptions { get; } =
-            new object[] { "All" }.Concat(Enum.GetValues(typeof(MetalType)).Cast<object>());
-
-        private readonly Dictionary<MetalType, decimal> _currentMarketPrices = new();
-
-        public decimal this[MetalType type]
-        {
-            get => _currentMarketPrices.TryGetValue(type, out var price) ? price : 0m;
-            set
-            {
-                if (_currentMarketPrices.ContainsKey(type) && _currentMarketPrices[type] == value)
-                    return;
-                _currentMarketPrices[type] = value;
-                OnPropertyChanged($"Item[{type}]");
-                UpdateCalculatedValues();
-            }
-        }
-
-        public IEnumerable<MetalType> AllMetalTypes => Enum.GetValues(typeof(MetalType)).Cast<MetalType>();
+            new object[] { L("Filter_All") }.Concat(Enum.GetValues(typeof(MetalType)).Cast<object>());
 
         private readonly LocalStorageService _storage = new LocalStorageService();
 
@@ -81,11 +67,12 @@ namespace PreciousMetalsManager.ViewModels
             UpdateCalculatedValues();
         }
 
-        private void Holdings_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void Holdings_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.NewItems != null)
                 foreach (MetalHolding h in e.NewItems)
                     h.PropertyChanged += Holding_PropertyChanged;
+
             if (e.OldItems != null)
                 foreach (MetalHolding h in e.OldItems)
                     h.PropertyChanged -= Holding_PropertyChanged;
@@ -113,13 +100,13 @@ namespace PreciousMetalsManager.ViewModels
             foreach (var holding in Holdings)
             {
                 var price = GetMarketPrice(holding.MetalType);
-                // A Purity of 999.9 is considered as highest purity (100%) 
+                // A Purity of 999.9 is considered as highest purity (100%)
                 holding.CurrentValue = holding.Weight * (holding.Purity / 999.9m) * price;
                 holding.TotalValue = holding.CurrentValue * holding.Quantity;
             }
+
             OnPropertyChanged(nameof(Holdings));
-            if (FilteredHoldings != null)
-                FilteredHoldings.Refresh();
+            FilteredHoldings.Refresh();
         }
 
         private decimal _goldPrice = 72.50m;
@@ -210,7 +197,7 @@ namespace PreciousMetalsManager.ViewModels
             };
         }
 
-        private void Holding_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void Holding_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(MetalHolding.Weight) ||
                 e.PropertyName == nameof(MetalHolding.Purity) ||
@@ -258,7 +245,13 @@ namespace PreciousMetalsManager.ViewModels
             System.Diagnostics.Debug.WriteLine($"ReloadHoldings() after add: {Holdings.Count}");
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public void ToggleLanguage()
+        {
+            App.SetLanguage(App.CurrentLanguage == "en" ? "de" : "en");
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

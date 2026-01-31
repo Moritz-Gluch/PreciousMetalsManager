@@ -5,6 +5,18 @@
 *.cache
 *.log
 
+# Visual Studio upgrade logs
+UpgradeLog*.htm
+
 # Build output
 bin/
 obj/
+
+# Test output
+TestResults/
+**/TestResults/
+
+# Local app data
+*.db
+*.db-shm
+*.db-wal

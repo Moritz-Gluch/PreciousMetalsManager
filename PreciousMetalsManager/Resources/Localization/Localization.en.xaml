@@ -1,0 +1,86 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+
+    <!-- Buttons -->
+    <sys:String x:Key="AddButton">Add</sys:String>
+    <sys:String x:Key="EditButton">Edit</sys:String>
+    <sys:String x:Key="DeleteButton">Delete</sys:String>
+    <sys:String x:Key="EditPricesButton">Edit prices</sys:String>
+
+    <!-- MainWindow labels -->
+    <sys:String x:Key="Lbl_Gold">Gold:</sys:String>
+    <sys:String x:Key="Lbl_Silver">Silver:</sys:String>
+    <sys:String x:Key="Lbl_Platinum">Platinum:</sys:String>
+    <sys:String x:Key="Lbl_Palladium">Palladium:</sys:String>
+    <sys:String x:Key="Lbl_Bronce">Bronce:</sys:String>
+
+    <sys:String x:Key="Lbl_MetalTypeFilter">Metal Type:</sys:String>
+    <sys:String x:Key="Lbl_FormVariantFilter">Form/Variant:</sys:String>
+
+    <!-- MainWindow DataGrid headers -->
+    <sys:String x:Key="Col_CurrentValue">Current Value</sys:String>
+    <sys:String x:Key="Col_TotalValue">Total Value</sys:String>
+
+    <!-- MainWindow empty text -->
+    <sys:String x:Key="Txt_NoHoldingsMatch">No holdings match your criteria.</sys:String>
+
+    <!-- MessageBoxes -->
+    <sys:String x:Key="Msg_SelectHoldingToEdit">Please select a holding to edit.</sys:String>
+    <sys:String x:Key="Msg_SelectHoldingToDelete">Please select a holding to delete.</sys:String>
+    <sys:String x:Key="Msg_ConfirmDeleteText">Are you sure you want to delete this holding?</sys:String>
+    <sys:String x:Key="Msg_ConfirmDeleteTitle">Confirm Delete</sys:String>
+
+    <!-- Language Button -->
+    <sys:String x:Key="LanguageButtonShort">DE</sys:String>
+
+    <!-- HoldingDialog -->
+    <sys:String x:Key="HoldingDialog_Title">Holding</sys:String>
+    <sys:String x:Key="HoldingDialog_Lbl_FormVariant">Form / Variant</sys:String>
+
+    <sys:String x:Key="HoldingDialog_Btn_Save">Save</sys:String>
+    <sys:String x:Key="HoldingDialog_Btn_Cancel">Cancel</sys:String>
+
+    <!-- HoldingDialog (validation) -->
+    <sys:String x:Key="HoldingDialog_Msg_SelectMetalType">Please select a metal type.</sys:String>
+    <sys:String x:Key="HoldingDialog_Msg_FormRequired">Form / Variant is required.</sys:String>
+    <sys:String x:Key="HoldingDialog_Msg_PurityPositive">Purity must be a positive number.</sys:String>
+    <sys:String x:Key="HoldingDialog_Msg_WeightPositive">Weight must be a positive number.</sys:String>
+    <sys:String x:Key="HoldingDialog_Msg_QuantityPositiveWhole">Quantity must be a positive whole number.</sys:String>
+    <sys:String x:Key="HoldingDialog_Msg_PurchasePriceNonNegative">Purchase price must be zero or greater.</sys:String>
+    <sys:String x:Key="HoldingDialog_Msg_SelectPurchaseDate">Please select a purchase date.</sys:String>
+
+    <!-- EditPricesDialog -->
+    <sys:String x:Key="EditPricesDialog_Title">Edit metal prices</sys:String>
+    <sys:String x:Key="EditPricesDialog_HintText">Please enter the current prices:</sys:String>
+    <sys:String x:Key="EditPricesDialog_Btn_Save">Save</sys:String>
+    <sys:String x:Key="EditPricesDialog_Btn_Cancel">Cancel</sys:String>
+
+    <!-- EditPricesDialog (validation) -->
+    <sys:String x:Key="EditPricesDialog_Msg_InvalidPrice">Please enter a valid, non-negative price for all metals.</sys:String>
+
+    <!-- Window titles -->
+    <sys:String x:Key="MainWindow_Title">Precious Metals Manager</sys:String>
+
+    <!-- Filters -->
+    <sys:String x:Key="Filter_All">All</sys:String>
+
+    <!-- Database messages -->
+    <sys:String x:Key="Db_Title_Error">Database Error</sys:String>
+    <sys:String x:Key="Db_Title_Warning">Database Warning</sys:String>
+
+    <sys:String x:Key="Db_Msg_CorruptRecordIgnored">Corrupt record ignored:</sys:String>
+    <sys:String x:Key="Db_Msg_LoadError">Error loading from the database:</sys:String>
+    <sys:String x:Key="Db_Msg_SaveError">Error saving to the database:</sys:String>
+    <sys:String x:Key="Db_Msg_UpdateError">Error updating the database:</sys:String>
+    <sys:String x:Key="Db_Msg_DeleteError">Error deleting from the database:</sys:String>
+
+    <!-- Common terms -->
+    <sys:String x:Key="Common_MetalType">Metal Type</sys:String>
+    <sys:String x:Key="Common_Form">Form</sys:String>
+    <sys:String x:Key="Common_Purity">Purity</sys:String>
+    <sys:String x:Key="Common_Weight">Weight</sys:String>
+    <sys:String x:Key="Common_Quantity">Quantity</sys:String>
+    <sys:String x:Key="Common_PurchasePrice">Purchase Price</sys:String>
+    <sys:String x:Key="Common_PurchaseDate">Purchase Date</sys:String>
+</ResourceDictionary>
