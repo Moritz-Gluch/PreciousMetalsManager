@@ -11,7 +11,6 @@ namespace PreciousMetalsManager
     {
         public MainWindow()
         {
-            App.SetLanguage("en");
             InitializeComponent();
             DataContext = new ViewModel();
         }
@@ -119,6 +118,9 @@ namespace PreciousMetalsManager
             if (DataContext is ViewModel vm)
             {
                 vm.ToggleLanguage();
+
+                // Enforces Refresh of the dropdown entries (necessary for language change)
+                MetalTypeFilterComboBox.Items.Refresh();
             }
         }
     }

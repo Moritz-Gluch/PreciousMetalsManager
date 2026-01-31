@@ -15,7 +15,13 @@
 
         <StackPanel>
             <Label Content="{DynamicResource Common_MetalType}"/>
-            <ComboBox Name="MetalTypeComboBox" />
+            <ComboBox Name="MetalTypeComboBox">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Converter={StaticResource MetalTypeToLabelConverter}}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
 
             <Label Content="{DynamicResource HoldingDialog_Lbl_FormVariant}"/>
             <TextBox Name="FormTextBox"/>
