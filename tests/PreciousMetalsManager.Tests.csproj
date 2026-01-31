@@ -10,12 +10,6 @@
     <OldToolsVersion>2.0</OldToolsVersion>
     <ProjectGuid>{B8274544-B7B0-B967-FCD7-467376A59E23}</ProjectGuid>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\PreciousMetalsManager\PreciousMetalsManager.csproj" />
   </ItemGroup>
