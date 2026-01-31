@@ -19,12 +19,16 @@ namespace PreciousMetalsManager
 
             languageCode = languageCode.ToLowerInvariant();
 
-            var source = languageCode switch
+            var fileName = languageCode switch
             {
-                "de" => new Uri($"{LocalizationFolder}Localization.de.xaml", UriKind.Relative),
-                "en" => new Uri($"{LocalizationFolder}Localization.en.xaml", UriKind.Relative),
+                "de" => "Localization.de.xaml",
+                "en" => "Localization.en.xaml",
                 _ => throw new NotSupportedException($"Language '{languageCode}' is not supported.")
             };
+
+            var source = new Uri(
+                $"pack://application:,,,/PreciousMetalsManager;component/{LocalizationFolder}{fileName}",
+                UriKind.Absolute);
 
             var newDict = new ResourceDictionary { Source = source };
 
@@ -32,8 +36,7 @@ namespace PreciousMetalsManager
 
             var oldDict = merged.FirstOrDefault(d =>
                 d.Source != null &&
-                d.Source.OriginalString.StartsWith(LocalizationFolder, StringComparison.OrdinalIgnoreCase) &&
-                d.Source.OriginalString.Contains("Localization.", StringComparison.OrdinalIgnoreCase));
+                d.Source.OriginalString.Contains("/Resources/Localization/Localization.", StringComparison.OrdinalIgnoreCase));
 
             if (oldDict != null)
                 merged.Remove(oldDict);
