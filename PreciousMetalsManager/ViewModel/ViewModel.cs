@@ -8,6 +8,7 @@ using System.Collections.Specialized;
 using PreciousMetalsManager.Services;
 using System.Windows;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace PreciousMetalsManager.ViewModels
 {
@@ -70,6 +71,8 @@ namespace PreciousMetalsManager.ViewModels
 
             // Fetch current market prices on startup
             _ = UpdateMarketPricesAsync();
+
+            RefreshPricesCommand = new RelayCommand(async _ => await UpdateMarketPricesAsync());
         }
 
         private void Holdings_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -269,6 +272,8 @@ namespace PreciousMetalsManager.ViewModels
             PalladiumPrice = Math.Round(dto.PalladiumEur / gramsPerOunce, 2);
             // Bronce price is not avaiable on used api, must currently be added manually  
         }
+
+        public ICommand RefreshPricesCommand { get; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
