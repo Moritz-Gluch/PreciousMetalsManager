@@ -9,6 +9,7 @@ using PreciousMetalsManager.Services;
 using System.Windows;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace PreciousMetalsManager.ViewModels
 {
@@ -56,6 +57,8 @@ namespace PreciousMetalsManager.ViewModels
         private readonly LocalStorageService _storage = new LocalStorageService();
         private readonly MetalPriceApiService _metalPriceApiService = new MetalPriceApiService();
 
+        private readonly DispatcherTimer _autoRefreshTimer;
+
         public ViewModel()
         {
             Holdings = new ObservableCollection<MetalHolding>(_storage.LoadHoldings());
@@ -73,6 +76,14 @@ namespace PreciousMetalsManager.ViewModels
             _ = UpdateMarketPricesAsync();
 
             RefreshPricesCommand = new RelayCommand(async _ => await UpdateMarketPricesAsync());
+
+            // Auto-refresh every 15 minutes
+            _autoRefreshTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMinutes(15)
+            };
+            _autoRefreshTimer.Tick += async (s, e) => await UpdateMarketPricesAsync();
+            _autoRefreshTimer.Start();
         }
 
         private void Holdings_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
