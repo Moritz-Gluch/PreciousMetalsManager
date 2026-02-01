@@ -273,7 +273,10 @@ namespace PreciousMetalsManager.ViewModels
         {
             var dto = await _metalPriceApiService.FetchMetalPricesAsync();
             if (dto == null)
+            {
+                MessageBox.Show(L("Msg_PriceApiError"), L("Msg_ErrorTitle"), MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
+            }
 
             // 1 troy ounce = 31.1g (may be adjusted to the exact value in the future)
             const decimal gramsPerOunce = 31.1m;

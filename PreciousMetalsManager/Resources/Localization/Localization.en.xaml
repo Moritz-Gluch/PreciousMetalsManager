@@ -75,6 +75,10 @@
     <sys:String x:Key="Db_Msg_SaveError">Error saving to the database:</sys:String>
     <sys:String x:Key="Db_Msg_UpdateError">Error updating the database:</sys:String>
     <sys:String x:Key="Db_Msg_DeleteError">Error deleting from the database:</sys:String>
+    
+    <!-- API call error messages-->
+    <sys:String x:Key="Msg_PriceApiError">Failed to fetch market prices.</sys:String>
+    <sys:String x:Key="Msg_ErrorTitle">Error</sys:String>
 
     <!-- Common terms -->
     <sys:String x:Key="Common_MetalType">Metal Type</sys:String>
