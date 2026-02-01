@@ -7,6 +7,7 @@
     <sys:String x:Key="EditButton">Bearbeiten</sys:String>
     <sys:String x:Key="DeleteButton">Löschen</sys:String>
     <sys:String x:Key="EditPricesButton">Preise bearbeiten</sys:String>
+    <sys:String x:Key="RefreshPricesButton">Preise aktualisieren</sys:String>
 
     <!-- MainWindow labels -->
     <sys:String x:Key="Lbl_Gold">Gold:</sys:String>
