@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace PreciousMetalsManager.Services
 {
@@ -16,6 +17,22 @@ namespace PreciousMetalsManager.Services
                 var response = await httpClient.GetAsync(ApiUrl);
                 response.EnsureSuccessStatusCode();
                 return await response.Content.ReadAsStringAsync();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<MetalPriceApiResponse?> FetchMetalPricesAsync()
+        {
+            var json = await FetchMetalPricesRawAsync();
+            if (json == null)
+                return null;
+
+            try
+            {
+                return JsonSerializer.Deserialize<MetalPriceApiResponse>(json);
             }
             catch
             {

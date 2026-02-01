@@ -7,6 +7,7 @@ using System.Linq;
 using System.Collections.Specialized;
 using PreciousMetalsManager.Services;
 using System.Windows;
+using System.Threading.Tasks;
 
 namespace PreciousMetalsManager.ViewModels
 {
@@ -52,6 +53,7 @@ namespace PreciousMetalsManager.ViewModels
             new object[] { L("Filter_All") }.Concat(Enum.GetValues(typeof(MetalType)).Cast<object>());
 
         private readonly LocalStorageService _storage = new LocalStorageService();
+        private readonly MetalPriceApiService _metalPriceApiService = new MetalPriceApiService();
 
         public ViewModel()
         {
@@ -65,6 +67,9 @@ namespace PreciousMetalsManager.ViewModels
                 holding.PropertyChanged += Holding_PropertyChanged;
 
             UpdateCalculatedValues();
+
+            // Fetch current market prices on startup
+            _ = UpdateMarketPricesAsync();
         }
 
         private void Holdings_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -248,6 +253,19 @@ namespace PreciousMetalsManager.ViewModels
         public void ToggleLanguage()
         {
             App.SetLanguage(App.CurrentLanguage == "en" ? "de" : "en");
+        }
+
+        public async Task UpdateMarketPricesAsync()
+        {
+            var dto = await _metalPriceApiService.FetchMetalPricesAsync();
+            if (dto == null)
+                return;
+
+            GoldPrice = dto.GoldEur;
+            SilverPrice = dto.SilverEur;
+            PlatinumPrice = dto.PlatinumEur;
+            PalladiumPrice = dto.PalladiumEur;
+            // Bronce price is not avaiable on used api, must currently be added manually  
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
