@@ -1,9 +1,12 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PreciousMetalsManager.ViewModels;
 using PreciousMetalsManager.Models;
+using PreciousMetalsManager.Services;
 using System.Linq;
-using System.Collections.Specialized;
-using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using System.Windows.Threading;
+using System;
 
 namespace PreciousMetalsManager.Tests
 {
@@ -98,6 +101,118 @@ namespace PreciousMetalsManager.Tests
 
             Assert.AreEqual(2m * (999.9m / 999.9m) * 10m, holding.CurrentValue);
             Assert.AreEqual(holding.CurrentValue * 3, holding.TotalValue);
+        }
+
+        [TestMethod]
+        public async Task UpdateMarketPricesAsync_UpdatesPricesAndRecalculatesHoldings()
+        {
+            // Test: API prices are loaded, converted to gram, rounded and holdings recalculated
+            var testService = new TestMetalPriceApiService
+            {
+                ResponseToReturn = new MetalPriceApiResponse
+                {
+                    GoldEur = 3110m,      // 1g = 100.00
+                    SilverEur = 62.2m,    // 1g = 2.00
+                    PlatinumEur = 155.5m, // 1g = 5.00
+                    PalladiumEur = 62.2m  // 1g = 2.00
+                }
+            };
+            var vm = new TestViewModel(testService);
+
+            var holding = new MetalHolding
+            {
+                MetalType = MetalType.Gold,
+                Weight = 2m,
+                Purity = 999.9m,
+                Quantity = 1
+            };
+            vm.Holdings.Add(holding);
+
+            await vm.UpdateMarketPricesAsync();
+
+            Assert.AreEqual(100.00m, vm.GoldPrice);
+            Assert.AreEqual(2.00m, vm.SilverPrice);
+            Assert.AreEqual(5.00m, vm.PlatinumPrice);
+            Assert.AreEqual(2.00m, vm.PalladiumPrice);
+
+            Assert.AreEqual(200.00m, holding.CurrentValue);
+            Assert.AreEqual(200.00m, holding.TotalValue);
+        }
+
+        [TestMethod]
+        public async Task UpdateMarketPricesAsync_ApiError_ShowsErrorMessage()
+        {
+            // Test: If API fails, error message is shown
+            var testService = new TestMetalPriceApiService { ResponseToReturn = null };
+            var vm = new TestViewModel(testService);
+
+            await vm.UpdateMarketPricesAsync();
+
+            Assert.IsNotNull(vm.LastErrorMessage);
+            Assert.IsNotNull(vm.LastErrorTitle);
+        }
+
+        [TestMethod]
+        public void AutoRefreshTimer_IsStarted()
+        {
+            // Test: The auto-refresh timer is started on ViewModel construction
+            var testService = new TestMetalPriceApiService();
+            var vm = new TestViewModel(testService);
+
+            var timerField = typeof(ViewModel).GetField("_autoRefreshTimer", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var timer = timerField?.GetValue(vm) as DispatcherTimer;
+
+            Assert.IsNotNull(timer);
+            Assert.IsTrue(timer.IsEnabled);
+        }
+
+        [TestMethod]
+        public async Task RefreshPricesCommand_ExecutesUpdateMarketPricesAsync()
+        {
+            // Test: The RefreshPricesCommand triggers a price update
+            var testService = new TestMetalPriceApiService
+            {
+                ResponseToReturn = new MetalPriceApiResponse
+                {
+                    GoldEur = 3110m,
+                    SilverEur = 62.2m,
+                    PlatinumEur = 155.5m,
+                    PalladiumEur = 62.2m
+                }
+            };
+            var vm = new TestViewModel(testService);
+
+            await Task.Run(() => ((ICommand)vm.RefreshPricesCommand).Execute(null));
+
+            Assert.AreEqual(100.00m, vm.GoldPrice);
+        }
+
+        private class TestMetalPriceApiService : MetalPriceApiService
+        {
+            public MetalPriceApiResponse? ResponseToReturn { get; set; }
+            public override Task<MetalPriceApiResponse?> FetchMetalPricesAsync()
+            {
+                return Task.FromResult(ResponseToReturn);
+            }
+        }
+
+        private class TestViewModel : ViewModel
+        {
+            public string? LastErrorMessage { get; private set; }
+            public string? LastErrorTitle { get; private set; }
+
+            public TestViewModel(MetalPriceApiService service)
+            {
+                // Inject the test service via reflection
+                var field = typeof(ViewModel).GetField("_metalPriceApiService", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                field?.SetValue(this, service);
+            }
+
+            protected override void ShowErrorMessage(string message, string title)
+            {
+                LastErrorMessage = message;
+                LastErrorTitle = title;
+            }
         }
     }
 }

@@ -7,6 +7,9 @@ using System.Linq;
 using System.Collections.Specialized;
 using PreciousMetalsManager.Services;
 using System.Windows;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace PreciousMetalsManager.ViewModels
 {
@@ -52,6 +55,9 @@ namespace PreciousMetalsManager.ViewModels
             new object[] { L("Filter_All") }.Concat(Enum.GetValues(typeof(MetalType)).Cast<object>());
 
         private readonly LocalStorageService _storage = new LocalStorageService();
+        private readonly MetalPriceApiService _metalPriceApiService = new MetalPriceApiService();
+
+        private readonly DispatcherTimer _autoRefreshTimer;
 
         public ViewModel()
         {
@@ -65,6 +71,19 @@ namespace PreciousMetalsManager.ViewModels
                 holding.PropertyChanged += Holding_PropertyChanged;
 
             UpdateCalculatedValues();
+
+            // Fetch current market prices on startup
+            _ = UpdateMarketPricesAsync();
+
+            RefreshPricesCommand = new RelayCommand(async _ => await UpdateMarketPricesAsync());
+
+            // Auto-refresh every 15 minutes
+            _autoRefreshTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMinutes(15)
+            };
+            _autoRefreshTimer.Tick += async (s, e) => await UpdateMarketPricesAsync();
+            _autoRefreshTimer.Start();
         }
 
         private void Holdings_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -109,7 +128,7 @@ namespace PreciousMetalsManager.ViewModels
             FilteredHoldings.Refresh();
         }
 
-        private decimal _goldPrice = 72.50m;
+        private decimal _goldPrice;
         public decimal GoldPrice
         {
             get => _goldPrice;
@@ -124,7 +143,7 @@ namespace PreciousMetalsManager.ViewModels
             }
         }
 
-        private decimal _silverPrice = 0.85m;
+        private decimal _silverPrice;
         public decimal SilverPrice
         {
             get => _silverPrice;
@@ -139,7 +158,7 @@ namespace PreciousMetalsManager.ViewModels
             }
         }
 
-        private decimal _platinumPrice = 32.10m;
+        private decimal _platinumPrice;
         public decimal PlatinumPrice
         {
             get => _platinumPrice;
@@ -154,7 +173,7 @@ namespace PreciousMetalsManager.ViewModels
             }
         }
 
-        private decimal _palladiumPrice = 41.00m;
+        private decimal _palladiumPrice;
         public decimal PalladiumPrice
         {
             get => _palladiumPrice;
@@ -169,7 +188,7 @@ namespace PreciousMetalsManager.ViewModels
             }
         }
 
-        private decimal _broncePrice = 0.10m;
+        private decimal _broncePrice;
         public decimal BroncePrice
         {
             get => _broncePrice;
@@ -250,11 +269,36 @@ namespace PreciousMetalsManager.ViewModels
             App.SetLanguage(App.CurrentLanguage == "en" ? "de" : "en");
         }
 
+        public async Task UpdateMarketPricesAsync()
+        {
+            var dto = await _metalPriceApiService.FetchMetalPricesAsync();
+            if (dto == null)
+            {
+                ShowErrorMessage(L("Msg_PriceApiError"), L("Msg_ErrorTitle"));
+                return;
+            }
+
+            // 1 troy ounce = 31.1g (may be adjusted to the exact value in the future)
+            const decimal gramsPerOunce = 31.1m;
+            GoldPrice = Math.Round(dto.GoldEur / gramsPerOunce, 2);
+            SilverPrice = Math.Round(dto.SilverEur / gramsPerOunce, 2);
+            PlatinumPrice = Math.Round(dto.PlatinumEur / gramsPerOunce, 2);
+            PalladiumPrice = Math.Round(dto.PalladiumEur / gramsPerOunce, 2);
+            // Bronce price is not avaiable on used api, must currently be added manually  
+        }
+
+        public ICommand RefreshPricesCommand { get; }
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected virtual void ShowErrorMessage(string message, string title)
+        {
+            MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }

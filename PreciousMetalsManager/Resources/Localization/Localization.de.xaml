@@ -7,6 +7,7 @@
     <sys:String x:Key="EditButton">Bearbeiten</sys:String>
     <sys:String x:Key="DeleteButton">Löschen</sys:String>
     <sys:String x:Key="EditPricesButton">Preise bearbeiten</sys:String>
+    <sys:String x:Key="RefreshPricesButton">Preise aktualisieren</sys:String>
 
     <!-- MainWindow labels -->
     <sys:String x:Key="Lbl_Gold">Gold:</sys:String>
@@ -74,6 +75,10 @@
     <sys:String x:Key="Db_Msg_SaveError">Fehler beim Speichern in die Datenbank:</sys:String>
     <sys:String x:Key="Db_Msg_UpdateError">Fehler beim Aktualisieren der Datenbank:</sys:String>
     <sys:String x:Key="Db_Msg_DeleteError">Fehler beim Löschen aus der Datenbank:</sys:String>
+
+    <!-- API call error messages-->
+    <sys:String x:Key="Msg_PriceApiError">Marktpreise konnten nicht abgerufen werden.</sys:String>
+    <sys:String x:Key="Msg_ErrorTitle">Fehler</sys:String>
 
     <!-- Common terms -->
     <sys:String x:Key="Common_MetalType">Metalltyp</sys:String>
