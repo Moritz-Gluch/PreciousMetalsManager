@@ -109,7 +109,7 @@ namespace PreciousMetalsManager.ViewModels
             FilteredHoldings.Refresh();
         }
 
-        private decimal _goldPrice = 72.50m;
+        private decimal _goldPrice;
         public decimal GoldPrice
         {
             get => _goldPrice;
@@ -124,7 +124,7 @@ namespace PreciousMetalsManager.ViewModels
             }
         }
 
-        private decimal _silverPrice = 0.85m;
+        private decimal _silverPrice;
         public decimal SilverPrice
         {
             get => _silverPrice;
@@ -139,7 +139,7 @@ namespace PreciousMetalsManager.ViewModels
             }
         }
 
-        private decimal _platinumPrice = 32.10m;
+        private decimal _platinumPrice;
         public decimal PlatinumPrice
         {
             get => _platinumPrice;
@@ -154,7 +154,7 @@ namespace PreciousMetalsManager.ViewModels
             }
         }
 
-        private decimal _palladiumPrice = 41.00m;
+        private decimal _palladiumPrice;
         public decimal PalladiumPrice
         {
             get => _palladiumPrice;
@@ -169,7 +169,7 @@ namespace PreciousMetalsManager.ViewModels
             }
         }
 
-        private decimal _broncePrice = 0.10m;
+        private decimal _broncePrice;
         public decimal BroncePrice
         {
             get => _broncePrice;
