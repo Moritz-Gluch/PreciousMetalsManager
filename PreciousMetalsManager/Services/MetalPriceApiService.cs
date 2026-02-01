@@ -24,7 +24,7 @@ namespace PreciousMetalsManager.Services
             }
         }
 
-        public async Task<MetalPriceApiResponse?> FetchMetalPricesAsync()
+        public virtual async Task<MetalPriceApiResponse?> FetchMetalPricesAsync()
         {
             var json = await FetchMetalPricesRawAsync();
             if (json == null)

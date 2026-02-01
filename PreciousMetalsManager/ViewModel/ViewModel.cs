@@ -274,7 +274,7 @@ namespace PreciousMetalsManager.ViewModels
             var dto = await _metalPriceApiService.FetchMetalPricesAsync();
             if (dto == null)
             {
-                MessageBox.Show(L("Msg_PriceApiError"), L("Msg_ErrorTitle"), MessageBoxButton.OK, MessageBoxImage.Error);
+                ShowErrorMessage(L("Msg_PriceApiError"), L("Msg_ErrorTitle"));
                 return;
             }
 
@@ -294,6 +294,11 @@ namespace PreciousMetalsManager.ViewModels
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected virtual void ShowErrorMessage(string message, string title)
+        {
+            MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }
