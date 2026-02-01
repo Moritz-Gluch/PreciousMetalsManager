@@ -261,10 +261,12 @@ namespace PreciousMetalsManager.ViewModels
             if (dto == null)
                 return;
 
-            GoldPrice = dto.GoldEur;
-            SilverPrice = dto.SilverEur;
-            PlatinumPrice = dto.PlatinumEur;
-            PalladiumPrice = dto.PalladiumEur;
+            // 1 troy ounce = 31.1g (may be adjusted to the exact value in the future)
+            const decimal gramsPerOunce = 31.1m;
+            GoldPrice = dto.GoldEur / gramsPerOunce;
+            SilverPrice = dto.SilverEur / gramsPerOunce;
+            PlatinumPrice = dto.PlatinumEur / gramsPerOunce;
+            PalladiumPrice = dto.PalladiumEur / gramsPerOunce;
             // Bronce price is not avaiable on used api, must currently be added manually  
         }
 
