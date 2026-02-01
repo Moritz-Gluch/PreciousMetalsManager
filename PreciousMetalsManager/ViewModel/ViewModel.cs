@@ -263,10 +263,10 @@ namespace PreciousMetalsManager.ViewModels
 
             // 1 troy ounce = 31.1g (may be adjusted to the exact value in the future)
             const decimal gramsPerOunce = 31.1m;
-            GoldPrice = dto.GoldEur / gramsPerOunce;
-            SilverPrice = dto.SilverEur / gramsPerOunce;
-            PlatinumPrice = dto.PlatinumEur / gramsPerOunce;
-            PalladiumPrice = dto.PalladiumEur / gramsPerOunce;
+            GoldPrice = Math.Round(dto.GoldEur / gramsPerOunce, 2);
+            SilverPrice = Math.Round(dto.SilverEur / gramsPerOunce, 2);
+            PlatinumPrice = Math.Round(dto.PlatinumEur / gramsPerOunce, 2);
+            PalladiumPrice = Math.Round(dto.PalladiumEur / gramsPerOunce, 2);
             // Bronce price is not avaiable on used api, must currently be added manually  
         }
 
