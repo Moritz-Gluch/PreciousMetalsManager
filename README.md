@@ -25,3 +25,22 @@ Done (implemented):
 
 Planned / Future:
 - See `docs/backlog/future/`
+
+## Build & Automation (Makefile)
+
+A Makefile is included to automate building, testing, running, cleaning and formatting tasks for the codebase.
+
+### Prerequisites
+- .NET SDK 10.0 or newer
+- GNU Make 
+
+### Usage
+Open a terminal in the project root and run:
+
+- `make build`   Build the project in Release mode
+- `make run`    Run the WPF application
+- `make test`    Run all unit tests
+- `make clean`   Clean build artifacts
+- `make format`  Format code using dotnet-format
+- `make restore`  Restore NuGet packages
+
