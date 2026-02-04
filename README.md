@@ -118,3 +118,14 @@ sequenceDiagram
     ApiService-->>ViewModel: MetalPriceApiResponse
     ViewModel-->>UI: Update prices in UI (via data binding)
 ```
+
+## Screenshots
+
+<strong>Main Window</strong><br>
+<img src="docs/assets/Screenshot_MainView.png" alt="Main Window" style="border:1px solid #888; border-radius:6px; max-width:100%;"><br><br>
+
+<strong>Add/Edit Holding Dialog</strong><br>
+<img src="docs/assets/Screenshot_AddView.png" alt="Holding Dialog" style="border:1px solid #888; border-radius:6px; max-width:100%;"><br><br>
+
+<strong>Edit Metal Prices Dialog</strong><br>
+<img src="docs/assets/Screenshot_MetalPriceView.png" alt="Edit Prices Dialog" style="border:1px solid #888; border-radius:6px; max-width:100%;">
