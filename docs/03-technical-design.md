@@ -31,9 +31,9 @@ Refer to `00-project-overview.md` for the complete folder structure of the proje
 
 ## 5. UI Design
 - Main window:
-  - DataGrid for holdings (columns as defined in STORY-01)
+  - DataGrid for holdings (columns for metal type, form, purity, weight, quantity, purchase price, and date)
   - Add/Edit/Delete buttons
-  - Filter/Sort controls (STORY-02)
+  - Filter/Sort controls
 - Dialog windows:
   - Add/Edit dialogs for holdings
 - Charts: LiveCharts2 / OxyPlot (future enhancement)

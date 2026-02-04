@@ -22,7 +22,7 @@ A story is considered done when all of the following criteria are met:
 ## Documentation
 - Story and acceptance criteria are documented.
 - Relevant code sections contain XML comments if necessary.
-- UI changes are documented in the project overview or backlog notes.
+- UI changes are documented in the project overview or tracked in GitHub Issues.
 
 ## Review & Deployment
 - Story has been self-reviewed.

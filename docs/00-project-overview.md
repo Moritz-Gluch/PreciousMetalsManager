@@ -28,11 +28,7 @@ This project aims to clearly record and display purchase prices, current market 
 - Local storage via SQLite
 
 ### Future / Optional Features
-- API integration for current market prices
-- Basic charting for price trends
-- Export to CSV/Excel
-- Light/Dark theme support and modern UI styling
-- Logging & Exception Handling
+Future and optional features are now tracked in the [GitHub Issues](https://github.com/Moritz-Gluch/PreciousMetalsManager/issues) page.
 
 ### Out of Scope
 - Multi-user support or cloud syncing
