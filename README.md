@@ -80,3 +80,23 @@ Open a terminal in the project root and run:
 - `make format`  Format code using dotnet-format
 - `make restore`  Restore NuGet packages
 
+## Architecture Diagram
+
+Below is a simplified database structure for the Precious Metals Portfolio Manager:
+
+```mermaid
+erDiagram
+    Holdings {  
+        int Id PK
+        int MetalType
+        string Form
+        decimal Purity
+        decimal Weight
+        int Quantity
+        decimal PurchasePrice
+        string PurchaseDate
+    }
+```
+
+This diagram shows the single-table SQLite schema used to store all precious metal holdings. For more details, see the technical documentation in the `docs/` folder.
+
