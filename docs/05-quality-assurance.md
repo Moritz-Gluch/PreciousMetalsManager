@@ -20,7 +20,7 @@ This document outlines the testing and QA measures to ensure the quality of the 
 
 ## 3. UI Testing (Manual)
 - Check that Add/Edit/Delete dialogs function as expected
-- Verify DataGrid sorting and filtering (STORY-02)
+- Verify DataGrid sorting and filtering
 - Confirm placeholder messages appear when no data matches filter
 - Verify read-only columns (Current Value / Total Value) cannot be edited
 

@@ -4,12 +4,12 @@ This document outlines the development and testing approach to ensure reliable i
 
 
 ## 1. Development Approach
-- **Feature-by-feature**: Implement stories incrementally (STORY-01 → STORY-04)
+- **Feature-by-feature**: Implement features and tasks incrementally, as tracked in GitHub Issues.
 - **MVVM architecture** ensures separation of concerns
 - **Services** encapsulate business logic (Database, Calculation, API, Export)
 - **In-memory first**: MVP CRUD and calculations are done without persistence for rapid iteration
 - **Git workflow**:
-  - Branch per story / feature
+  - Branch per feature or task
   - Meaningful commits
   - Self-review before merging
 
