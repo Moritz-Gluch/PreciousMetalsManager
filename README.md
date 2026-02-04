@@ -92,7 +92,7 @@ sequenceDiagram
     participant ApiService
     participant API
 
-    UI->>ViewModel: User starts app or triggers refresh
+    UI->>VM: User starts app or triggers refresh
     VM->>ApiService: FetchMetalPricesAsync()
     ApiService->>API: HTTP GET /public.json
     API-->>ApiService: JSON with prices
