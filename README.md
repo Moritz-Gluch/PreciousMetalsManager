@@ -100,3 +100,21 @@ erDiagram
 
 This diagram shows the single-table SQLite schema used to store all precious metal holdings. For more details, see the technical documentation in the `docs/` folder.
 
+## HTTP API Integration Diagram
+
+The application fetches real-time metal prices from an external API. The following sequence diagram illustrates the HTTP API integration:
+
+```mermaid
+sequenceDiagram
+    participant UI
+    participant ViewModel
+    participant ApiService
+    participant API
+
+    UI->>ViewModel: User starts app or clicks refresh
+    ViewModel->>ApiService: FetchMetalPricesAsync()
+    ApiService->>API: HTTP GET /public.json
+    API-->>ApiService: JSON with prices
+    ApiService-->>ViewModel: MetalPriceApiResponse
+    ViewModel-->>UI: Update prices in UI (via data binding)
+```
