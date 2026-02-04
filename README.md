@@ -121,11 +121,14 @@ sequenceDiagram
 
 ## Screenshots
 
-<strong>Main Window</strong><br>
+**Main Window**  
+_Overview of the main application window with controls for adding, editing and viewing precious metal holdings._  
 <img src="docs/assets/Screenshot_MainView.png" alt="Main Window" style="border:1px solid #888; border-radius:6px; max-width:100%;"><br><br>
 
-<strong>Add/Edit Holding Dialog</strong><br>
+**Add/Edit Holding Dialog**  
+_Dialog for entering or editing the details of a precious metal holding._  
 <img src="docs/assets/Screenshot_AddView.png" alt="Holding Dialog" style="border:1px solid #888; border-radius:6px; max-width:100%;"><br><br>
 
-<strong>Edit Metal Prices Dialog</strong><br>
+**Edit Metal Prices Dialog**  
+_Dialog for manually updating the current market prices for each metal._  
 <img src="docs/assets/Screenshot_MetalPriceView.png" alt="Edit Prices Dialog" style="border:1px solid #888; border-radius:6px; max-width:100%;">
