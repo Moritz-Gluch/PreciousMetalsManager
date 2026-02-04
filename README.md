@@ -10,6 +10,42 @@ Refer to `docs/00-project-overview.md` for the full project overview.
 - The highest possible purity for precious metals is considered to be 999.9.
 - One troy ounce is treated as a rounded value of 31.1 grams.
 
+## Getting Started
+
+Follow these steps to set up and run Precious Metals Portfolio Manager on your machine:
+
+1. **Install prerequisites:**
+   - [.NET SDK 10.0 or newer](https://dotnet.microsoft.com/download)
+   - [GNU Make](https://www.gnu.org/software/make/) (on Windows, install via Chocolatey: `choco install make`)
+
+2. **Clone the repository:**
+   ```sh
+   git clone https://github.com/Moritz-Gluch/PreciousMetalsManager.git
+   cd PreciousMetalsManager
+   ```
+
+3. **Restore dependencies:**
+   ```sh
+   make restore
+   ```
+
+4. **Build the project:**
+   ```sh
+   make build
+   ```
+
+5. **Run the application:**
+   ```sh
+   make run
+   ```
+
+6. **Run tests (optional):**
+   ```sh
+   make test
+   ```
+
+For more details, see the documentation in the `docs/` folder.
+
 ## Backlog / Storys
 Done (implemented):
 - [STORY-01: CRUD for Precious Metals](docs/backlog/done/STORY-01-crud.md)
