@@ -282,6 +282,7 @@ namespace PreciousMetalsManager.ViewModels
         public void ToggleLanguage()
         {
             App.SetLanguage(App.CurrentLanguage == "en" ? "de" : "en");
+            UpdateMetalTypeFilterOptions(); // Needed to update 'All' option text in metal type filter
         }
 
         public async Task UpdateMarketPricesAsync()
