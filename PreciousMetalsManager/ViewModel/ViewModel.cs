@@ -51,8 +51,19 @@ namespace PreciousMetalsManager.ViewModels
             }
         }
 
-        public IEnumerable<object> MetalTypeFilterOptions { get; } =
-            new object[] { L("Filter_All") }.Concat(Enum.GetValues(typeof(MetalType)).Cast<object>());
+        private ObservableCollection<object> _metalTypeFilterOptions = new ObservableCollection<object>();
+        public ObservableCollection<object> MetalTypeFilterOptions
+        {
+            get => _metalTypeFilterOptions;
+            private set
+            {
+                if (_metalTypeFilterOptions != value)
+                {
+                    _metalTypeFilterOptions = value;
+                    OnPropertyChanged(nameof(MetalTypeFilterOptions));
+                }
+            }
+        }
 
         private readonly LocalStorageService _storage = new LocalStorageService();
         private readonly MetalPriceApiService _metalPriceApiService = new MetalPriceApiService();
@@ -84,6 +95,10 @@ namespace PreciousMetalsManager.ViewModels
             };
             _autoRefreshTimer.Tick += async (s, e) => await UpdateMarketPricesAsync();
             _autoRefreshTimer.Start();
+
+            UpdateMetalTypeFilterOptions();
+            SelectedMetalTypeFilter = MetalTypeFilterOptions.FirstOrDefault(); // Set 'All' as default
+            Holdings.CollectionChanged += (s, e) => UpdateMetalTypeFilterOptions();
         }
 
         private void Holdings_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -267,6 +282,7 @@ namespace PreciousMetalsManager.ViewModels
         public void ToggleLanguage()
         {
             App.SetLanguage(App.CurrentLanguage == "en" ? "de" : "en");
+            UpdateMetalTypeFilterOptions(); // Needed to update 'All' option text in metal type filter
         }
 
         public async Task UpdateMarketPricesAsync()
@@ -285,6 +301,23 @@ namespace PreciousMetalsManager.ViewModels
             PlatinumPrice = Math.Round(dto.PlatinumEur / gramsPerOunce, 2);
             PalladiumPrice = Math.Round(dto.PalladiumEur / gramsPerOunce, 2);
             // Bronce price is not avaiable on used api, must currently be added manually  
+        }
+
+        private void UpdateMetalTypeFilterOptions()
+        {
+            var typesInHoldings = Holdings
+                .Select(h => h.MetalType)
+                .Distinct()
+                .Cast<object>()
+                .ToList();
+
+            var allOption = L("Filter_All");
+            // 'All' option always first
+            typesInHoldings.Insert(0, allOption);
+            MetalTypeFilterOptions = new ObservableCollection<object>(typesInHoldings);
+
+            // Set filter value to 'All' after add, edit and delete
+            SelectedMetalTypeFilter = allOption;
         }
 
         public ICommand RefreshPricesCommand { get; }
