@@ -97,6 +97,7 @@ namespace PreciousMetalsManager.ViewModels
             _autoRefreshTimer.Start();
 
             UpdateMetalTypeFilterOptions();
+            SelectedMetalTypeFilter = MetalTypeFilterOptions.FirstOrDefault(); // Set 'All' as default
             Holdings.CollectionChanged += (s, e) => UpdateMetalTypeFilterOptions();
         }
 
