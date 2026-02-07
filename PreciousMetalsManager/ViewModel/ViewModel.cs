@@ -310,9 +310,13 @@ namespace PreciousMetalsManager.ViewModels
                 .Cast<object>()
                 .ToList();
 
+            var allOption = L("Filter_All");
             // 'All' option always first
-            typesInHoldings.Insert(0, L("Filter_All"));
+            typesInHoldings.Insert(0, allOption);
             MetalTypeFilterOptions = new ObservableCollection<object>(typesInHoldings);
+
+            // Set filter value to 'All' after add, edit and delete
+            SelectedMetalTypeFilter = allOption;
         }
 
         public ICommand RefreshPricesCommand { get; }
