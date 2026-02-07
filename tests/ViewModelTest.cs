@@ -2,6 +2,7 @@
 using PreciousMetalsManager.ViewModels;
 using PreciousMetalsManager.Models;
 using PreciousMetalsManager.Services;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -185,6 +186,126 @@ namespace PreciousMetalsManager.Tests
             await Task.Run(() => ((ICommand)vm.RefreshPricesCommand).Execute(null));
 
             Assert.AreEqual(100.00m, vm.GoldPrice);
+        }
+
+        [TestMethod]
+        public void ToggleLanguage_ResetsFilterToLocalizedAll()
+        {
+            if (System.Windows.Application.Current == null)
+                new PreciousMetalsManager.App();
+
+            var vm = new ViewModel();
+            vm.SelectedMetalTypeFilter = MetalType.Gold;
+
+            vm.ToggleLanguage();
+
+            var expectedAll = vm.MetalTypeFilterOptions.First();
+            Assert.AreEqual(expectedAll, vm.SelectedMetalTypeFilter);
+        }
+
+        [TestMethod]
+        public void MetalTypeFilterOptions_FirstEntry_IsAllOption()
+        {
+            var vm = new ViewModel();
+
+            Assert.IsGreaterThanOrEqualTo(1, vm.MetalTypeFilterOptions.Count);
+
+            var first = vm.MetalTypeFilterOptions[0];
+            Assert.IsInstanceOfType(first, typeof(string));
+            Assert.AreEqual(first, vm.SelectedMetalTypeFilter); 
+        }
+
+        [TestMethod]
+        public void MetalTypeFilterOptions_ContainsDistinctMetalTypesOnly()
+        {
+            var vm = new ViewModel();
+
+            vm.Holdings.Add(new MetalHolding { MetalType = MetalType.Gold, Form = "A" });
+            vm.Holdings.Add(new MetalHolding { MetalType = MetalType.Gold, Form = "B" });
+            vm.Holdings.Add(new MetalHolding { MetalType = MetalType.Silver, Form = "C" });
+
+            var metalTypes = vm.MetalTypeFilterOptions.OfType<MetalType>().ToList();
+
+            CollectionAssert.AreEquivalent(new List<MetalType> { MetalType.Gold, MetalType.Silver }, metalTypes);
+
+            Assert.AreEqual(metalTypes.Count, metalTypes.Distinct().Count());
+        }
+
+        [TestMethod]
+        public void SelectedMetalTypeFilter_AllOption_DoesNotFilterByMetalType()
+        {
+            var vm = new ViewModel();
+
+            var gold = new MetalHolding { MetalType = MetalType.Gold, Form = "Barren" };
+            var silver = new MetalHolding { MetalType = MetalType.Silver, Form = "Coin" };
+            vm.Holdings.Add(gold);
+            vm.Holdings.Add(silver);
+
+            vm.SelectedMetalTypeFilter = vm.MetalTypeFilterOptions.First(); 
+            var filtered = vm.FilteredHoldings.Cast<MetalHolding>().ToList();
+
+            CollectionAssert.Contains(filtered, gold);
+            CollectionAssert.Contains(filtered, silver);
+        }
+
+        [TestMethod]
+        // Users curently can't edit the filter options, but this test may be usefull to spot errors in the code
+        public void SelectedMetalTypeFilter_UnknownString_DoesNotFilterByMetalType()
+        {
+            var vm = new ViewModel();
+
+            var gold = new MetalHolding { MetalType = MetalType.Gold, Form = "Barren" };
+            var silver = new MetalHolding { MetalType = MetalType.Silver, Form = "Coin" };
+            vm.Holdings.Add(gold);
+            vm.Holdings.Add(silver);
+
+            // Any string that is not a MetalType must behave like "All" (no MetalType filter)
+            vm.SelectedMetalTypeFilter = "SomeUnknownOption";
+            var filtered = vm.FilteredHoldings.Cast<MetalHolding>().ToList();
+
+            CollectionAssert.Contains(filtered, gold);
+            CollectionAssert.Contains(filtered, silver);
+        }
+
+        [TestMethod]
+        public void ToggleLanguage_UpdatesAllOptionText_EnToDe()
+        {
+            var vm = new ViewModel();
+
+            PreciousMetalsManager.App.SetLanguage("en");
+            vm.ToggleLanguage(); // toggles to "de"
+
+            var first = vm.MetalTypeFilterOptions.First();
+            Assert.IsInstanceOfType(first, typeof(string));
+            Assert.AreEqual(first, vm.SelectedMetalTypeFilter);
+        }
+
+        [TestMethod]
+        public void ToggleLanguage_UpdatesAllOptionText_DeToEn()
+        {
+            var vm = new ViewModel();
+
+            PreciousMetalsManager.App.SetLanguage("de");
+            vm.ToggleLanguage(); // toggles to "en"
+
+            var first = vm.MetalTypeFilterOptions.First();
+            Assert.IsInstanceOfType(first, typeof(string));
+            Assert.AreEqual(first, vm.SelectedMetalTypeFilter);
+        }
+
+        [TestMethod]
+        public void UpdateMetalTypeFilterOptions_AfterHoldingsChange_AlwaysKeepsAllAtIndex0()
+        {
+            var vm = new ViewModel();
+
+            vm.Holdings.Add(new MetalHolding { MetalType = MetalType.Gold, Form = "A" });
+            Assert.IsInstanceOfType(vm.MetalTypeFilterOptions[0], typeof(string));
+
+            vm.Holdings.Add(new MetalHolding { MetalType = MetalType.Silver, Form = "B" });
+            Assert.IsInstanceOfType(vm.MetalTypeFilterOptions[0], typeof(string));
+
+            vm.Holdings.Remove(vm.Holdings.First());
+            Assert.IsInstanceOfType(vm.MetalTypeFilterOptions[0], typeof(string));
         }
 
         private class TestMetalPriceApiService : MetalPriceApiService
