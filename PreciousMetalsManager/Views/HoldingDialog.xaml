@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PreciousMetalsManager.Views"
         mc:Ignorable="d"
-        Title="{DynamicResource HoldingDialog_Title}" Height="450" Width="800">
+        Title="{DynamicResource HoldingDialog_Title}" Height="485" Width="800">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -40,6 +40,21 @@
 
             <Label Content="{DynamicResource Common_PurchaseDate}"/>
             <DatePicker Name="PurchaseDatePicker"/>
+
+            <Label Content="{DynamicResource Common_CollectableType}" />
+            <StackPanel Orientation="Horizontal" Margin="3,0,0,10">
+                <RadioButton Content="{DynamicResource CollectableType_Bullion}"
+                             IsChecked="{Binding Holding.CollectableType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Bullion, Mode=TwoWay}" 
+                             GroupName="CollectableType"
+                             Margin="0,0,20,0"/>
+                <RadioButton Content="{DynamicResource CollectableType_SemiNumismatic}"
+                             IsChecked="{Binding Holding.CollectableType, ConverterParameter=SemiNumismatic, Converter={StaticResource EnumToBooleanConverter}, Mode=TwoWay}" 
+                             GroupName="CollectableType"
+                             Margin="0,0,20,0"/>
+                <RadioButton Content="{DynamicResource CollectableType_Numismatic}"
+                             IsChecked="{Binding Holding.CollectableType, ConverterParameter=Numismatic, Converter={StaticResource EnumToBooleanConverter}, Mode=TwoWay}" 
+                             GroupName="CollectableType"/>
+            </StackPanel>
         </StackPanel>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
