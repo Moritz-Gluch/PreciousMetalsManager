@@ -12,6 +12,13 @@ namespace PreciousMetalsManager.Models
         Palladium
     }
 
+    public enum CollectableType
+    {
+        Bullion = 0,
+        SemiNumismatic = 1,
+        Numismatic = 2
+    }
+
     public class MetalHolding : INotifyPropertyChanged
     {
         public int Id { get; set; }
@@ -77,6 +84,13 @@ namespace PreciousMetalsManager.Models
         {
             get => _totalValue;
             set { if (_totalValue != value) { _totalValue = value; OnPropertyChanged(nameof(TotalValue)); } }
+        }
+
+        private CollectableType _collectableType;
+        public CollectableType CollectableType
+        {
+            get => _collectableType;
+            set { if (_collectableType != value) { _collectableType = value; OnPropertyChanged(nameof(CollectableType)); } }
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
