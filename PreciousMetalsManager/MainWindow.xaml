@@ -10,6 +10,7 @@
 
     <Window.Resources>
         <models:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <models:CollectableTypeToLabelConverter x:Key="CollectableTypeToLabelConverter"/>
     </Window.Resources>
 
     <Grid Margin="10">
@@ -95,6 +96,14 @@
                         <DataGridTextColumn.HeaderTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{DynamicResource Common_Form}" />
+                            </DataTemplate>
+                        </DataGridTextColumn.HeaderTemplate>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Binding="{Binding CollectableType, Converter={StaticResource CollectableTypeToLabelConverter}}">
+                        <DataGridTextColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{DynamicResource Common_CollectableType}" />
                             </DataTemplate>
                         </DataGridTextColumn.HeaderTemplate>
                     </DataGridTextColumn>
