@@ -56,6 +56,7 @@ namespace PreciousMetalsManager
                     selected.Quantity = edited.Quantity;
                     selected.PurchasePrice = edited.PurchasePrice;
                     selected.PurchaseDate = edited.PurchaseDate;
+                    selected.CollectableType = edited.CollectableType; 
 
                     vm.UpdateHolding(selected);
 
