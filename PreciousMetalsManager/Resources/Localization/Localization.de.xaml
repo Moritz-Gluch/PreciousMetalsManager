@@ -88,7 +88,7 @@
     <sys:String x:Key="Common_Quantity">Menge</sys:String>
     <sys:String x:Key="Common_PurchasePrice">Kaufpreis</sys:String>
     <sys:String x:Key="Common_PurchaseDate">Kaufdatum</sys:String>
-    <sys:String x:Key="Common_CollectableType">Typ</sys:String>
+    <sys:String x:Key="Common_CollectableType">Klassifizierung</sys:String>
     <sys:String x:Key="CollectableType_Bullion">Bullion</sys:String>
     <sys:String x:Key="CollectableType_SemiNumismatic">Semi-Numismatisch</sys:String>
     <sys:String x:Key="CollectableType_Numismatic">Numismatisch</sys:String>
