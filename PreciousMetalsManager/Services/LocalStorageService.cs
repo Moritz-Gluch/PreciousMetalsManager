@@ -9,10 +9,11 @@ namespace PreciousMetalsManager.Services
 {
     public class LocalStorageService
     {
-        private readonly string _dbPath = "holdings.db";
+        private readonly string _dbPath;
 
-        public LocalStorageService()
+        public LocalStorageService(string? dbPath = null)
         {
+            _dbPath = dbPath ?? "holdings.db";
             InitializeDatabase();
         }
 

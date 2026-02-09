@@ -11,25 +11,35 @@ namespace PreciousMetalsManager.Tests
     [TestClass]
     public class LocalStorageServiceTest
     {
-        private const string TestDbPath = "test_holdings.db";
+        private string _testDbPath = null!;
         private LocalStorageService _service = null!; 
 
         [TestInitialize]
         public void TestInitialize()
         {
-            // Ensure the test database is clean before each test
-            if (File.Exists(TestDbPath))
-                File.Delete(TestDbPath);
-
-            _service = new LocalStorageService();
+            // Creates a unique temporary database for each test
+            _testDbPath = Path.Combine(Path.GetTempPath(), $"test_holdings_{Guid.NewGuid()}.db");
+            _service = new LocalStorageService(_testDbPath);
         }
 
         [TestCleanup]
         public void TestCleanup()
         {
-            // Remove the test database after each test
-            if (File.Exists(TestDbPath))
-                File.Delete(TestDbPath);
+            _service = null!;
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            if (File.Exists(_testDbPath))
+            {
+                try
+                {
+                    File.Delete(_testDbPath);
+                }
+                catch (IOException ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("Error deleting test database: " + ex.Message);
+                }
+            }
         }
 
         [TestMethod]
@@ -94,7 +104,8 @@ namespace PreciousMetalsManager.Tests
                 Weight = 10.5m,
                 Quantity = 1,
                 PurchasePrice = 1000m,
-                PurchaseDate = DateTime.Today
+                PurchaseDate = DateTime.Today,
+                CollectableType = CollectableType.Bullion 
             };
         }
     }
