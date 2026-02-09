@@ -43,16 +43,16 @@
 
             <Label Content="{DynamicResource Common_CollectableType}" />
             <StackPanel Orientation="Horizontal" Margin="3,0,0,10">
-                <RadioButton Content="{DynamicResource CollectableType_Bullion}"
-                             IsChecked="{Binding Holding.CollectableType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Bullion, Mode=TwoWay}" 
+                <RadioButton Name="CollectableType_BullionRadioButton" Content="{DynamicResource CollectableType_Bullion}"
+                             IsChecked="{Binding SelectedCollectableType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Bullion, Mode=TwoWay}" 
                              GroupName="CollectableType"
                              Margin="0,0,20,0"/>
-                <RadioButton Content="{DynamicResource CollectableType_SemiNumismatic}"
-                             IsChecked="{Binding Holding.CollectableType, ConverterParameter=SemiNumismatic, Converter={StaticResource EnumToBooleanConverter}, Mode=TwoWay}" 
+                <RadioButton Name="CollectableType_SemiNumismaticRadioButton" Content="{DynamicResource CollectableType_SemiNumismatic}"
+                             IsChecked="{Binding SelectedCollectableType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=SemiNumismatic, Mode=TwoWay}" 
                              GroupName="CollectableType"
                              Margin="0,0,20,0"/>
-                <RadioButton Content="{DynamicResource CollectableType_Numismatic}"
-                             IsChecked="{Binding Holding.CollectableType, ConverterParameter=Numismatic, Converter={StaticResource EnumToBooleanConverter}, Mode=TwoWay}" 
+                <RadioButton Name="CollectableType_NumismaticRadioButton" Content="{DynamicResource CollectableType_Numismatic}"
+                             IsChecked="{Binding SelectedCollectableType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Numismatic, Mode=TwoWay}" 
                              GroupName="CollectableType"/>
             </StackPanel>
         </StackPanel>

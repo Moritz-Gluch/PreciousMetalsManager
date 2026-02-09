@@ -100,10 +100,9 @@ namespace PreciousMetalsManager.Services
                 using var connection = new SqliteConnection($"Data Source={_dbPath}");
                 connection.Open();
                 var cmd = connection.CreateCommand();
-                cmd.CommandText =
-                    @"INSERT INTO Holdings (MetalType, Form, Purity, Weight, Quantity, PurchasePrice, PurchaseDate, CollectableType)
-                      VALUES (@MetalType, @Form, @Purity, @Weight, @Quantity, @PurchasePrice, @PurchaseDate, @CollectableType)
-                      SELECT last_insert_rowid();";
+                cmd.CommandText = @"
+                    INSERT INTO Holdings (MetalType, Form, Purity, Weight, Quantity, PurchasePrice, PurchaseDate, CollectableType)
+                    VALUES (@MetalType, @Form, @Purity, @Weight, @Quantity, @PurchasePrice, @PurchaseDate, @CollectableType);";
                 cmd.Parameters.AddWithValue("@MetalType", (int)holding.MetalType);
                 cmd.Parameters.AddWithValue("@Form", holding.Form);
                 cmd.Parameters.AddWithValue("@Purity", holding.Purity);
@@ -113,6 +112,8 @@ namespace PreciousMetalsManager.Services
                 cmd.Parameters.AddWithValue("@PurchaseDate", holding.PurchaseDate.ToString("o"));
                 cmd.Parameters.AddWithValue("@CollectableType", (int)holding.CollectableType);
 
+                cmd.ExecuteNonQuery();
+                cmd.CommandText = "SELECT last_insert_rowid();";
                 holding.Id = Convert.ToInt32(cmd.ExecuteScalar());
             }
             catch (Exception ex)

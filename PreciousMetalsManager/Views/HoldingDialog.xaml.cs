@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Controls;
 using PreciousMetalsManager.Models;
 
 namespace PreciousMetalsManager.Views
@@ -10,12 +11,14 @@ namespace PreciousMetalsManager.Views
     /// </summary>
     public partial class HoldingDialog : Window
     {
+        public CollectableType SelectedCollectableType { get; set; } = CollectableType.Bullion;
+
         public MetalHolding? NewHolding { get; private set; }
 
         public HoldingDialog()
         {
             InitializeComponent();
-
+            DataContext = this; 
             MetalTypeComboBox.ItemsSource = Enum.GetValues(typeof(MetalType));
             MetalTypeComboBox.SelectedIndex = 0;
             PurchaseDatePicker.SelectedDate = DateTime.Now;
@@ -79,6 +82,7 @@ namespace PreciousMetalsManager.Views
                 Quantity = quantity,
                 PurchasePrice = price,
                 PurchaseDate = PurchaseDatePicker.SelectedDate.Value,
+                CollectableType = SelectedCollectableType,
                 CurrentValue = 0,
                 TotalValue = 0
             };

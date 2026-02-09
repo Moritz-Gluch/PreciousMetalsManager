@@ -44,6 +44,7 @@ namespace PreciousMetalsManager
                 editWindow.QuantityTextBox.Text = selected.Quantity.ToString();
                 editWindow.PurchasePriceTextBox.Text = selected.PurchasePrice.ToString();
                 editWindow.PurchaseDatePicker.SelectedDate = selected.PurchaseDate;
+                editWindow.SelectedCollectableType = selected.CollectableType;
 
                 if (editWindow.ShowDialog() == true && editWindow.NewHolding is { } edited)
                 {
