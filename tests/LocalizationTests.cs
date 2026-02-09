@@ -281,17 +281,5 @@ namespace PreciousMetalsManager.Tests
             var storage = new PreciousMetalsManager.Services.LocalStorageService(_testDbPath);
             return new ViewModel(storage);
         }
-
-        [TestCleanup]
-        public void TestCleanup()
-        {
-            _vm = null;
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-            System.Threading.Thread.Sleep(100);
-
-            if (File.Exists(_testDbPath))
-                File.Delete(_testDbPath);
-        }
     }
 }

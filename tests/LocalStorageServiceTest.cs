@@ -91,6 +91,55 @@ namespace PreciousMetalsManager.Tests
             Assert.IsInstanceOfType(holdings, typeof(List<MetalHolding>));
         }
 
+        [TestMethod]
+        public void AddAndLoadHolding_ShouldPersistCollectableType()
+        {
+            foreach (CollectableType type in Enum.GetValues(typeof(CollectableType)))
+            {
+                var holding = new MetalHolding
+                {
+                    MetalType = MetalType.Gold,
+                    Form = "Test",
+                    Purity = 999.9m,
+                    Weight = 1m,
+                    Quantity = 1,
+                    PurchasePrice = 100m,
+                    PurchaseDate = DateTime.Today,
+                    CollectableType = type
+                };
+
+                _service.AddHolding(holding);
+                var loaded = _service.LoadHoldings().FirstOrDefault(h => h.Id == holding.Id);
+
+                Assert.IsNotNull(loaded);
+                Assert.AreEqual(type, loaded.CollectableType);
+            }
+        }
+
+        [TestMethod]
+        public void UpdateHolding_ShouldChangeCollectableType()
+        {
+            var holding = new MetalHolding
+            {
+                MetalType = MetalType.Gold,
+                Form = "Test",
+                Purity = 999.9m,
+                Weight = 1m,
+                Quantity = 1,
+                PurchasePrice = 100m,
+                PurchaseDate = DateTime.Today,
+                CollectableType = CollectableType.Bullion
+            };
+
+            _service.AddHolding(holding);
+            holding.CollectableType = CollectableType.Numismatic;
+            _service.UpdateHolding(holding, holding.Id);
+
+            var loaded = _service.LoadHoldings().FirstOrDefault(h => h.Id == holding.Id);
+            Assert.IsNotNull(loaded);
+            Assert.AreEqual(CollectableType.Numismatic, loaded.CollectableType);
+        }
+
         /// <summary>
         /// Creates a test object with all required fields.
         /// </summary>

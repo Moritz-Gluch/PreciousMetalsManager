@@ -80,5 +80,25 @@ namespace PreciousMetalsManager.Tests
             Assert.AreEqual(0m, holding.TotalValue);
             Assert.AreEqual(default(CollectableType), holding.CollectableType);
         }
+
+        [TestMethod]
+        public void CollectableType_SetAndGet_WorksCorrectly()
+        {
+            var holding = new MetalHolding();
+            holding.CollectableType = CollectableType.Numismatic;
+            Assert.AreEqual(CollectableType.Numismatic, holding.CollectableType);
+        }
+
+        [TestMethod]
+        public void CollectableType_PropertyChanged_IsRaised()
+        {
+            var holding = new MetalHolding();
+            string? changedProperty = null;
+            holding.PropertyChanged += (s, e) => changedProperty = e.PropertyName;
+
+            holding.CollectableType = CollectableType.SemiNumismatic;
+
+            Assert.AreEqual(nameof(MetalHolding.CollectableType), changedProperty);
+        }
     }
 }

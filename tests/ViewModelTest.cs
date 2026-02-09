@@ -346,6 +346,51 @@ namespace PreciousMetalsManager.Tests
             Assert.IsInstanceOfType(vm.MetalTypeFilterOptions[0], typeof(string));
         }
 
+        [TestMethod]
+        public void AddHolding_WithCollectableType_ReflectsInHoldings()
+        {
+            var vm = CreateTestViewModel();
+            var holding = new MetalHolding
+            {
+                MetalType = MetalType.Gold,
+                Form = "Test",
+                Purity = 999.9m,
+                Weight = 1m,
+                Quantity = 1,
+                PurchasePrice = 100m,
+                PurchaseDate = DateTime.Today,
+                CollectableType = CollectableType.SemiNumismatic
+            };
+
+            vm.AddHolding(holding);
+
+            Assert.IsTrue(vm.Holdings.Any(h => h.CollectableType == CollectableType.SemiNumismatic));
+        }
+
+        [TestMethod]
+        public void EditHolding_UpdatesCollectableType()
+        {
+            var vm = CreateTestViewModel();
+            var holding = new MetalHolding
+            {
+                MetalType = MetalType.Gold,
+                Form = "Test",
+                Purity = 999.9m,
+                Weight = 1m,
+                Quantity = 1,
+                PurchasePrice = 100m,
+                PurchaseDate = DateTime.Today,
+                CollectableType = CollectableType.Bullion
+            };
+
+            vm.AddHolding(holding);
+
+            holding.CollectableType = CollectableType.Numismatic;
+            vm.UpdateHolding(holding);
+
+            Assert.IsTrue(vm.Holdings.Any(h => h.Id == holding.Id && h.CollectableType == CollectableType.Numismatic));
+        }
+
         private ViewModel CreateTestViewModel()
         {
             var storage = new LocalStorageService(_testDbPath);
