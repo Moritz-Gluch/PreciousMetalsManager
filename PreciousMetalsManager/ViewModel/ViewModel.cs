@@ -70,8 +70,9 @@ namespace PreciousMetalsManager.ViewModels
 
         private readonly DispatcherTimer _autoRefreshTimer;
 
-        public ViewModel()
+        public ViewModel(LocalStorageService? storage = null)
         {
+            _storage = storage ?? new LocalStorageService();
             Holdings = new ObservableCollection<MetalHolding>(_storage.LoadHoldings());
             Holdings.CollectionChanged += Holdings_CollectionChanged;
 

@@ -88,4 +88,8 @@
     <sys:String x:Key="Common_Quantity">Quantity</sys:String>
     <sys:String x:Key="Common_PurchasePrice">Purchase Price</sys:String>
     <sys:String x:Key="Common_PurchaseDate">Purchase Date</sys:String>
+    <sys:String x:Key="Common_CollectableType">Classification</sys:String>
+    <sys:String x:Key="CollectableType_Bullion">Bullion</sys:String>
+    <sys:String x:Key="CollectableType_SemiNumismatic">Semi-numismatic</sys:String>
+    <sys:String x:Key="CollectableType_Numismatic">Numismatic</sys:String>
 </ResourceDictionary>

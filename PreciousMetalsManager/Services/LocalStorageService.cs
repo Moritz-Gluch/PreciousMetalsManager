@@ -9,10 +9,11 @@ namespace PreciousMetalsManager.Services
 {
     public class LocalStorageService
     {
-        private readonly string _dbPath = "holdings.db";
+        private readonly string _dbPath;
 
-        public LocalStorageService()
+        public LocalStorageService(string? dbPath = null)
         {
+            _dbPath = dbPath ?? "holdings.db";
             InitializeDatabase();
         }
 
@@ -35,7 +36,8 @@ namespace PreciousMetalsManager.Services
                         Weight REAL,
                         Quantity INTEGER,
                         PurchasePrice REAL,
-                        PurchaseDate TEXT
+                        PurchaseDate TEXT,
+                        CollectableType INTEGER DEFAULT 0
                     );";
                 cmd.ExecuteNonQuery();
             }
@@ -49,7 +51,7 @@ namespace PreciousMetalsManager.Services
                 using var connection = new SqliteConnection($"Data Source={_dbPath}");
                 connection.Open();
                 var cmd = connection.CreateCommand();
-                cmd.CommandText = "SELECT Id, MetalType, Form, Purity, Weight, Quantity, PurchasePrice, PurchaseDate FROM Holdings";
+                cmd.CommandText = "SELECT Id, MetalType, Form, Purity, Weight, Quantity, PurchasePrice, PurchaseDate, CollectableType FROM Holdings";
                 using var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
@@ -64,7 +66,8 @@ namespace PreciousMetalsManager.Services
                             Weight = reader.GetDecimal(4),
                             Quantity = reader.GetInt32(5),
                             PurchasePrice = reader.GetDecimal(6),
-                            PurchaseDate = DateTime.Parse(reader.GetString(7))
+                            PurchaseDate = DateTime.Parse(reader.GetString(7)),
+                            CollectableType = reader.IsDBNull(8) ? CollectableType.Bullion : (CollectableType)reader.GetInt32(8)
                         });
                     }
                     catch (Exception ex)
@@ -98,18 +101,20 @@ namespace PreciousMetalsManager.Services
                 using var connection = new SqliteConnection($"Data Source={_dbPath}");
                 connection.Open();
                 var cmd = connection.CreateCommand();
-                cmd.CommandText =
-                    @"INSERT INTO Holdings (MetalType, Form, Purity, Weight, Quantity, PurchasePrice, PurchaseDate)
-                      VALUES (@type, @form, @purity, @weight, @quantity, @price, @date);
-                      SELECT last_insert_rowid();";
-                cmd.Parameters.AddWithValue("@type", (int)holding.MetalType);
-                cmd.Parameters.AddWithValue("@form", holding.Form);
-                cmd.Parameters.AddWithValue("@purity", holding.Purity);
-                cmd.Parameters.AddWithValue("@weight", holding.Weight);
-                cmd.Parameters.AddWithValue("@quantity", holding.Quantity);
-                cmd.Parameters.AddWithValue("@price", holding.PurchasePrice);
-                cmd.Parameters.AddWithValue("@date", holding.PurchaseDate.ToString("o"));
+                cmd.CommandText = @"
+                    INSERT INTO Holdings (MetalType, Form, Purity, Weight, Quantity, PurchasePrice, PurchaseDate, CollectableType)
+                    VALUES (@MetalType, @Form, @Purity, @Weight, @Quantity, @PurchasePrice, @PurchaseDate, @CollectableType);";
+                cmd.Parameters.AddWithValue("@MetalType", (int)holding.MetalType);
+                cmd.Parameters.AddWithValue("@Form", holding.Form);
+                cmd.Parameters.AddWithValue("@Purity", holding.Purity);
+                cmd.Parameters.AddWithValue("@Weight", holding.Weight);
+                cmd.Parameters.AddWithValue("@Quantity", holding.Quantity);
+                cmd.Parameters.AddWithValue("@PurchasePrice", holding.PurchasePrice);
+                cmd.Parameters.AddWithValue("@PurchaseDate", holding.PurchaseDate.ToString("o"));
+                cmd.Parameters.AddWithValue("@CollectableType", (int)holding.CollectableType);
 
+                cmd.ExecuteNonQuery();
+                cmd.CommandText = "SELECT last_insert_rowid();";
                 holding.Id = Convert.ToInt32(cmd.ExecuteScalar());
             }
             catch (Exception ex)
@@ -133,16 +138,24 @@ namespace PreciousMetalsManager.Services
                 var cmd = connection.CreateCommand();
                 cmd.CommandText =
                     @"UPDATE Holdings SET
-                        MetalType=@type, Form=@form, Purity=@purity, Weight=@weight, Quantity=@quantity, PurchasePrice=@price, PurchaseDate=@date
-                      WHERE Id=@id";
-                cmd.Parameters.AddWithValue("@type", (int)holding.MetalType);
-                cmd.Parameters.AddWithValue("@form", holding.Form);
-                cmd.Parameters.AddWithValue("@purity", holding.Purity);
-                cmd.Parameters.AddWithValue("@weight", holding.Weight);
-                cmd.Parameters.AddWithValue("@quantity", holding.Quantity);
-                cmd.Parameters.AddWithValue("@price", holding.PurchasePrice);
-                cmd.Parameters.AddWithValue("@date", holding.PurchaseDate.ToString("o"));
-                cmd.Parameters.AddWithValue("@id", id);
+                        MetalType = @MetalType,
+                        Form = @Form,
+                        Purity = @Purity,
+                        Weight = @Weight,
+                        Quantity = @Quantity,
+                        PurchasePrice = @PurchasePrice,
+                        PurchaseDate = @PurchaseDate,
+                        CollectableType = @CollectableType
+                        WHERE Id = @Id";
+                cmd.Parameters.AddWithValue("@MetalType", (int)holding.MetalType);
+                cmd.Parameters.AddWithValue("@Form", holding.Form);
+                cmd.Parameters.AddWithValue("@Purity", holding.Purity);
+                cmd.Parameters.AddWithValue("@Weight", holding.Weight);
+                cmd.Parameters.AddWithValue("@Quantity", holding.Quantity);
+                cmd.Parameters.AddWithValue("@PurchasePrice", holding.PurchasePrice);
+                cmd.Parameters.AddWithValue("@PurchaseDate", holding.PurchaseDate.ToString("o"));
+                cmd.Parameters.AddWithValue("@CollectableType", (int)holding.CollectableType);
+                cmd.Parameters.AddWithValue("@Id", id);
                 cmd.ExecuteNonQuery();
             }
             catch (Exception ex)

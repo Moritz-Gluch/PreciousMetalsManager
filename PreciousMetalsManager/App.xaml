@@ -7,6 +7,8 @@
     <Application.Resources>
         <ResourceDictionary>
             <models:MetalTypeToLabelConverter x:Key="MetalTypeToLabelConverter" />
+            <models:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+            <models:CollectableTypeToLabelConverter x:Key="CollectableTypeToLabelConverter" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Localization/Localization.en.xaml" />
             </ResourceDictionary.MergedDictionaries>

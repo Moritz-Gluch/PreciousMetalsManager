@@ -16,12 +16,21 @@ namespace PreciousMetalsManager.Tests
     public sealed class LocalizationTests
     {
         private const string LocalizationFolder = "Resources/Localization/";
+        private string _testDbPath = null!;
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext _)
         {
             EnsureWpfApp();
         }
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            _testDbPath = Path.Combine(Path.GetTempPath(), $"test_holdings_{Guid.NewGuid()}.db");
+        }
+
+        private ViewModel? _vm;
 
         [TestMethod]
         public void LocalizationDictionaries_ShouldContainSameKeys()
@@ -155,10 +164,8 @@ namespace PreciousMetalsManager.Tests
         public void ViewModel_ToggleLanguage_ShouldSwitch_AppCurrentLanguage()
         {
             App.SetLanguage("en");
-            var vm = new ViewModel();
-
-            vm.ToggleLanguage();
-
+            _vm = CreateTestViewModel();
+            _vm.ToggleLanguage();
             Assert.AreEqual("de", App.CurrentLanguage);
         }
 
@@ -166,13 +173,13 @@ namespace PreciousMetalsManager.Tests
         public void ViewModel_MetalTypeFilterOptions_FirstItem_ShouldMatchLocalizedFilterAll()
         {
             App.SetLanguage("de");
-            var vmDe = new ViewModel();
-            var firstDe = vmDe.MetalTypeFilterOptions.Cast<object>().First() as string;
+            _vm = CreateTestViewModel();
+            var firstDe = _vm.MetalTypeFilterOptions.Cast<object>().First() as string;
             Assert.AreEqual("Alle", firstDe);
 
             App.SetLanguage("en");
-            var vmEn = new ViewModel();
-            var firstEn = vmEn.MetalTypeFilterOptions.Cast<object>().First() as string;
+            _vm = CreateTestViewModel();
+            var firstEn = _vm.MetalTypeFilterOptions.Cast<object>().First() as string;
             Assert.AreEqual("All", firstEn);
         }
 
@@ -267,6 +274,12 @@ namespace PreciousMetalsManager.Tests
             {
                 // expected
             }
+        }
+
+        private ViewModel CreateTestViewModel()
+        {
+            var storage = new PreciousMetalsManager.Services.LocalStorageService(_testDbPath);
+            return new ViewModel(storage);
         }
     }
 }

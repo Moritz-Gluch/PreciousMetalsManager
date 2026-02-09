@@ -8,43 +8,73 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
 using System;
+using System.IO;
 
 namespace PreciousMetalsManager.Tests
 {
     [TestClass]
     public class ViewModelTest
     {
+        private string _testDbPath = null!;
+        private ViewModel _vm = null!;
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            _testDbPath = Path.Combine(Path.GetTempPath(), $"test_holdings_{Guid.NewGuid()}.db");
+            var storage = new LocalStorageService(_testDbPath);
+            _vm = new ViewModel(storage);
+        }
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            _vm = null!;
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            if (File.Exists(_testDbPath))
+            {
+                try
+                {
+                    File.Delete(_testDbPath);
+                }
+                catch (IOException ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("Error deleting test database: " + ex.Message);
+                }
+            }
+        }
+
         [TestMethod]
         public void AddHolding_AddsItemToHoldings()
         {
-            var vm = new ViewModel();
             var holding = new MetalHolding { MetalType = MetalType.Gold, Form = "Barren" };
 
-            vm.AddHolding(holding);
+            _vm.AddHolding(holding);
 
-            Assert.IsTrue(vm.Holdings.Any(h => h.Form == "Barren" && h.MetalType == MetalType.Gold));
+            Assert.IsTrue(_vm.Holdings.Any(h => h.Form == "Barren" && h.MetalType == MetalType.Gold));
         }
 
         [TestMethod]
         public void DeleteHolding_RemovesItemFromHoldings()
         {
-            var vm = new ViewModel();
             var holding = new MetalHolding { MetalType = MetalType.Silver, Form = "Münze" };
-            vm.AddHolding(holding);
+            _vm.AddHolding(holding);
 
             // CHecks if the holding was added
-            Assert.IsTrue(vm.Holdings.Any(h => h.Form == "Münze" && h.MetalType == MetalType.Silver));
+            Assert.IsTrue(_vm.Holdings.Any(h => h.Form == "Münze" && h.MetalType == MetalType.Silver));
 
-            vm.DeleteHolding(holding);
+            _vm.DeleteHolding(holding);
 
             // Checks if the holding was removed
-            Assert.IsFalse(vm.Holdings.Any(h => h.Form == "Münze" && h.MetalType == MetalType.Silver));
+            Assert.IsFalse(_vm.Holdings.Any(h => h.Form == "Münze" && h.MetalType == MetalType.Silver));
         }
 
         [TestMethod]
         public void FormFilter_FiltersHoldings()
         {
-            var vm = new ViewModel();
+            var vm = CreateTestViewModel();
             var holding = new MetalHolding { Form = "Barren" };
             vm.Holdings.Add(holding);
 
@@ -58,7 +88,7 @@ namespace PreciousMetalsManager.Tests
         [TestMethod]
         public void SelectedMetalTypeFilter_FiltersHoldings()
         {
-            var vm = new ViewModel();
+            var vm = CreateTestViewModel();
             var gold = new MetalHolding { MetalType = MetalType.Gold };
             var silver = new MetalHolding { MetalType = MetalType.Silver };
             vm.Holdings.Add(gold);
@@ -74,7 +104,7 @@ namespace PreciousMetalsManager.Tests
         [TestMethod]
         public void PropertyChanged_IsRaised_WhenGoldPriceChanges()
         {
-            var vm = new ViewModel();
+            var vm = CreateTestViewModel();
             bool eventRaised = false;
             vm.PropertyChanged += (s, e) => { if (e.PropertyName == nameof(vm.GoldPrice)) eventRaised = true; };
 
@@ -86,7 +116,7 @@ namespace PreciousMetalsManager.Tests
         [TestMethod]
         public void UpdateCalculatedValues_UpdatesCurrentAndTotalValue()
         {
-            var vm = new ViewModel();
+            var vm = CreateTestViewModel();
             var holding = new MetalHolding
             {
                 MetalType = MetalType.Gold,
@@ -118,7 +148,7 @@ namespace PreciousMetalsManager.Tests
                     PalladiumEur = 62.2m  // 1g = 2.00
                 }
             };
-            var vm = new TestViewModel(testService);
+            var vm = CreateTestViewModelWithApi(testService);
 
             var holding = new MetalHolding
             {
@@ -145,7 +175,7 @@ namespace PreciousMetalsManager.Tests
         {
             // Test: If API fails, error message is shown
             var testService = new TestMetalPriceApiService { ResponseToReturn = null };
-            var vm = new TestViewModel(testService);
+            var vm = CreateTestViewModelWithApi(testService);
 
             await vm.UpdateMarketPricesAsync();
 
@@ -158,7 +188,8 @@ namespace PreciousMetalsManager.Tests
         {
             // Test: The auto-refresh timer is started on ViewModel construction
             var testService = new TestMetalPriceApiService();
-            var vm = new TestViewModel(testService);
+            var storage = new LocalStorageService(_testDbPath);
+            var vm = new TestViewModel(testService, storage);
 
             var timerField = typeof(ViewModel).GetField("_autoRefreshTimer", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
             var timer = timerField?.GetValue(vm) as DispatcherTimer;
@@ -181,7 +212,8 @@ namespace PreciousMetalsManager.Tests
                     PalladiumEur = 62.2m
                 }
             };
-            var vm = new TestViewModel(testService);
+            var storage = new LocalStorageService(_testDbPath);
+            var vm = new TestViewModel(testService, storage);
 
             await Task.Run(() => ((ICommand)vm.RefreshPricesCommand).Execute(null));
 
@@ -194,7 +226,7 @@ namespace PreciousMetalsManager.Tests
             if (System.Windows.Application.Current == null)
                 new PreciousMetalsManager.App();
 
-            var vm = new ViewModel();
+            var vm = CreateTestViewModel();
             vm.SelectedMetalTypeFilter = MetalType.Gold;
 
             vm.ToggleLanguage();
@@ -206,7 +238,7 @@ namespace PreciousMetalsManager.Tests
         [TestMethod]
         public void MetalTypeFilterOptions_FirstEntry_IsAllOption()
         {
-            var vm = new ViewModel();
+            var vm = CreateTestViewModel();
 
             Assert.IsGreaterThanOrEqualTo(1, vm.MetalTypeFilterOptions.Count);
 
@@ -218,7 +250,7 @@ namespace PreciousMetalsManager.Tests
         [TestMethod]
         public void MetalTypeFilterOptions_ContainsDistinctMetalTypesOnly()
         {
-            var vm = new ViewModel();
+            var vm = CreateTestViewModel();
 
             vm.Holdings.Add(new MetalHolding { MetalType = MetalType.Gold, Form = "A" });
             vm.Holdings.Add(new MetalHolding { MetalType = MetalType.Gold, Form = "B" });
@@ -234,7 +266,7 @@ namespace PreciousMetalsManager.Tests
         [TestMethod]
         public void SelectedMetalTypeFilter_AllOption_DoesNotFilterByMetalType()
         {
-            var vm = new ViewModel();
+            var vm = CreateTestViewModel();
 
             var gold = new MetalHolding { MetalType = MetalType.Gold, Form = "Barren" };
             var silver = new MetalHolding { MetalType = MetalType.Silver, Form = "Coin" };
@@ -252,7 +284,7 @@ namespace PreciousMetalsManager.Tests
         // Users curently can't edit the filter options, but this test may be usefull to spot errors in the code
         public void SelectedMetalTypeFilter_UnknownString_DoesNotFilterByMetalType()
         {
-            var vm = new ViewModel();
+            var vm = CreateTestViewModel();
 
             var gold = new MetalHolding { MetalType = MetalType.Gold, Form = "Barren" };
             var silver = new MetalHolding { MetalType = MetalType.Silver, Form = "Coin" };
@@ -270,7 +302,10 @@ namespace PreciousMetalsManager.Tests
         [TestMethod]
         public void ToggleLanguage_UpdatesAllOptionText_EnToDe()
         {
-            var vm = new ViewModel();
+            if (System.Windows.Application.Current == null)
+                new System.Windows.Application { ShutdownMode = System.Windows.ShutdownMode.OnExplicitShutdown };
+
+            var vm = CreateTestViewModel();
 
             PreciousMetalsManager.App.SetLanguage("en");
             vm.ToggleLanguage(); // toggles to "de"
@@ -283,7 +318,10 @@ namespace PreciousMetalsManager.Tests
         [TestMethod]
         public void ToggleLanguage_UpdatesAllOptionText_DeToEn()
         {
-            var vm = new ViewModel();
+            if (System.Windows.Application.Current == null)
+                new System.Windows.Application { ShutdownMode = System.Windows.ShutdownMode.OnExplicitShutdown };
+
+            var vm = CreateTestViewModel();
 
             PreciousMetalsManager.App.SetLanguage("de");
             vm.ToggleLanguage(); // toggles to "en"
@@ -296,7 +334,7 @@ namespace PreciousMetalsManager.Tests
         [TestMethod]
         public void UpdateMetalTypeFilterOptions_AfterHoldingsChange_AlwaysKeepsAllAtIndex0()
         {
-            var vm = new ViewModel();
+            var vm = CreateTestViewModel();
 
             vm.Holdings.Add(new MetalHolding { MetalType = MetalType.Gold, Form = "A" });
             Assert.IsInstanceOfType(vm.MetalTypeFilterOptions[0], typeof(string));
@@ -306,6 +344,63 @@ namespace PreciousMetalsManager.Tests
 
             vm.Holdings.Remove(vm.Holdings.First());
             Assert.IsInstanceOfType(vm.MetalTypeFilterOptions[0], typeof(string));
+        }
+
+        [TestMethod]
+        public void AddHolding_WithCollectableType_ReflectsInHoldings()
+        {
+            var vm = CreateTestViewModel();
+            var holding = new MetalHolding
+            {
+                MetalType = MetalType.Gold,
+                Form = "Test",
+                Purity = 999.9m,
+                Weight = 1m,
+                Quantity = 1,
+                PurchasePrice = 100m,
+                PurchaseDate = DateTime.Today,
+                CollectableType = CollectableType.SemiNumismatic
+            };
+
+            vm.AddHolding(holding);
+
+            Assert.IsTrue(vm.Holdings.Any(h => h.CollectableType == CollectableType.SemiNumismatic));
+        }
+
+        [TestMethod]
+        public void EditHolding_UpdatesCollectableType()
+        {
+            var vm = CreateTestViewModel();
+            var holding = new MetalHolding
+            {
+                MetalType = MetalType.Gold,
+                Form = "Test",
+                Purity = 999.9m,
+                Weight = 1m,
+                Quantity = 1,
+                PurchasePrice = 100m,
+                PurchaseDate = DateTime.Today,
+                CollectableType = CollectableType.Bullion
+            };
+
+            vm.AddHolding(holding);
+
+            holding.CollectableType = CollectableType.Numismatic;
+            vm.UpdateHolding(holding);
+
+            Assert.IsTrue(vm.Holdings.Any(h => h.Id == holding.Id && h.CollectableType == CollectableType.Numismatic));
+        }
+
+        private ViewModel CreateTestViewModel()
+        {
+            var storage = new LocalStorageService(_testDbPath);
+            return new ViewModel(storage);
+        }
+
+        private TestViewModel CreateTestViewModelWithApi(MetalPriceApiService apiService)
+        {
+            var storage = new LocalStorageService(_testDbPath);
+            return new TestViewModel(apiService, storage);
         }
 
         private class TestMetalPriceApiService : MetalPriceApiService
@@ -322,7 +417,8 @@ namespace PreciousMetalsManager.Tests
             public string? LastErrorMessage { get; private set; }
             public string? LastErrorTitle { get; private set; }
 
-            public TestViewModel(MetalPriceApiService service)
+            public TestViewModel(MetalPriceApiService service, LocalStorageService? storage = null)
+                : base(storage)
             {
                 // Inject the test service via reflection
                 var field = typeof(ViewModel).GetField("_metalPriceApiService", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);

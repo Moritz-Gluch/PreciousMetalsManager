@@ -24,6 +24,7 @@ namespace PreciousMetalsManager.Tests
             holding.PurchaseDate = date;
             holding.CurrentValue = 1200m;
             holding.TotalValue = 2400m;
+            holding.CollectableType = CollectableType.SemiNumismatic;
 
             Assert.AreEqual(1, holding.Id);
             Assert.AreEqual(MetalType.Gold, holding.MetalType);
@@ -35,6 +36,7 @@ namespace PreciousMetalsManager.Tests
             Assert.AreEqual(date, holding.PurchaseDate);
             Assert.AreEqual(1200m, holding.CurrentValue);
             Assert.AreEqual(2400m, holding.TotalValue);
+            Assert.AreEqual(CollectableType.SemiNumismatic, holding.CollectableType);
         }
 
         [TestMethod]
@@ -76,6 +78,27 @@ namespace PreciousMetalsManager.Tests
             Assert.AreEqual(default(DateTime), holding.PurchaseDate);
             Assert.AreEqual(0m, holding.CurrentValue);
             Assert.AreEqual(0m, holding.TotalValue);
+            Assert.AreEqual(default(CollectableType), holding.CollectableType);
+        }
+
+        [TestMethod]
+        public void CollectableType_SetAndGet_WorksCorrectly()
+        {
+            var holding = new MetalHolding();
+            holding.CollectableType = CollectableType.Numismatic;
+            Assert.AreEqual(CollectableType.Numismatic, holding.CollectableType);
+        }
+
+        [TestMethod]
+        public void CollectableType_PropertyChanged_IsRaised()
+        {
+            var holding = new MetalHolding();
+            string? changedProperty = null;
+            holding.PropertyChanged += (s, e) => changedProperty = e.PropertyName;
+
+            holding.CollectableType = CollectableType.SemiNumismatic;
+
+            Assert.AreEqual(nameof(MetalHolding.CollectableType), changedProperty);
         }
     }
 }

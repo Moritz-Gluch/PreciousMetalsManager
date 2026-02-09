@@ -11,25 +11,35 @@ namespace PreciousMetalsManager.Tests
     [TestClass]
     public class LocalStorageServiceTest
     {
-        private const string TestDbPath = "test_holdings.db";
+        private string _testDbPath = null!;
         private LocalStorageService _service = null!; 
 
         [TestInitialize]
         public void TestInitialize()
         {
-            // Ensure the test database is clean before each test
-            if (File.Exists(TestDbPath))
-                File.Delete(TestDbPath);
-
-            _service = new LocalStorageService();
+            // Creates a unique temporary database for each test
+            _testDbPath = Path.Combine(Path.GetTempPath(), $"test_holdings_{Guid.NewGuid()}.db");
+            _service = new LocalStorageService(_testDbPath);
         }
 
         [TestCleanup]
         public void TestCleanup()
         {
-            // Remove the test database after each test
-            if (File.Exists(TestDbPath))
-                File.Delete(TestDbPath);
+            _service = null!;
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            if (File.Exists(_testDbPath))
+            {
+                try
+                {
+                    File.Delete(_testDbPath);
+                }
+                catch (IOException ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("Error deleting test database: " + ex.Message);
+                }
+            }
         }
 
         [TestMethod]
@@ -81,6 +91,55 @@ namespace PreciousMetalsManager.Tests
             Assert.IsInstanceOfType(holdings, typeof(List<MetalHolding>));
         }
 
+        [TestMethod]
+        public void AddAndLoadHolding_ShouldPersistCollectableType()
+        {
+            foreach (CollectableType type in Enum.GetValues(typeof(CollectableType)))
+            {
+                var holding = new MetalHolding
+                {
+                    MetalType = MetalType.Gold,
+                    Form = "Test",
+                    Purity = 999.9m,
+                    Weight = 1m,
+                    Quantity = 1,
+                    PurchasePrice = 100m,
+                    PurchaseDate = DateTime.Today,
+                    CollectableType = type
+                };
+
+                _service.AddHolding(holding);
+                var loaded = _service.LoadHoldings().FirstOrDefault(h => h.Id == holding.Id);
+
+                Assert.IsNotNull(loaded);
+                Assert.AreEqual(type, loaded.CollectableType);
+            }
+        }
+
+        [TestMethod]
+        public void UpdateHolding_ShouldChangeCollectableType()
+        {
+            var holding = new MetalHolding
+            {
+                MetalType = MetalType.Gold,
+                Form = "Test",
+                Purity = 999.9m,
+                Weight = 1m,
+                Quantity = 1,
+                PurchasePrice = 100m,
+                PurchaseDate = DateTime.Today,
+                CollectableType = CollectableType.Bullion
+            };
+
+            _service.AddHolding(holding);
+            holding.CollectableType = CollectableType.Numismatic;
+            _service.UpdateHolding(holding, holding.Id);
+
+            var loaded = _service.LoadHoldings().FirstOrDefault(h => h.Id == holding.Id);
+            Assert.IsNotNull(loaded);
+            Assert.AreEqual(CollectableType.Numismatic, loaded.CollectableType);
+        }
+
         /// <summary>
         /// Creates a test object with all required fields.
         /// </summary>
@@ -94,7 +153,8 @@ namespace PreciousMetalsManager.Tests
                 Weight = 10.5m,
                 Quantity = 1,
                 PurchasePrice = 1000m,
-                PurchaseDate = DateTime.Today
+                PurchaseDate = DateTime.Today,
+                CollectableType = CollectableType.Bullion 
             };
         }
     }

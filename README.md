@@ -73,6 +73,7 @@ erDiagram
         int Id PK
         int MetalType
         string Form
+        int CollectableType
         decimal Purity
         decimal Weight
         int Quantity
