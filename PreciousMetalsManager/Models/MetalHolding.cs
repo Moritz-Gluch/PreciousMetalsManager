@@ -93,6 +93,56 @@ namespace PreciousMetalsManager.Models
             set { if (_collectableType != value) { _collectableType = value; OnPropertyChanged(nameof(CollectableType)); } }
         }
 
+        private static string L(string key)
+            => System.Windows.Application.Current?.TryFindResource(key) as string ?? key;
+
+        /// <summary>
+        /// Returns "Yes" if the holding period is at least 1 year, otherwise "X days"
+        /// </summary>
+        public string TaxFreeStatus
+        {
+            get
+            {
+                if (PurchaseDate == default)
+                    return string.Empty;
+
+                var taxFreeDate = PurchaseDate.Date.AddYears(1);
+                if (DateTime.Today >= taxFreeDate)
+                    return L("TaxFreeStatus_Yes");
+                else
+                    return $"{(taxFreeDate - DateTime.Today).Days} {L("TaxFreeStatus_DaysLeft")}";
+            }
+        }
+
+        /// <summary>
+        /// True if the holding period is at least 1 year.
+        /// </summary>
+        public bool IsTaxFree =>
+            PurchaseDate != default && DateTime.Today >= PurchaseDate.Date.AddYears(1);
+
+        /// <summary>
+        /// Notifies the UI that TaxFreeStatus and IsTaxFree have changed.
+        /// </summary>
+        public void NotifyTaxFreeStatusChanged()
+        {
+            OnPropertyChanged(nameof(TaxFreeStatus));
+            OnPropertyChanged(nameof(IsTaxFree));
+        }
+
+        /// <summary>
+        /// Returns 0 if tax-free, otherwise the number of days left.
+        /// </summary>
+        public int TaxFreeSortValue
+        {
+            get
+            {
+                if (PurchaseDate == default)
+                    return int.MaxValue; // Unset dates last
+                var taxFreeDate = PurchaseDate.Date.AddYears(1);
+                return DateTime.Today >= taxFreeDate ? 0 : (taxFreeDate - DateTime.Today).Days;
+            }
+        }
+
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

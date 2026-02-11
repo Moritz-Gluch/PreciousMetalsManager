@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PreciousMetalsManager"
         xmlns:models="clr-namespace:PreciousMetalsManager.Models"
         mc:Ignorable="d"
-        Title="{DynamicResource MainWindow_Title}" Height="450" Width="750">
+        Title="{DynamicResource MainWindow_Title}" Height="450" Width="875">
 
     <Window.Resources>
         <models:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
@@ -64,6 +64,10 @@
                      Width="120"
                      Margin="5,0"
                      Text="{Binding FormFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <CheckBox Content="{DynamicResource TaxFreeOnly_Checkbox}" 
+                      Margin="10,0,0,0"
+                      VerticalAlignment="Center"
+                      IsChecked="{Binding TaxFreeOnly, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
 
         <Grid Grid.Row="3" Grid.ColumnSpan="2">
@@ -148,6 +152,14 @@
                         </DataGridTextColumn.HeaderTemplate>
                     </DataGridTextColumn>
 
+                    <DataGridTextColumn Binding="{Binding TaxFreeStatus}" IsReadOnly="True" SortMemberPath="TaxFreeSortValue">
+                        <DataGridTextColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{DynamicResource Col_TaxFreeStatus}" />
+                            </DataTemplate>
+                        </DataGridTextColumn.HeaderTemplate>
+                    </DataGridTextColumn>
+                    
                     <DataGridTextColumn Binding="{Binding CurrentValue, StringFormat=F2}">
                         <DataGridTextColumn.HeaderTemplate>
                             <DataTemplate>

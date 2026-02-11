@@ -391,6 +391,31 @@ namespace PreciousMetalsManager.Tests
             Assert.IsTrue(vm.Holdings.Any(h => h.Id == holding.Id && h.CollectableType == CollectableType.Numismatic));
         }
 
+        [TestMethod]
+        public void TaxFreeOnly_Filter_WorksCorrectly()
+        {
+            var vm = CreateTestViewModel();
+
+            var now = DateTime.Today;
+            var old = new MetalHolding { PurchaseDate = now.AddYears(-2) };
+            var young = new MetalHolding { PurchaseDate = now.AddMonths(-6) };
+
+            vm.Holdings.Add(old);
+            vm.Holdings.Add(young);
+
+            vm.TaxFreeOnly = true;
+            var filtered = vm.FilteredHoldings.Cast<MetalHolding>().ToList();
+
+            Assert.Contains(old, filtered);
+            Assert.DoesNotContain(young, filtered);
+
+            vm.TaxFreeOnly = false;
+            filtered = vm.FilteredHoldings.Cast<MetalHolding>().ToList();
+
+            Assert.Contains(old, filtered);
+            Assert.Contains(young, filtered);
+        }
+
         private ViewModel CreateTestViewModel()
         {
             var storage = new LocalStorageService(_testDbPath);

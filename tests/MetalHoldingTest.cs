@@ -2,6 +2,7 @@
 using PreciousMetalsManager.Models;
 using System;
 using System.ComponentModel;
+using System.Windows;
 
 namespace PreciousMetalsManager.Tests
 {
@@ -99,6 +100,43 @@ namespace PreciousMetalsManager.Tests
             holding.CollectableType = CollectableType.SemiNumismatic;
 
             Assert.AreEqual(nameof(MetalHolding.CollectableType), changedProperty);
+        }
+
+        [TestMethod]
+        public void TaxFreeStatus_And_IsTaxFree_AreCorrect_ForOldAndNewHoldings()
+        {
+            var now = DateTime.Today;
+            var oneYearAgo = now.AddYears(-1).AddDays(-1);
+            var almostOneYearAgo = now.AddYears(-1).AddDays(1);
+
+            var holdingOld = new MetalHolding { PurchaseDate = oneYearAgo };
+            var holdingNew = new MetalHolding { PurchaseDate = almostOneYearAgo };
+
+            var yesString = Application.Current?.TryFindResource("TaxFreeStatus_Yes") as string;
+            var daysString = Application.Current?.TryFindResource("TaxFreeStatus_DaysLeft") as string;
+
+            Assert.IsNotNull(yesString);
+            Assert.IsNotNull(daysString);
+
+            Assert.AreEqual(yesString, holdingOld.TaxFreeStatus);
+            Assert.IsTrue(holdingOld.IsTaxFree);
+
+            Assert.Contains(daysString, holdingNew.TaxFreeStatus);
+            Assert.IsFalse(holdingNew.IsTaxFree);
+        }
+
+        [TestMethod]
+        public void TaxFreeSortValue_IsZero_ForTaxFree_OtherwiseDaysLeft()
+        {
+            var now = DateTime.Today;
+            var oneYearAgo = now.AddYears(-1).AddDays(-1);
+            var almostOneYearAgo = now.AddYears(-1).AddDays(1);
+
+            var holdingOld = new MetalHolding { PurchaseDate = oneYearAgo };
+            var holdingNew = new MetalHolding { PurchaseDate = almostOneYearAgo };
+
+            Assert.AreEqual(0, holdingOld.TaxFreeSortValue);
+            Assert.AreEqual((almostOneYearAgo.AddYears(1) - now).Days, holdingNew.TaxFreeSortValue);
         }
     }
 }
