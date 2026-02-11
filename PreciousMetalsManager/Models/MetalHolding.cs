@@ -129,6 +129,20 @@ namespace PreciousMetalsManager.Models
             OnPropertyChanged(nameof(IsTaxFree));
         }
 
+        /// <summary>
+        /// Returns 0 if tax-free, otherwise the number of days left.
+        /// </summary>
+        public int TaxFreeSortValue
+        {
+            get
+            {
+                if (PurchaseDate == default)
+                    return int.MaxValue; // Unset dates last
+                var taxFreeDate = PurchaseDate.Date.AddYears(1);
+                return DateTime.Today >= taxFreeDate ? 0 : (taxFreeDate - DateTime.Today).Days;
+            }
+        }
+
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
