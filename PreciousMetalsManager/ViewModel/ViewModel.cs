@@ -241,6 +241,15 @@ namespace PreciousMetalsManager.ViewModels
             {
                 UpdateCalculatedValues();
             }
+
+            // Forward TaxFreeStatus and IsTaxFree property changes when PurchaseDate changes
+            if (e.PropertyName == nameof(MetalHolding.PurchaseDate))
+            {
+                if (sender is MetalHolding holding)
+                {
+                    holding.NotifyTaxFreeStatusChanged();
+                }
+            }
         }
 
         public void AddHolding(MetalHolding holding)

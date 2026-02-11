@@ -22,6 +22,11 @@
     <!-- MainWindow DataGrid headers -->
     <sys:String x:Key="Col_CurrentValue">Aktueller Wert</sys:String>
     <sys:String x:Key="Col_TotalValue">Gesamtwert</sys:String>
+    <sys:String x:Key="Col_TaxFreeStatus">Steuerfrei</sys:String>
+
+    <!-- MainWindow DataGrid -->
+    <sys:String x:Key="TaxFreeStatus_Yes">Ja</sys:String>
+    <sys:String x:Key="TaxFreeStatus_DaysLeft">Tage</sys:String>
 
     <!-- MainWindow empty text -->
     <sys:String x:Key="Txt_NoHoldingsMatch">Keine Einträge passen zu deinen Kriterien.</sys:String>

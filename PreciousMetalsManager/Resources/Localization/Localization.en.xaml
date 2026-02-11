@@ -22,7 +22,12 @@
     <!-- MainWindow DataGrid headers -->
     <sys:String x:Key="Col_CurrentValue">Current Value</sys:String>
     <sys:String x:Key="Col_TotalValue">Total Value</sys:String>
+    <sys:String x:Key="Col_TaxFreeStatus">Tax-Free</sys:String>
 
+    <!-- MainWindow DataGrid -->
+    <sys:String x:Key="TaxFreeStatus_DaysLeft">days</sys:String>
+    <sys:String x:Key="TaxFreeStatus_Yes">Yes</sys:String>
+    
     <!-- MainWindow empty text -->
     <sys:String x:Key="Txt_NoHoldingsMatch">No holdings match your criteria.</sys:String>
 

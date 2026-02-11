@@ -148,6 +148,14 @@
                         </DataGridTextColumn.HeaderTemplate>
                     </DataGridTextColumn>
 
+                    <DataGridTextColumn Binding="{Binding TaxFreeStatus}" IsReadOnly="True">
+                        <DataGridTextColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{DynamicResource Col_TaxFreeStatus}" />
+                            </DataTemplate>
+                        </DataGridTextColumn.HeaderTemplate>
+                    </DataGridTextColumn>
+                    
                     <DataGridTextColumn Binding="{Binding CurrentValue, StringFormat=F2}">
                         <DataGridTextColumn.HeaderTemplate>
                             <DataTemplate>
