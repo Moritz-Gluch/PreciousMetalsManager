@@ -127,6 +127,9 @@ namespace PreciousMetalsManager.ViewModels
                 !holding.Form.Contains(FormFilter, StringComparison.OrdinalIgnoreCase))
                 return false;
 
+            if (TaxFreeOnly && !holding.IsTaxFree)
+                return false;
+
             return true;
         }
 
@@ -248,6 +251,21 @@ namespace PreciousMetalsManager.ViewModels
                 if (sender is MetalHolding holding)
                 {
                     holding.NotifyTaxFreeStatusChanged();
+                }
+            }
+        }
+
+        private bool _taxFreeOnly;
+        public bool TaxFreeOnly
+        {
+            get => _taxFreeOnly;
+            set
+            {
+                if (_taxFreeOnly != value)
+                {
+                    _taxFreeOnly = value;
+                    OnPropertyChanged(nameof(TaxFreeOnly));
+                    FilteredHoldings.Refresh();
                 }
             }
         }

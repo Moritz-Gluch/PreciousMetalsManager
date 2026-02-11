@@ -64,6 +64,10 @@
                      Width="120"
                      Margin="5,0"
                      Text="{Binding FormFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <CheckBox Content="{DynamicResource TaxFreeOnly_Checkbox}" 
+                      Margin="10,0,0,0"
+                      VerticalAlignment="Center"
+                      IsChecked="{Binding TaxFreeOnly, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
 
         <Grid Grid.Row="3" Grid.ColumnSpan="2">
