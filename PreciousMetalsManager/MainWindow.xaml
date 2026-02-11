@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PreciousMetalsManager"
         xmlns:models="clr-namespace:PreciousMetalsManager.Models"
         mc:Ignorable="d"
-        Title="{DynamicResource MainWindow_Title}" Height="450" Width="750">
+        Title="{DynamicResource MainWindow_Title}" Height="450" Width="875">
 
     <Window.Resources>
         <models:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
