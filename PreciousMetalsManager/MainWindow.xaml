@@ -11,6 +11,7 @@
     <Window.Resources>
         <models:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <models:CollectableTypeToLabelConverter x:Key="CollectableTypeToLabelConverter"/>
+        <models:MetalTypeToLabelConverter x:Key="MetalTypeToLabelConverter"/>
     </Window.Resources>
 
     <Grid Margin="10">
@@ -88,7 +89,7 @@
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding MetalType}">
+                    <DataGridTextColumn Binding="{Binding MetalType, Converter={StaticResource MetalTypeToLabelConverter}}">
                         <DataGridTextColumn.HeaderTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{DynamicResource Common_MetalType}" />
