@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Windows;
@@ -24,6 +23,27 @@ namespace PreciousMetalsManager.Services
             var sb = new StringBuilder();
 
             string L(string key) => Application.Current?.TryFindResource(key) as string ?? key;
+
+            static string GetMetalTypeKey(MetalType metalType) => metalType switch
+            {
+                MetalType.Gold => "Lbl_Gold",
+                MetalType.Silver => "Lbl_Silver",
+                MetalType.Platinum => "Lbl_Platinum",
+                MetalType.Palladium => "Lbl_Palladium",
+                MetalType.Bronce => "Lbl_Bronce",
+                _ => metalType.ToString()
+            };
+
+            static string GetCollectableTypeKey(CollectableType collectableType) => collectableType switch
+            {
+                CollectableType.Bullion => "CollectableType_Bullion",
+                CollectableType.SemiNumismatic => "CollectableType_SemiNumismatic",
+                CollectableType.Numismatic => "CollectableType_Numismatic",
+                _ => collectableType.ToString()
+            };
+
+            static string TrimTrailingColon(string s) => string.IsNullOrWhiteSpace(s) ? s : s.TrimEnd().TrimEnd(':');
+
             sb.AppendLine(
                 $"{L("Common_MetalType")}; " +
                 $"{L("Common_Form")}; " +
@@ -37,8 +57,8 @@ namespace PreciousMetalsManager.Services
 
             foreach (var h in holdings)
             {
-                var metalTypeLabel = L(h.MetalType.ToString());
-                var collectableTypeLabel = L(h.CollectableType.ToString());
+                var metalTypeLabel = TrimTrailingColon(L(GetMetalTypeKey(h.MetalType)));
+                var collectableTypeLabel = L(GetCollectableTypeKey(h.CollectableType));
 
                 sb.AppendLine(
                     $"{metalTypeLabel}; " +
@@ -51,6 +71,7 @@ namespace PreciousMetalsManager.Services
                     $"{h.PurchaseDate:dd.MM.yyyy}; "
                 );
             }
+
             File.WriteAllText(filePath, sb.ToString(), Encoding.UTF8);
         }
     }
