@@ -1,6 +1,7 @@
 ﻿using PreciousMetalsManager.ViewModels;
 using PreciousMetalsManager.Views;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace PreciousMetalsManager
 {
@@ -123,6 +124,16 @@ namespace PreciousMetalsManager
 
                 // Enforces Refresh of the dropdown entries (necessary for language change)
                 MetalTypeFilterComboBox.Items.Refresh();
+            }
+        }
+
+        private void ExportButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            if (button?.ContextMenu != null)
+            {
+                button.ContextMenu.PlacementTarget = button;
+                button.ContextMenu.IsOpen = true;
             }
         }
     }
