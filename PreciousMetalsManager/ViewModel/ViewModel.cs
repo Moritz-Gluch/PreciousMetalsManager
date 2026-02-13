@@ -102,7 +102,7 @@ namespace PreciousMetalsManager.ViewModels
             SelectedMetalTypeFilter = MetalTypeFilterOptions.FirstOrDefault(); // Set 'All' as default
             Holdings.CollectionChanged += (s, e) => UpdateMetalTypeFilterOptions();
             
-            ExportCommand = new RelayCommand(_ => ExportHoldings());
+            ExportSimpleCommand = new RelayCommand(_ => ExportSimpleHoldings());
         }
 
         private void Holdings_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -352,7 +352,7 @@ namespace PreciousMetalsManager.ViewModels
         }
 
         public ICommand RefreshPricesCommand { get; }
-        public ICommand ExportCommand { get; }
+        public ICommand ExportSimpleCommand { get; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -366,7 +366,7 @@ namespace PreciousMetalsManager.ViewModels
             MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        private void ExportHoldings()
+        private void ExportSimpleHoldings()
         {
             var dateString = DateTime.Now.ToString("dd-MM-yyyy");
             var exportFileName = $"{L("ExportButton")}_{dateString}.csv";
