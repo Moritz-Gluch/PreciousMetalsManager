@@ -1,10 +1,6 @@
 ﻿using PreciousMetalsManager.ViewModels;
 using PreciousMetalsManager.Views;
 using System.Windows;
-using Microsoft.Win32;
-using System.IO;
-using System.Text;
-using System.Linq;
 
 namespace PreciousMetalsManager
 {
@@ -116,46 +112,6 @@ namespace PreciousMetalsManager
                 vm.PlatinumPrice = dlg.PlatinumPrice;
                 vm.PalladiumPrice = dlg.PalladiumPrice;
                 vm.BroncePrice = dlg.BroncePrice;
-            }
-        }
-
-        private void ExportButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (DataContext is not ViewModel vm)
-                return;
-
-            var saveFileDialog = new SaveFileDialog
-            {
-                Filter = "CSV-Datei (*.csv)|*.csv",
-                Title = L("ExportButton"),
-                FileName = "Export.csv"
-            };
-
-            if (saveFileDialog.ShowDialog() == true)
-            {
-                try
-                {
-                    var holdings = vm.FilteredHoldings?.Cast<Models.MetalHolding>().ToList();
-                    if (holdings == null || holdings.Count == 0)
-                    {
-                        MessageBox.Show(L("Txt_NoHoldingsMatch"), L("ExportButton"), MessageBoxButton.OK, MessageBoxImage.Information);
-                        return;
-                    }
-
-                    var sb = new StringBuilder();
-
-                    foreach (var h in holdings)
-                    {
-                        sb.AppendLine($"{(int)h.MetalType};{h.Form};{h.Purity};{h.Weight};{h.Quantity};{h.PurchasePrice};{h.PurchaseDate:yyyy-MM-dd};{(int)h.CollectableType}");
-                    }
-
-                    File.WriteAllText(saveFileDialog.FileName, sb.ToString(), Encoding.UTF8);
-                    MessageBox.Show(L("ExportButton") + " " + L("Msg_ExportSuccess"), L("ExportButton"), MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"{L("Msg_ExportError")}: {ex.Message}", L("ExportButton"), MessageBoxButton.OK, MessageBoxImage.Error);
-                }
             }
         }
 

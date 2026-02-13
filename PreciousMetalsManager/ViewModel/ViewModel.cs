@@ -10,6 +10,7 @@ using System.Windows;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
+using Microsoft.Win32;
 
 namespace PreciousMetalsManager.ViewModels
 {
@@ -100,6 +101,8 @@ namespace PreciousMetalsManager.ViewModels
             UpdateMetalTypeFilterOptions();
             SelectedMetalTypeFilter = MetalTypeFilterOptions.FirstOrDefault(); // Set 'All' as default
             Holdings.CollectionChanged += (s, e) => UpdateMetalTypeFilterOptions();
+            
+            ExportCommand = new RelayCommand(_ => ExportHoldings());
         }
 
         private void Holdings_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -349,6 +352,7 @@ namespace PreciousMetalsManager.ViewModels
         }
 
         public ICommand RefreshPricesCommand { get; }
+        public ICommand ExportCommand { get; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -360,6 +364,36 @@ namespace PreciousMetalsManager.ViewModels
         protected virtual void ShowErrorMessage(string message, string title)
         {
             MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        private void ExportHoldings()
+        {
+            var saveFileDialog = new SaveFileDialog
+            {
+                Filter = "CSV-Datei (*.csv)|*.csv",
+                Title = L("ExportButton"),
+                FileName = "Export.csv"
+            };
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                var holdings = FilteredHoldings.Cast<MetalHolding>().ToList();
+                if (holdings.Count == 0)
+                {
+                    MessageBox.Show(L("Txt_NoHoldingsMatch"), L("ExportButton"), MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+
+                try
+                {
+                    CsvExportService.ExportHoldings(holdings, saveFileDialog.FileName);
+                    MessageBox.Show(L("ExportButton") + " " + L("Msg_ExportSuccess"), L("ExportButton"), MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"{L("Msg_ExportError")}: {ex.Message}", L("ExportButton"), MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
     }
 }
