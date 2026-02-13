@@ -25,14 +25,14 @@ namespace PreciousMetalsManager.Services
 
             string L(string key) => Application.Current?.TryFindResource(key) as string ?? key;
             sb.AppendLine(
-                $"{L("Common_MetalType")};" +
-                $"{L("Common_Form")};" +
-                $"{L("Common_CollectableType")};" +
-                $"{L("Common_Purity")};" +
-                $"{L("Common_Weight")};" +
-                $"{L("Common_Quantity")};" +
-                $"{L("Common_PurchasePrice")};" +
-                $"{L("Common_PurchaseDate")};"
+                $"{L("Common_MetalType")}; " +
+                $"{L("Common_Form")}; " +
+                $"{L("Common_CollectableType")}; " +
+                $"{L("Common_Purity")}; " +
+                $"{L("Common_Weight")}; " +
+                $"{L("Common_Quantity")}; " +
+                $"{L("Common_PurchasePrice")}; " +
+                $"{L("Common_PurchaseDate")}; "
             );
 
             foreach (var h in holdings)
@@ -41,14 +41,14 @@ namespace PreciousMetalsManager.Services
                 var collectableTypeLabel = L(h.CollectableType.ToString());
 
                 sb.AppendLine(
-                    $"{metalTypeLabel};" +
-                    $"{h.Form};" +
-                    $"{collectableTypeLabel};" +
-                    $"{h.Purity};" +
-                    $"{h.Weight};" +
-                    $"{h.Quantity};" +
-                    $"{h.PurchasePrice:F2};" +
-                    $"{h.PurchaseDate:dd.MM.yyyy};"
+                    $"{metalTypeLabel}; " +
+                    $"{h.Form}; " +
+                    $"{collectableTypeLabel}; " +
+                    $"{h.Purity}; " +
+                    $"{h.Weight}; " +
+                    $"{h.Quantity}; " +
+                    $"{h.PurchasePrice:F2}; " +
+                    $"{h.PurchaseDate:dd.MM.yyyy}; "
                 );
             }
             File.WriteAllText(filePath, sb.ToString(), Encoding.UTF8);

@@ -404,7 +404,8 @@ namespace PreciousMetalsManager.ViewModels
         private void ExportDetailedHoldings()
         {
             var dateString = DateTime.Now.ToString("dd-MM-yyyy");
-            var exportFileName = $"{L("ExportButton")}_{dateString}_detailed.csv";
+            var detailedSuffix = L("ExportDialog_Detailed");
+            var exportFileName = $"{L("ExportButton")}_{dateString}_{detailedSuffix}.csv";
 
             var saveFileDialog = new SaveFileDialog
             {
