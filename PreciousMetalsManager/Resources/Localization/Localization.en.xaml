@@ -99,4 +99,10 @@
     <sys:String x:Key="CollectableType_Bullion">Bullion</sys:String>
     <sys:String x:Key="CollectableType_SemiNumismatic">Semi-numismatic</sys:String>
     <sys:String x:Key="CollectableType_Numismatic">Numismatic</sys:String>
+
+    <!-- ExportDialog -->
+    <sys:String x:Key="ExportDialog_Filter">CSV file (*.csv)|*.csv</sys:String>
+    <sys:String x:Key="ExportDialog_Success">Export successful.</sys:String>
+    <sys:String x:Key="ExportDialog_Error">Error during export</sys:String>
+    <sys:String x:Key="ExportDialog_NoHoldings">No holdings to export.</sys:String>
 </ResourceDictionary>

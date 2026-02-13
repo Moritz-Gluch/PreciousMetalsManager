@@ -368,11 +368,14 @@ namespace PreciousMetalsManager.ViewModels
 
         private void ExportHoldings()
         {
+            var dateString = DateTime.Now.ToString("dd-MM-yyyy");
+            var exportFileName = $"{L("ExportButton")}_{dateString}.csv";
+
             var saveFileDialog = new SaveFileDialog
             {
-                Filter = "CSV-Datei (*.csv)|*.csv",
+                Filter = L("ExportDialog_Filter"),
                 Title = L("ExportButton"),
-                FileName = "Export.csv"
+                FileName = exportFileName
             };
 
             if (saveFileDialog.ShowDialog() == true)
@@ -380,18 +383,18 @@ namespace PreciousMetalsManager.ViewModels
                 var holdings = FilteredHoldings.Cast<MetalHolding>().ToList();
                 if (holdings.Count == 0)
                 {
-                    MessageBox.Show(L("Txt_NoHoldingsMatch"), L("ExportButton"), MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(L("ExportDialog_NoHoldings"), L("ExportButton"), MessageBoxButton.OK, MessageBoxImage.Information);
                     return;
                 }
 
                 try
                 {
                     CsvExportService.ExportHoldings(holdings, saveFileDialog.FileName);
-                    MessageBox.Show(L("ExportButton") + " " + L("Msg_ExportSuccess"), L("ExportButton"), MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(L("ExportDialog_Success"), L("ExportButton"), MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"{L("Msg_ExportError")}: {ex.Message}", L("ExportButton"), MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"{L("ExportDialog_Error")}: {ex.Message}", L("ExportButton"), MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
