@@ -449,6 +449,21 @@ namespace PreciousMetalsManager.ViewModels
                 if (dialog.ShowDialog() != true)
                     return;
 
+                // Asks user if they want to overwrite existing data
+                var result = MessageBox.Show(
+                    L("ImportDialog_OverwritePrompt"),
+                    L("ImportDialog_OverwritePrompt_Title"),
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question,
+                    MessageBoxResult.No);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    // Deletes all existing data before import
+                    foreach (var holding in Holdings.ToList())
+                        DeleteHolding(holding);
+                }
+
                 var lines = await System.IO.File.ReadAllLinesAsync(dialog.FileName);
                 if (lines.Length == 0)
                     throw new InvalidOperationException(L("ImportDialog_NoData"));

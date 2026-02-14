@@ -115,4 +115,6 @@
     <sys:String x:Key="ImportDialog_InvalidFormat">Invalid file format.</sys:String>
     <sys:String x:Key="ImportDialog_Success">Import successful.</sys:String>
     <sys:String x:Key="ImportDialog_Error">Error during import</sys:String>
+    <sys:String x:Key="ImportDialog_OverwritePrompt">Delete existing holdings before import?</sys:String>
+    <sys:String x:Key="ImportDialog_OverwritePrompt_Title">Import Options</sys:String>
 </ResourceDictionary>
