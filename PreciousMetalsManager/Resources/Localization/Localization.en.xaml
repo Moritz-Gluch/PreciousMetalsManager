@@ -108,4 +108,11 @@
     <sys:String x:Key="ExportDialog_Success">Export successful.</sys:String>
     <sys:String x:Key="ExportDialog_Error">Error during export</sys:String>
     <sys:String x:Key="ExportDialog_NoHoldings">No holdings to export.</sys:String>
+
+    <!-- Import Dialog -->
+    <sys:String x:Key="ImportDialog_Title">Import Holdings</sys:String>
+    <sys:String x:Key="ImportDialog_NoData">The file contains no data.</sys:String>
+    <sys:String x:Key="ImportDialog_InvalidFormat">Invalid file format.</sys:String>
+    <sys:String x:Key="ImportDialog_Success">Import successful.</sys:String>
+    <sys:String x:Key="ImportDialog_Error">Error during import</sys:String>
 </ResourceDictionary>

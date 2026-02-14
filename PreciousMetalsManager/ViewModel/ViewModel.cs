@@ -104,6 +104,7 @@ namespace PreciousMetalsManager.ViewModels
             
             ExportSimpleCommand = new RelayCommand(_ => ExportSimpleHoldings());
             ExportDetailedCommand = new RelayCommand(_ => ExportDetailedHoldings());
+            ImportCommand = new RelayCommand(async _ => await ImportSimpleHoldingsAsync());
         }
 
         private void Holdings_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -355,6 +356,7 @@ namespace PreciousMetalsManager.ViewModels
         public ICommand RefreshPricesCommand { get; }
         public ICommand ExportSimpleCommand { get; }
         public ICommand ExportDetailedCommand { get; }
+        public ICommand ImportCommand { get; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -432,6 +434,51 @@ namespace PreciousMetalsManager.ViewModels
                 {
                     MessageBox.Show($"{L("ExportDialog_Error")}: {ex.Message}", L("ExportButton"), MessageBoxButton.OK, MessageBoxImage.Error);
                 }
+            }
+        }
+
+        private async Task ImportSimpleHoldingsAsync()
+        {
+            try
+            {
+                var dialog = new Microsoft.Win32.OpenFileDialog
+                {
+                    Filter = "CSV-Dateien (*.csv)|*.csv",
+                    Title = L("ImportDialog_Title")
+                };
+                if (dialog.ShowDialog() != true)
+                    return;
+
+                var lines = await System.IO.File.ReadAllLinesAsync(dialog.FileName);
+                if (lines.Length == 0)
+                    throw new InvalidOperationException(L("ImportDialog_NoData"));
+
+                foreach (var line in lines)
+                {
+                    if (string.IsNullOrWhiteSpace(line)) continue;
+                    var values = line.Split(';');
+                    if (values.Length < 8)
+                        throw new FormatException(L("ImportDialog_InvalidFormat"));
+
+                    var holding = new MetalHolding
+                    {
+                        MetalType = (MetalType)int.Parse(values[0]),
+                        Form = values[1],
+                        CollectableType = (CollectableType)int.Parse(values[2]),
+                        Purity = decimal.Parse(values[3]),
+                        Weight = decimal.Parse(values[4]),
+                        Quantity = int.Parse(values[5]),
+                        PurchasePrice = decimal.Parse(values[6]),
+                        PurchaseDate = DateTime.ParseExact(values[7], "yyyy-MM-dd", null)
+                    };
+                    AddHolding(holding);
+                }
+
+                MessageBox.Show(L("ImportDialog_Success"), L("ImportButton"), MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{L("ImportDialog_Error")}: {ex.Message}", L("ImportButton"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

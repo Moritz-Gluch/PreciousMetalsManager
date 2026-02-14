@@ -108,4 +108,11 @@
     <sys:String x:Key="ExportDialog_Success">Export erfolgreich.</sys:String>
     <sys:String x:Key="ExportDialog_Error">Fehler beim Export</sys:String>
     <sys:String x:Key="ExportDialog_NoHoldings">Keine Bestände zum Exportieren vorhanden.</sys:String>
+
+    <!-- Import Dialog -->
+    <sys:String x:Key="ImportDialog_Title">Bestände importieren</sys:String>
+    <sys:String x:Key="ImportDialog_NoData">Die Datei enthält keine Daten.</sys:String>
+    <sys:String x:Key="ImportDialog_InvalidFormat">Ungültiges Dateiformat.</sys:String>
+    <sys:String x:Key="ImportDialog_Success">Import erfolgreich.</sys:String>
+    <sys:String x:Key="ImportDialog_Error">Fehler beim Import</sys:String>
 </ResourceDictionary>
