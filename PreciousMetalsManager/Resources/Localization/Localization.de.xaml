@@ -8,9 +8,10 @@
     <sys:String x:Key="DeleteButton">Löschen</sys:String>
     <sys:String x:Key="EditPricesButton">Preise bearbeiten</sys:String>
     <sys:String x:Key="RefreshPricesButton">Preise aktualisieren</sys:String>
-    <sys:String x:Key="ExportButton">Export</sys:String>
+    <sys:String x:Key="ExportButton">Exportieren</sys:String>
     <sys:String x:Key="ExportDialog_Simple">Einfach</sys:String>
     <sys:String x:Key="ExportDialog_Detailed">Detailliert</sys:String>
+    <sys:String x:Key="ImportButton">Importieren</sys:String>
 
     <!-- MainWindow labels -->
     <sys:String x:Key="Lbl_Gold">Gold:</sys:String>
@@ -107,4 +108,13 @@
     <sys:String x:Key="ExportDialog_Success">Export erfolgreich.</sys:String>
     <sys:String x:Key="ExportDialog_Error">Fehler beim Export</sys:String>
     <sys:String x:Key="ExportDialog_NoHoldings">Keine Bestände zum Exportieren vorhanden.</sys:String>
+
+    <!-- Import Dialog -->
+    <sys:String x:Key="ImportDialog_Title">Bestände importieren</sys:String>
+    <sys:String x:Key="ImportDialog_NoData">Die Datei enthält keine Daten.</sys:String>
+    <sys:String x:Key="ImportDialog_InvalidFormat">Ungültiges Dateiformat.</sys:String>
+    <sys:String x:Key="ImportDialog_Success">Import erfolgreich.</sys:String>
+    <sys:String x:Key="ImportDialog_Error">Fehler beim Import</sys:String>
+    <sys:String x:Key="ImportDialog_OverwritePrompt">Bestehende Bestände vor dem Import löschen?</sys:String>
+    <sys:String x:Key="ImportDialog_OverwritePrompt_Title">Import-Optionen</sys:String>
 </ResourceDictionary>

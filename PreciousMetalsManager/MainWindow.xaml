@@ -40,6 +40,7 @@
                     </ContextMenu>
                 </Button.ContextMenu>
             </Button>
+            <Button Content="{DynamicResource ImportButton}" Width="80" Command="{Binding ImportCommand}" />
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,10" Grid.ColumnSpan="2">
