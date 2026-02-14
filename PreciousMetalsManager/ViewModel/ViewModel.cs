@@ -484,19 +484,22 @@ namespace PreciousMetalsManager.ViewModels
                     lineNumber++;
                 }
 
-                // Asks user if they want to overwrite existing data
-                var result = MessageBox.Show(
-                    L("ImportDialog_OverwritePrompt"),
-                    L("ImportDialog_OverwritePrompt_Title"),
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Question,
-                    MessageBoxResult.No);
-
-                if (result == MessageBoxResult.Yes)
+                // Asks user if they want to overwrite existing data if any data exists
+                if (Holdings.Any())
                 {
-                    // Deletes all existing data before import
-                    foreach (var holding in Holdings.ToList())
-                        DeleteHolding(holding);
+                    var result = MessageBox.Show(
+                        L("ImportDialog_OverwritePrompt"),
+                        L("ImportDialog_OverwritePrompt_Title"),
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Question,
+                        MessageBoxResult.No);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        // Deletes all existing data before import
+                        foreach (var holding in Holdings.ToList())
+                            DeleteHolding(holding);
+                    }
                 }
 
                 foreach (var holding in newHoldings)
