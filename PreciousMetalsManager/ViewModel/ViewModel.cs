@@ -449,6 +449,41 @@ namespace PreciousMetalsManager.ViewModels
                 if (dialog.ShowDialog() != true)
                     return;
 
+                var lines = await System.IO.File.ReadAllLinesAsync(dialog.FileName);
+                if (lines.Length == 0)
+                    throw new InvalidOperationException(L("ImportDialog_NoData"));
+
+                var newHoldings = new List<MetalHolding>();
+                int lineNumber = 1;
+                foreach (var line in lines)
+                {
+                    if (string.IsNullOrWhiteSpace(line)) continue;
+                    var values = line.Split(';');
+                    if (values.Length < 8)
+                        throw new FormatException($"{L("ImportDialog_InvalidFormat")} (Line {lineNumber})");
+
+                    try
+                    {
+                        var holding = new MetalHolding
+                        {
+                            MetalType = (MetalType)int.Parse(values[0]),
+                            Form = values[1],
+                            CollectableType = (CollectableType)int.Parse(values[2]),
+                            Purity = decimal.Parse(values[3]),
+                            Weight = decimal.Parse(values[4]),
+                            Quantity = int.Parse(values[5]),
+                            PurchasePrice = decimal.Parse(values[6]),
+                            PurchaseDate = DateTime.ParseExact(values[7], "yyyy-MM-dd", null)
+                        };
+                        newHoldings.Add(holding);
+                    }
+                    catch (Exception)
+                    {
+                        throw new FormatException($"{L("ImportDialog_InvalidFormat")} (Line {lineNumber})");
+                    }
+                    lineNumber++;
+                }
+
                 // Asks user if they want to overwrite existing data
                 var result = MessageBox.Show(
                     L("ImportDialog_OverwritePrompt"),
@@ -464,30 +499,8 @@ namespace PreciousMetalsManager.ViewModels
                         DeleteHolding(holding);
                 }
 
-                var lines = await System.IO.File.ReadAllLinesAsync(dialog.FileName);
-                if (lines.Length == 0)
-                    throw new InvalidOperationException(L("ImportDialog_NoData"));
-
-                foreach (var line in lines)
-                {
-                    if (string.IsNullOrWhiteSpace(line)) continue;
-                    var values = line.Split(';');
-                    if (values.Length < 8)
-                        throw new FormatException(L("ImportDialog_InvalidFormat"));
-
-                    var holding = new MetalHolding
-                    {
-                        MetalType = (MetalType)int.Parse(values[0]),
-                        Form = values[1],
-                        CollectableType = (CollectableType)int.Parse(values[2]),
-                        Purity = decimal.Parse(values[3]),
-                        Weight = decimal.Parse(values[4]),
-                        Quantity = int.Parse(values[5]),
-                        PurchasePrice = decimal.Parse(values[6]),
-                        PurchaseDate = DateTime.ParseExact(values[7], "yyyy-MM-dd", null)
-                    };
+                foreach (var holding in newHoldings)
                     AddHolding(holding);
-                }
 
                 MessageBox.Show(L("ImportDialog_Success"), L("ImportButton"), MessageBoxButton.OK, MessageBoxImage.Information);
             }
