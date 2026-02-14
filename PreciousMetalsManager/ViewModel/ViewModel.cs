@@ -10,6 +10,7 @@ using System.Windows;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
+using Microsoft.Win32;
 
 namespace PreciousMetalsManager.ViewModels
 {
@@ -100,6 +101,9 @@ namespace PreciousMetalsManager.ViewModels
             UpdateMetalTypeFilterOptions();
             SelectedMetalTypeFilter = MetalTypeFilterOptions.FirstOrDefault(); // Set 'All' as default
             Holdings.CollectionChanged += (s, e) => UpdateMetalTypeFilterOptions();
+            
+            ExportSimpleCommand = new RelayCommand(_ => ExportSimpleHoldings());
+            ExportDetailedCommand = new RelayCommand(_ => ExportDetailedHoldings());
         }
 
         private void Holdings_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -349,6 +353,8 @@ namespace PreciousMetalsManager.ViewModels
         }
 
         public ICommand RefreshPricesCommand { get; }
+        public ICommand ExportSimpleCommand { get; }
+        public ICommand ExportDetailedCommand { get; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -360,6 +366,73 @@ namespace PreciousMetalsManager.ViewModels
         protected virtual void ShowErrorMessage(string message, string title)
         {
             MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        private void ExportSimpleHoldings()
+        {
+            var dateString = DateTime.Now.ToString("dd-MM-yyyy");
+            var exportFileName = $"{L("ExportButton")}_{dateString}.csv";
+
+            var saveFileDialog = new SaveFileDialog
+            {
+                Filter = L("ExportDialog_Filter"),
+                Title = L("ExportButton"),
+                FileName = exportFileName
+            };
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                var holdings = FilteredHoldings.Cast<MetalHolding>().ToList();
+                if (holdings.Count == 0)
+                {
+                    MessageBox.Show(L("ExportDialog_NoHoldings"), L("ExportButton"), MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+
+                try
+                {
+                    CsvExportService.ExportHoldings(holdings, saveFileDialog.FileName);
+                    MessageBox.Show(L("ExportDialog_Success"), L("ExportButton"), MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"{L("ExportDialog_Error")}: {ex.Message}", L("ExportButton"), MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private void ExportDetailedHoldings()
+        {
+            var dateString = DateTime.Now.ToString("dd-MM-yyyy");
+            var detailedSuffix = L("ExportDialog_Detailed");
+            var exportFileName = $"{L("ExportButton")}_{dateString}_{detailedSuffix}.csv";
+
+            var saveFileDialog = new SaveFileDialog
+            {
+                Filter = L("ExportDialog_Filter"),
+                Title = L("ExportButton"),
+                FileName = exportFileName
+            };
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                var holdings = FilteredHoldings.Cast<MetalHolding>().ToList();
+                if (holdings.Count == 0)
+                {
+                    MessageBox.Show(L("ExportDialog_NoHoldings"), L("ExportButton"), MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+
+                try
+                {
+                    CsvExportService.ExportHoldingsDetailed(holdings, saveFileDialog.FileName);
+                    MessageBox.Show(L("ExportDialog_Success"), L("ExportButton"), MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"{L("ExportDialog_Error")}: {ex.Message}", L("ExportButton"), MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
     }
 }

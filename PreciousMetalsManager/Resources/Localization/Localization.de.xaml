@@ -8,6 +8,9 @@
     <sys:String x:Key="DeleteButton">Löschen</sys:String>
     <sys:String x:Key="EditPricesButton">Preise bearbeiten</sys:String>
     <sys:String x:Key="RefreshPricesButton">Preise aktualisieren</sys:String>
+    <sys:String x:Key="ExportButton">Export</sys:String>
+    <sys:String x:Key="ExportDialog_Simple">Einfach</sys:String>
+    <sys:String x:Key="ExportDialog_Detailed">Detailliert</sys:String>
 
     <!-- MainWindow labels -->
     <sys:String x:Key="Lbl_Gold">Gold:</sys:String>
@@ -98,4 +101,10 @@
     <sys:String x:Key="CollectableType_Bullion">Bullion</sys:String>
     <sys:String x:Key="CollectableType_SemiNumismatic">Semi-Numismatisch</sys:String>
     <sys:String x:Key="CollectableType_Numismatic">Numismatisch</sys:String>
+
+    <!-- Export Dialog -->
+    <sys:String x:Key="ExportDialog_Filter">CSV-Datei (*.csv)|*.csv</sys:String>
+    <sys:String x:Key="ExportDialog_Success">Export erfolgreich.</sys:String>
+    <sys:String x:Key="ExportDialog_Error">Fehler beim Export</sys:String>
+    <sys:String x:Key="ExportDialog_NoHoldings">Keine Bestände zum Exportieren vorhanden.</sys:String>
 </ResourceDictionary>
