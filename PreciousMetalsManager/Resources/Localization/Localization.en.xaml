@@ -11,6 +11,7 @@
     <sys:String x:Key="ExportButton">Export</sys:String>
     <sys:String x:Key="ExportDialog_Simple">Simple</sys:String>
     <sys:String x:Key="ExportDialog_Detailed">Detailed</sys:String>
+    <sys:String x:Key="ImportButton">Import</sys:String>
 
     <!-- MainWindow labels -->
     <sys:String x:Key="Lbl_Gold">Gold:</sys:String>
