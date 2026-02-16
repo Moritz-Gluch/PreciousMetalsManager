@@ -252,6 +252,11 @@ namespace PreciousMetalsManager.ViewModels
             }
         }
 
+        public string CurrencyUnit => "(€)";
+        public string WeightUnit => "(g)";
+        public string PurityUnit => "(‰)";
+
+
         public string GoldPriceDisplay => $"{GoldPrice:F2} {PriceUnit}";
         public string SilverPriceDisplay => $"{SilverPrice:F2} {PriceUnit}";
         public string PlatinumPriceDisplay => $"{PlatinumPrice:F2} {PriceUnit}";
