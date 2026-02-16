@@ -162,6 +162,7 @@ namespace PreciousMetalsManager.ViewModels
                 {
                     _goldPrice = value;
                     OnPropertyChanged(nameof(GoldPrice));
+                    OnPropertyChanged(nameof(GoldPriceDisplay));
                     UpdateCalculatedValues();
                 }
             }
@@ -177,6 +178,7 @@ namespace PreciousMetalsManager.ViewModels
                 {
                     _silverPrice = value;
                     OnPropertyChanged(nameof(SilverPrice));
+                    OnPropertyChanged(nameof(SilverPriceDisplay));
                     UpdateCalculatedValues();
                 }
             }
@@ -192,6 +194,7 @@ namespace PreciousMetalsManager.ViewModels
                 {
                     _platinumPrice = value;
                     OnPropertyChanged(nameof(PlatinumPrice));
+                    OnPropertyChanged(nameof(PlatinumPriceDisplay));
                     UpdateCalculatedValues();
                 }
             }
@@ -207,6 +210,7 @@ namespace PreciousMetalsManager.ViewModels
                 {
                     _palladiumPrice = value;
                     OnPropertyChanged(nameof(PalladiumPrice));
+                    OnPropertyChanged(nameof(PalladiumPriceDisplay));
                     UpdateCalculatedValues();
                 }
             }
@@ -222,10 +226,36 @@ namespace PreciousMetalsManager.ViewModels
                 {
                     _broncePrice = value;
                     OnPropertyChanged(nameof(BroncePrice));
+                    OnPropertyChanged(nameof(BroncePriceDisplay));
                     UpdateCalculatedValues();
                 }
             }
         }
+
+        private string _priceUnit = "€/g";
+        public string PriceUnit
+        {
+            get => _priceUnit;
+            set
+            {
+                if (_priceUnit != value)
+                {
+                    _priceUnit = value;
+                    OnPropertyChanged(nameof(PriceUnit));
+                    OnPropertyChanged(nameof(GoldPriceDisplay));
+                    OnPropertyChanged(nameof(SilverPriceDisplay));
+                    OnPropertyChanged(nameof(PlatinumPriceDisplay));
+                    OnPropertyChanged(nameof(PalladiumPriceDisplay));
+                    OnPropertyChanged(nameof(BroncePriceDisplay));
+                }
+            }
+        }
+
+        public string GoldPriceDisplay => $"{GoldPrice:F2} {PriceUnit}";
+        public string SilverPriceDisplay => $"{SilverPrice:F2} {PriceUnit}";
+        public string PlatinumPriceDisplay => $"{PlatinumPrice:F2} {PriceUnit}";
+        public string PalladiumPriceDisplay => $"{PalladiumPrice:F2} {PriceUnit}";
+        public string BroncePriceDisplay => $"{BroncePrice:F2} {PriceUnit}";
 
         private decimal GetMarketPrice(MetalType type)
         {
