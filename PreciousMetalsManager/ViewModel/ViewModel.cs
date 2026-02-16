@@ -257,11 +257,11 @@ namespace PreciousMetalsManager.ViewModels
         public string PurityUnit => "(‰)";
 
 
-        public string GoldPriceDisplay => $"{GoldPrice:F2} {PriceUnit}";
-        public string SilverPriceDisplay => $"{SilverPrice:F2} {PriceUnit}";
-        public string PlatinumPriceDisplay => $"{PlatinumPrice:F2} {PriceUnit}";
-        public string PalladiumPriceDisplay => $"{PalladiumPrice:F2} {PriceUnit}";
-        public string BroncePriceDisplay => $"{BroncePrice:F2} {PriceUnit}";
+        public string GoldPriceDisplay => $"{GoldPrice:F2}{PriceUnit}";
+        public string SilverPriceDisplay => $"{SilverPrice:F2}{PriceUnit}";
+        public string PlatinumPriceDisplay => $"{PlatinumPrice:F2}{PriceUnit}";
+        public string PalladiumPriceDisplay => $"{PalladiumPrice:F2}{PriceUnit}";
+        public string BroncePriceDisplay => $"{BroncePrice:F2}{PriceUnit}";
 
         private decimal GetMarketPrice(MetalType type)
         {

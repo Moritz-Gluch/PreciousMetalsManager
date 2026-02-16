@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PreciousMetalsManager"
         xmlns:models="clr-namespace:PreciousMetalsManager.Models"
         mc:Ignorable="d"
-        Title="{DynamicResource MainWindow_Title}" Height="450" Width="875">
+        Title="{DynamicResource MainWindow_Title}" Height="450" Width="1111">
 
     <Window.Resources>
         <models:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
@@ -98,7 +98,7 @@
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding MetalType, Converter={StaticResource MetalTypeToLabelConverter}}">
+                    <DataGridTextColumn Binding="{Binding MetalType, Converter={StaticResource MetalTypeToLabelConverter}}" Width="70">
                         <DataGridTextColumn.HeaderTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{DynamicResource Common_MetalType}" />
@@ -106,7 +106,7 @@
                         </DataGridTextColumn.HeaderTemplate>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Binding="{Binding Form}">
+                    <DataGridTextColumn Binding="{Binding Form}" Width="*">
                         <DataGridTextColumn.HeaderTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{DynamicResource Common_Form}" />
@@ -114,7 +114,7 @@
                         </DataGridTextColumn.HeaderTemplate>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Binding="{Binding CollectableType, Converter={StaticResource CollectableTypeToLabelConverter}}">
+                    <DataGridTextColumn Binding="{Binding CollectableType, Converter={StaticResource CollectableTypeToLabelConverter}}" Width="120">
                         <DataGridTextColumn.HeaderTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{DynamicResource Common_CollectableType}" />
@@ -122,31 +122,27 @@
                         </DataGridTextColumn.HeaderTemplate>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Binding="{Binding Purity}">
+                    <DataGridTextColumn Binding="{Binding Purity}" Width="100">
                         <DataGridTextColumn.Header>
                             <TextBlock>
                                 <Run Text="{DynamicResource Common_Purity}" />
                                 <Run Text=" " />
-                                <Run Text="{Binding DataContext.PurityUnit,
-                                RelativeSource={RelativeSource AncestorType=Window},
-                                Mode=OneWay}" />
+                                <Run Text="{Binding DataContext.PurityUnit, RelativeSource={RelativeSource AncestorType=Window}, Mode=OneWay}" />
                             </TextBlock>
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Binding="{Binding Weight}">
+                    <DataGridTextColumn Binding="{Binding Weight}" Width="80">
                         <DataGridTextColumn.Header>
                             <TextBlock>
                                 <Run Text="{DynamicResource Common_Weight}" />
                                 <Run Text=" " />
-                                <Run Text="{Binding DataContext.WeightUnit,
-                                RelativeSource={RelativeSource AncestorType=Window},
-                                Mode=OneWay}" />
+                                <Run Text="{Binding DataContext.WeightUnit, RelativeSource={RelativeSource AncestorType=Window}, Mode=OneWay}" />
                             </TextBlock>
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Binding="{Binding Quantity}">
+                    <DataGridTextColumn Binding="{Binding Quantity}" Width="60">
                         <DataGridTextColumn.HeaderTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{DynamicResource Common_Quantity}" />
@@ -154,19 +150,17 @@
                         </DataGridTextColumn.HeaderTemplate>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Binding="{Binding PurchasePrice}">
+                    <DataGridTextColumn Binding="{Binding PurchasePrice}" Width="110">
                         <DataGridTextColumn.Header>
                             <TextBlock>
                                 <Run Text="{DynamicResource Common_PurchasePrice}" />
                                 <Run Text=" " />
-                                <Run Text="{Binding DataContext.CurrencyUnit,
-                                RelativeSource={RelativeSource AncestorType=Window},
-                                Mode=OneWay}" />
+                                <Run Text="{Binding DataContext.CurrencyUnit, RelativeSource={RelativeSource AncestorType=Window}, Mode=OneWay}" />
                             </TextBlock>
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Binding="{Binding PurchaseDate, StringFormat='dd.MM.yyyy'}">
+                    <DataGridTextColumn Binding="{Binding PurchaseDate, StringFormat='dd.MM.yyyy'}" Width="87">
                         <DataGridTextColumn.HeaderTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{DynamicResource Common_PurchaseDate}" />
@@ -174,34 +168,30 @@
                         </DataGridTextColumn.HeaderTemplate>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Binding="{Binding TaxFreeStatus}" IsReadOnly="True" SortMemberPath="TaxFreeSortValue">
+                    <DataGridTextColumn Binding="{Binding TaxFreeStatus}" IsReadOnly="True" SortMemberPath="TaxFreeSortValue" Width="62">
                         <DataGridTextColumn.HeaderTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{DynamicResource Col_TaxFreeStatus}" />
                             </DataTemplate>
                         </DataGridTextColumn.HeaderTemplate>
                     </DataGridTextColumn>
-                    
-                    <DataGridTextColumn Binding="{Binding CurrentValue, StringFormat=F2}">
+
+                    <DataGridTextColumn Binding="{Binding CurrentValue, StringFormat=F2}" Width="110">
                         <DataGridTextColumn.Header>
                             <TextBlock>
                                 <Run Text="{DynamicResource Col_CurrentValue}" />
                                 <Run Text=" " />
-                                <Run Text="{Binding DataContext.CurrencyUnit,
-                                RelativeSource={RelativeSource AncestorType=Window},
-                                Mode=OneWay}" />
+                                <Run Text="{Binding DataContext.CurrencyUnit, RelativeSource={RelativeSource AncestorType=Window}, Mode=OneWay}" />
                             </TextBlock>
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Binding="{Binding TotalValue, StringFormat=F2}">
+                    <DataGridTextColumn Binding="{Binding TotalValue, StringFormat=F2}" Width="99">
                         <DataGridTextColumn.Header>
                             <TextBlock>
                                 <Run Text="{DynamicResource Col_TotalValue}" />
                                 <Run Text=" " />
-                                <Run Text="{Binding DataContext.CurrencyUnit,
-                                RelativeSource={RelativeSource AncestorType=Window},
-                                Mode=OneWay}" />
+                                <Run Text="{Binding DataContext.CurrencyUnit, RelativeSource={RelativeSource AncestorType=Window}, Mode=OneWay}" />
                             </TextBlock>
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
