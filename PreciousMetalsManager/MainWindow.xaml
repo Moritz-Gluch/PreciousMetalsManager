@@ -98,7 +98,7 @@
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding MetalType, Converter={StaticResource MetalTypeToLabelConverter}}" Width="70">
+                    <DataGridTextColumn Binding="{Binding MetalType, Converter={StaticResource MetalTypeToLabelConverter}}" Width="Auto">
                         <DataGridTextColumn.HeaderTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{DynamicResource Common_MetalType}" />
@@ -114,7 +114,7 @@
                         </DataGridTextColumn.HeaderTemplate>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Binding="{Binding CollectableType, Converter={StaticResource CollectableTypeToLabelConverter}}" Width="120">
+                    <DataGridTextColumn Binding="{Binding CollectableType, Converter={StaticResource CollectableTypeToLabelConverter}}" Width="Auto">
                         <DataGridTextColumn.HeaderTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{DynamicResource Common_CollectableType}" />
@@ -122,7 +122,7 @@
                         </DataGridTextColumn.HeaderTemplate>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Binding="{Binding Purity}" Width="100">
+                    <DataGridTextColumn Binding="{Binding Purity}" Width="Auto">
                         <DataGridTextColumn.Header>
                             <TextBlock>
                                 <Run Text="{DynamicResource Common_Purity}" />
@@ -136,7 +136,7 @@
                         </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Binding="{Binding Weight}" Width="80">
+                    <DataGridTextColumn Binding="{Binding Weight}" Width="Auto">
                         <DataGridTextColumn.Header>
                             <TextBlock>
                                 <Run Text="{DynamicResource Common_Weight}" />
@@ -151,7 +151,7 @@
                         </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Binding="{Binding Quantity}" Width="60">
+                    <DataGridTextColumn Binding="{Binding Quantity}" Width="Auto">
                         <DataGridTextColumn.HeaderTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{DynamicResource Common_Quantity}" />
@@ -164,7 +164,7 @@
                         </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Binding="{Binding PurchasePrice}" Width="110">
+                    <DataGridTextColumn Binding="{Binding PurchasePrice}" Width="Auto">
                         <DataGridTextColumn.Header>
                             <TextBlock>
                                 <Run Text="{DynamicResource Common_PurchasePrice}" />
@@ -178,7 +178,7 @@
                         </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Binding="{Binding PurchaseDate, StringFormat='dd.MM.yyyy'}" Width="87">
+                    <DataGridTextColumn Binding="{Binding PurchaseDate, StringFormat='dd.MM.yyyy'}" Width="Auto">
                         <DataGridTextColumn.HeaderTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{DynamicResource Common_PurchaseDate}" />
@@ -186,7 +186,7 @@
                         </DataGridTextColumn.HeaderTemplate>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Binding="{Binding TaxFreeStatus}" IsReadOnly="True" SortMemberPath="TaxFreeSortValue" Width="62">
+                    <DataGridTextColumn Binding="{Binding TaxFreeStatus}" IsReadOnly="True" SortMemberPath="TaxFreeSortValue" Width="Auto">
                         <DataGridTextColumn.HeaderTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{DynamicResource Col_TaxFreeStatus}" />
@@ -199,7 +199,7 @@
                         </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Binding="{Binding CurrentValue, StringFormat=F2}" Width="110">
+                    <DataGridTextColumn Binding="{Binding CurrentValue, StringFormat=F2}" Width="Auto">
                         <DataGridTextColumn.Header>
                             <TextBlock>
                                 <Run Text="{DynamicResource Col_CurrentValue}" />
@@ -213,7 +213,7 @@
                         </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Binding="{Binding TotalValue, StringFormat=F2}" Width="99">
+                    <DataGridTextColumn Binding="{Binding TotalValue, StringFormat=F2}" Width="Auto">
                         <DataGridTextColumn.Header>
                             <TextBlock>
                                 <Run Text="{DynamicResource Col_TotalValue}" />
