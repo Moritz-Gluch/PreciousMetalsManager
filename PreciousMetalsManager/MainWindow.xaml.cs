@@ -101,7 +101,14 @@ namespace PreciousMetalsManager
             if (DataContext is not ViewModel vm)
                 return;
 
-            var dlg = new Views.EditPricesDialog(vm.GoldPrice, vm.SilverPrice, vm.PlatinumPrice, vm.PalladiumPrice, vm.BroncePrice)
+            var dlg = new EditPricesDialog(
+                vm.GoldPrice,
+                vm.SilverPrice,
+                vm.PlatinumPrice,
+                vm.PalladiumPrice,
+                vm.BroncePrice,
+                vm.PriceUnit 
+            )
             {
                 Owner = this
             };

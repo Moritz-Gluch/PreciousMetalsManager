@@ -232,6 +232,7 @@ namespace PreciousMetalsManager.ViewModels
             }
         }
 
+        // Hardcoded here for now, may be extended in the future to also use different currencies and units
         private string _priceUnit = "€/g";
         public string PriceUnit
         {

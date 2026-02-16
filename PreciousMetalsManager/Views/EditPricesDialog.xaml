@@ -15,22 +15,27 @@
             <StackPanel Orientation="Horizontal" Margin="0,5">
                 <Label Content="{DynamicResource Lbl_Gold}" Width="80"/>
                 <TextBox Name="GoldPriceTextBox" Width="120"/>
+                <Label Content="{Binding PriceUnit}" VerticalAlignment="Center" Margin="5,0,0,0"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5">
                 <Label Content="{DynamicResource Lbl_Silver}" Width="80"/>
                 <TextBox Name="SilverPriceTextBox" Width="120"/>
+                <Label Content="{Binding PriceUnit}" VerticalAlignment="Center" Margin="5,0,0,0"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5">
                 <Label Content="{DynamicResource Lbl_Platinum}" Width="80"/>
                 <TextBox Name="PlatinumPriceTextBox" Width="120"/>
+                <Label Content="{Binding PriceUnit}" VerticalAlignment="Center" Margin="5,0,0,0"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5">
                 <Label Content="{DynamicResource Lbl_Palladium}" Width="80"/>
                 <TextBox Name="PalladiumPriceTextBox" Width="120"/>
+                <Label Content="{Binding PriceUnit}" VerticalAlignment="Center" Margin="5,0,0,0"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5">
                 <Label Content="{DynamicResource Lbl_Bronce}" Width="80"/>
                 <TextBox Name="BroncePriceTextBox" Width="120"/>
+                <Label Content="{Binding PriceUnit}" VerticalAlignment="Center" Margin="5,0,0,0"/>
             </StackPanel>
         </StackPanel>
 
