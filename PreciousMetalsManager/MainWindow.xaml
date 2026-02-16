@@ -126,20 +126,29 @@
                         <DataGridTextColumn.Header>
                             <TextBlock>
                                 <Run Text="{DynamicResource Common_Purity}" />
-                                <Run Text=" " />
                                 <Run Text="{Binding DataContext.PurityUnit, RelativeSource={RelativeSource AncestorType=Window}, Mode=OneWay}" />
                             </TextBlock>
                         </DataGridTextColumn.Header>
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="TextBlock.TextAlignment" Value="Right"/>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>
 
                     <DataGridTextColumn Binding="{Binding Weight}" Width="80">
                         <DataGridTextColumn.Header>
                             <TextBlock>
                                 <Run Text="{DynamicResource Common_Weight}" />
-                                <Run Text=" " />
                                 <Run Text="{Binding DataContext.WeightUnit, RelativeSource={RelativeSource AncestorType=Window}, Mode=OneWay}" />
                             </TextBlock>
                         </DataGridTextColumn.Header>
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="TextBlock.TextAlignment" Value="Right"/>
+                                <Setter Property="Padding" Value="0,0,8,0"/>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>
 
                     <DataGridTextColumn Binding="{Binding Quantity}" Width="60">
@@ -148,16 +157,25 @@
                                 <TextBlock Text="{DynamicResource Common_Quantity}" />
                             </DataTemplate>
                         </DataGridTextColumn.HeaderTemplate>
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="TextBlock.TextAlignment" Value="Right"/>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>
 
                     <DataGridTextColumn Binding="{Binding PurchasePrice}" Width="110">
                         <DataGridTextColumn.Header>
                             <TextBlock>
                                 <Run Text="{DynamicResource Common_PurchasePrice}" />
-                                <Run Text=" " />
                                 <Run Text="{Binding DataContext.CurrencyUnit, RelativeSource={RelativeSource AncestorType=Window}, Mode=OneWay}" />
                             </TextBlock>
                         </DataGridTextColumn.Header>
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="TextBlock.TextAlignment" Value="Right"/>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>
 
                     <DataGridTextColumn Binding="{Binding PurchaseDate, StringFormat='dd.MM.yyyy'}" Width="87">
@@ -174,26 +192,39 @@
                                 <TextBlock Text="{DynamicResource Col_TaxFreeStatus}" />
                             </DataTemplate>
                         </DataGridTextColumn.HeaderTemplate>
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="TextBlock.TextAlignment" Value="Right"/>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>
 
                     <DataGridTextColumn Binding="{Binding CurrentValue, StringFormat=F2}" Width="110">
                         <DataGridTextColumn.Header>
                             <TextBlock>
                                 <Run Text="{DynamicResource Col_CurrentValue}" />
-                                <Run Text=" " />
                                 <Run Text="{Binding DataContext.CurrencyUnit, RelativeSource={RelativeSource AncestorType=Window}, Mode=OneWay}" />
                             </TextBlock>
                         </DataGridTextColumn.Header>
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="TextBlock.TextAlignment" Value="Right"/>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>
 
                     <DataGridTextColumn Binding="{Binding TotalValue, StringFormat=F2}" Width="99">
                         <DataGridTextColumn.Header>
                             <TextBlock>
                                 <Run Text="{DynamicResource Col_TotalValue}" />
-                                <Run Text=" " />
                                 <Run Text="{Binding DataContext.CurrencyUnit, RelativeSource={RelativeSource AncestorType=Window}, Mode=OneWay}" />
                             </TextBlock>
                         </DataGridTextColumn.Header>
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="TextBlock.TextAlignment" Value="Right"/>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
