@@ -184,6 +184,11 @@
                                 <TextBlock Text="{DynamicResource Common_PurchaseDate}" />
                             </DataTemplate>
                         </DataGridTextColumn.HeaderTemplate>
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>
 
                     <DataGridTextColumn Binding="{Binding TaxFreeStatus}" IsReadOnly="True" SortMemberPath="TaxFreeSortValue" Width="Auto">
