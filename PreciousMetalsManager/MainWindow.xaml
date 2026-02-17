@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PreciousMetalsManager"
         xmlns:models="clr-namespace:PreciousMetalsManager.Models"
         mc:Ignorable="d"
-        Title="{DynamicResource MainWindow_Title}" Height="450" Width="1111">
+        Title="{DynamicResource MainWindow_Title}" Height="450" Width="1000">
 
     <Window.Resources>
         <models:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
@@ -122,7 +122,7 @@
                         </DataGridTextColumn.HeaderTemplate>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Binding="{Binding Purity}" Width="Auto">
+                    <DataGridTextColumn Binding="{Binding Purity, StringFormat=F1}" Width="Auto">
                         <DataGridTextColumn.Header>
                             <TextBlock>
                                 <Run Text="{DynamicResource Common_Purity}" />
@@ -136,7 +136,7 @@
                         </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Binding="{Binding Weight}" Width="Auto">
+                    <DataGridTextColumn Binding="{Binding Weight, StringFormat=F1}" Width="Auto">
                         <DataGridTextColumn.Header>
                             <TextBlock>
                                 <Run Text="{DynamicResource Common_Weight}" />
@@ -164,7 +164,7 @@
                         </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Binding="{Binding PurchasePrice}" Width="Auto">
+                    <DataGridTextColumn Binding="{Binding PurchasePrice, StringFormat=F2}" Width="Auto">
                         <DataGridTextColumn.Header>
                             <TextBlock>
                                 <Run Text="{DynamicResource Common_PurchasePrice}" />
