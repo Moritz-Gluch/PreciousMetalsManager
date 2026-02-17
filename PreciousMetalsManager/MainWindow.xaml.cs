@@ -1,7 +1,9 @@
 ﻿using PreciousMetalsManager.ViewModels;
 using PreciousMetalsManager.Views;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace PreciousMetalsManager
 {
@@ -21,7 +23,11 @@ namespace PreciousMetalsManager
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            var addWindow = new HoldingDialog();
+            var addWindow = new HoldingDialog
+            {
+                DataContext = DataContext
+            };
+
             if (addWindow.ShowDialog() == true && DataContext is ViewModel vm && addWindow.NewHolding is { } newHolding)
             {
                 vm.AddHolding(newHolding);
@@ -35,7 +41,10 @@ namespace PreciousMetalsManager
 
             if (MainDataGrid.SelectedItem is Models.MetalHolding selected)
             {
-                var editWindow = new HoldingDialog();
+                var editWindow = new HoldingDialog
+                {
+                    DataContext = DataContext
+                };
 
                 // Load presets
                 editWindow.MetalTypeComboBox.SelectedItem = selected.MetalType;
@@ -101,7 +110,14 @@ namespace PreciousMetalsManager
             if (DataContext is not ViewModel vm)
                 return;
 
-            var dlg = new Views.EditPricesDialog(vm.GoldPrice, vm.SilverPrice, vm.PlatinumPrice, vm.PalladiumPrice, vm.BroncePrice)
+            var dlg = new EditPricesDialog(
+                vm.GoldPrice,
+                vm.SilverPrice,
+                vm.PlatinumPrice,
+                vm.PalladiumPrice,
+                vm.BroncePrice,
+                vm.PriceUnit 
+            )
             {
                 Owner = this
             };
@@ -125,6 +141,54 @@ namespace PreciousMetalsManager
                 // Enforces Refresh of the dropdown entries (necessary for language change)
                 MetalTypeFilterComboBox.Items.Refresh();
             }
+
+            RecalculateDataGridColumnWidths();
+        }
+
+        // Neccessary workaround to prevent column width issues after language change 
+        private void RecalculateDataGridColumnWidths()
+        {
+            Dispatcher.InvokeAsync(() =>
+            {
+                if (MainDataGrid?.Columns == null || MainDataGrid.Columns.Count == 0)
+                    return;
+
+                // Temporarily disable virtualization to ensure proper layout recalculation
+                var oldEnableRowVirt = VirtualizingPanel.GetIsVirtualizing(MainDataGrid);
+                var oldVirtMode = VirtualizingPanel.GetVirtualizationMode(MainDataGrid);
+
+                VirtualizingPanel.SetIsVirtualizing(MainDataGrid, false);
+
+                // Force DataGrid to re-evaluate column widths by resetting the ItemsSource
+                var oldItemsSource = MainDataGrid.ItemsSource;
+                MainDataGrid.ItemsSource = null;
+                MainDataGrid.UpdateLayout();
+
+                MainDataGrid.ItemsSource = oldItemsSource;
+
+                // Reset column widths to auto to recalculate based on new language
+                foreach (var col in MainDataGrid.Columns)
+                {
+                    col.Width = new DataGridLength(0);
+                    col.Width = DataGridLength.Auto;
+                }
+
+                // Set "Form" column to star to fill remaining space
+                var formCol = MainDataGrid.Columns
+                    .OfType<DataGridTextColumn>()
+                    .FirstOrDefault(c => c.Binding is System.Windows.Data.Binding b && b.Path?.Path == "Form");
+
+                if (formCol != null)
+                    formCol.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
+
+                MainDataGrid.UpdateLayout();
+
+                // Restore virtualization settings
+                VirtualizingPanel.SetIsVirtualizing(MainDataGrid, oldEnableRowVirt);
+                VirtualizingPanel.SetVirtualizationMode(MainDataGrid, oldVirtMode);
+            }, 
+            
+            DispatcherPriority.Background);
         }
 
         private void ExportButton_Click(object sender, RoutedEventArgs e)

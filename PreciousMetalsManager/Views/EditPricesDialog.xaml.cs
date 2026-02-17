@@ -13,8 +13,9 @@ namespace PreciousMetalsManager.Views
         public decimal PlatinumPrice { get; private set; }
         public decimal PalladiumPrice { get; private set; }
         public decimal BroncePrice { get; private set; }
+        public string PriceUnit { get; }
 
-        public EditPricesDialog(decimal gold, decimal silver, decimal platinum, decimal palladium, decimal bronce)
+        public EditPricesDialog(decimal gold, decimal silver, decimal platinum, decimal palladium, decimal bronce, string priceUnit)
         {
             InitializeComponent();
             GoldPriceTextBox.Text = gold.ToString("F2");
@@ -22,6 +23,8 @@ namespace PreciousMetalsManager.Views
             PlatinumPriceTextBox.Text = platinum.ToString("F2");
             PalladiumPriceTextBox.Text = palladium.ToString("F2");
             BroncePriceTextBox.Text = bronce.ToString("F2");
+            PriceUnit = priceUnit;
+            DataContext = this; 
         }
 
         private static string L(string key)

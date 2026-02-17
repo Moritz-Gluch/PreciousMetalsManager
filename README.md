@@ -1,6 +1,6 @@
 # Precious Metals Manager
 
-Precious Metals Manager is a modern WPF desktop application designed for individuals who want to efficiently track and manage their personal holdings of gold, silver, platinum and other precious metals. The application uses SQLite for local data storage, provides an intuitive interface for managing assets, supports multi-language localization (German and English) and integrates live market price APIs. Built with the MVVM pattern and .NET 10, it offers a robust and maintainable solution for managing precious metal portfolios.
+Precious Metals Manager is a modern WPF desktop application designed for individuals who want to efficiently track and manage their personal holdings of gold, silver, platinum and other precious metals. The application uses SQLite for local data storage, provides an intuitive interface for managing assets, supports multi-language localization (German and English), integrates live market price APIs and offers CSV import/export functionality (simple for later re-import, detailed for use in e.g. Excel). Built with the MVVM pattern and .NET 10, it offers a robust and maintainable solution for managing precious metal portfolios.
 
 ## Technologies Used
 - .NET 10 
@@ -28,6 +28,7 @@ Refer to `docs/00-project-overview.md` for the full project overview.
 ## Important Conventions
 - The highest possible purity for precious metals is considered to be 999.9.
 - One troy ounce is treated as a rounded value of 31.1 grams.
+- The import function is only suitable for files created with this program.
 
 ## Getting Started
 
