@@ -26,16 +26,31 @@
             <Label Content="{DynamicResource HoldingDialog_Lbl_FormVariant}"/>
             <TextBox Name="FormTextBox"/>
 
-            <Label Content="{DynamicResource Common_Purity}"/>
+            <Label>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{DynamicResource Common_Purity}" />
+                    <TextBlock Text="{Binding PurityUnit}" Margin="6,0,0,0" />
+                </StackPanel>
+            </Label>
             <TextBox Name="PurityTextBox"/>
 
-            <Label Content="{DynamicResource Common_Weight}"/>
+            <Label>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{DynamicResource Common_Weight}" />
+                    <TextBlock Text="{Binding WeightUnit}" Margin="6,0,0,0" />
+                </StackPanel>
+            </Label>
             <TextBox Name="WeightTextBox"/>
 
             <Label Content="{DynamicResource Common_Quantity}"/>
             <TextBox Name="QuantityTextBox"/>
 
-            <Label Content="{DynamicResource Common_PurchasePrice}"/>
+            <Label>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{DynamicResource Common_PurchasePrice}" />
+                    <TextBlock Text="{Binding CurrencyUnit}" Margin="6,0,0,0" />
+                </StackPanel>
+            </Label>
             <TextBox Name="PurchasePriceTextBox"/>
 
             <Label Content="{DynamicResource Common_PurchaseDate}"/>
@@ -44,15 +59,15 @@
             <Label Content="{DynamicResource Common_CollectableType}" />
             <StackPanel Orientation="Horizontal" Margin="3,0,0,10">
                 <RadioButton Name="CollectableType_BullionRadioButton" Content="{DynamicResource CollectableType_Bullion}"
-                             IsChecked="{Binding SelectedCollectableType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Bullion, Mode=TwoWay}" 
+                             IsChecked="{Binding SelectedCollectableType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Bullion, Mode=TwoWay}"
                              GroupName="CollectableType"
                              Margin="0,0,20,0"/>
                 <RadioButton Name="CollectableType_SemiNumismaticRadioButton" Content="{DynamicResource CollectableType_SemiNumismatic}"
-                             IsChecked="{Binding SelectedCollectableType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=SemiNumismatic, Mode=TwoWay}" 
+                             IsChecked="{Binding SelectedCollectableType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=SemiNumismatic, Mode=TwoWay}"
                              GroupName="CollectableType"
                              Margin="0,0,20,0"/>
                 <RadioButton Name="CollectableType_NumismaticRadioButton" Content="{DynamicResource CollectableType_Numismatic}"
-                             IsChecked="{Binding SelectedCollectableType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Numismatic, Mode=TwoWay}" 
+                             IsChecked="{Binding SelectedCollectableType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Numismatic, Mode=TwoWay}"
                              GroupName="CollectableType"/>
             </StackPanel>
         </StackPanel>

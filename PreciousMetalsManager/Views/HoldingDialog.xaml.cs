@@ -18,7 +18,6 @@ namespace PreciousMetalsManager.Views
         public HoldingDialog()
         {
             InitializeComponent();
-            DataContext = this; 
             MetalTypeComboBox.ItemsSource = Enum.GetValues(typeof(MetalType));
             MetalTypeComboBox.SelectedIndex = 0;
             PurchaseDatePicker.SelectedDate = DateTime.Now;

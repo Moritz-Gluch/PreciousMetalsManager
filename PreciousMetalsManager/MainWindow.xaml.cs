@@ -23,7 +23,11 @@ namespace PreciousMetalsManager
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            var addWindow = new HoldingDialog();
+            var addWindow = new HoldingDialog
+            {
+                DataContext = DataContext
+            };
+
             if (addWindow.ShowDialog() == true && DataContext is ViewModel vm && addWindow.NewHolding is { } newHolding)
             {
                 vm.AddHolding(newHolding);
@@ -37,7 +41,10 @@ namespace PreciousMetalsManager
 
             if (MainDataGrid.SelectedItem is Models.MetalHolding selected)
             {
-                var editWindow = new HoldingDialog();
+                var editWindow = new HoldingDialog
+                {
+                    DataContext = DataContext
+                };
 
                 // Load presets
                 editWindow.MetalTypeComboBox.SelectedItem = selected.MetalType;
