@@ -14,6 +14,7 @@ namespace PreciousMetalsManager.Views
         public CollectableType SelectedCollectableType { get; set; } = CollectableType.Bullion;
 
         public MetalHolding? NewHolding { get; private set; }
+        public bool AddAnotherRequested { get; private set; }
 
         public HoldingDialog()
         {
@@ -26,49 +27,49 @@ namespace PreciousMetalsManager.Views
         private static string L(string key)
             => Application.Current?.TryFindResource(key) as string ?? key;
 
-        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        private bool TryCreateHolding()
         {
             // Goes sure no field is empty or unvalid
             if (MetalTypeComboBox.SelectedItem == null)
             {
                 MessageBox.Show(L("HoldingDialog_Msg_SelectMetalType"));
-                return;
+                return false;
             }
 
             if (string.IsNullOrWhiteSpace(FormTextBox.Text))
             {
                 MessageBox.Show(L("HoldingDialog_Msg_FormRequired"));
-                return;
+                return false;
             }
 
             if (!decimal.TryParse(PurityComboBox.Text.Replace(',', '.'), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var purity) || purity <= 0)
             {
                 MessageBox.Show(L("HoldingDialog_Msg_PurityPositive"));
-                return;
+                return false;
             }
 
             if (!decimal.TryParse(WeightTextBox.Text, out var weight) || weight <= 0)
             {
                 MessageBox.Show(L("HoldingDialog_Msg_WeightPositive"));
-                return;
+                return false;
             }
 
             if (!int.TryParse(QuantityTextBox.Text, out var quantity) || quantity <= 0)
             {
                 MessageBox.Show(L("HoldingDialog_Msg_QuantityPositiveWhole"));
-                return;
+                return false;
             }
 
             if (!decimal.TryParse(PurchasePriceTextBox.Text, out var price) || price < 0)
             {
                 MessageBox.Show(L("HoldingDialog_Msg_PurchasePriceNonNegative"));
-                return;
+                return false;
             }
 
             if (PurchaseDatePicker.SelectedDate == null)
             {
                 MessageBox.Show(L("HoldingDialog_Msg_SelectPurchaseDate"));
-                return;
+                return false;
             }
 
             // Saves new values
@@ -86,12 +87,32 @@ namespace PreciousMetalsManager.Views
                 TotalValue = 0
             };
 
+            return true;
+        }
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            AddAnotherRequested = false;
+            if (!TryCreateHolding())
+                return;
+
+            DialogResult = true;
+            Close();
+        }
+
+        private void AddAnotherButton_Click(object sender, RoutedEventArgs e)
+        {
+            AddAnotherRequested = true;
+            if (!TryCreateHolding())
+                return;
+
             DialogResult = true;
             Close();
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
+            AddAnotherRequested = false;
             DialogResult = false;
             Close();
         }
