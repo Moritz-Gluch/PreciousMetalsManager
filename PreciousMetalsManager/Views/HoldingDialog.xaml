@@ -69,7 +69,13 @@
                     <TextBlock Text="{Binding CurrencyUnit}" Margin="6,0,0,0" />
                 </StackPanel>
             </Label>
-            <TextBox Name="PurchasePriceTextBox"/>
+            <TextBox Name="PurchasePriceTextBox"
+                     Text="0.00"
+                     Width="100"
+                     HorizontalAlignment="Left"
+                     HorizontalContentAlignment="Left"
+                     PreviewTextInput="PurchasePriceTextBox_PreviewTextInput"
+                     LostFocus="PurchasePriceTextBox_LostFocus"/>
 
             <Label Content="{DynamicResource Common_PurchaseDate}"/>
             <DatePicker Name="PurchaseDatePicker"/>
