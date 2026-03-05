@@ -144,11 +144,22 @@ namespace PreciousMetalsManager.Views
         private void PurityComboBox_LostFocus(object sender, RoutedEventArgs e)
         {
             var text = PurityComboBox.Text.Replace(',', '.');
-            if (!decimal.TryParse(text, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var value) || value <= 0 || value >= 1000)
+            if (!decimal.TryParse(text, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var value))
             {
                 // Corrects invalid values to 999,9
                 PurityComboBox.Text = "999,9";
+                return;
             }
+
+            // Rounds the value to 1 decimal place
+            var rounded = Math.Round(value, 1, MidpointRounding.AwayFromZero);
+
+            if (rounded > 999.9m)
+                rounded = 999.9m;
+            else if (rounded < 0.1m)
+                rounded = 0.1m;
+
+            PurityComboBox.Text = rounded.ToString("F1", System.Globalization.CultureInfo.InvariantCulture).Replace('.', ',');
         }
 
         private void PurchasePriceTextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
