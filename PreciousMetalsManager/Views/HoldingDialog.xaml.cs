@@ -181,16 +181,23 @@ namespace PreciousMetalsManager.Views
         private void WeightTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             var text = WeightTextBox.Text.Replace(',', '.');
+
+            // Corrects invalid values
             if (!decimal.TryParse(text, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var value) || value <= 0)
             {
-                // Corrects invalid values to 1.00
                 WeightTextBox.Text = "1.00";
+                return;
             }
-            else
+
+            var formatted = value.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
+            
+            if (formatted == "0.00")
             {
-                // Formats the value to 2 decimal places
-                WeightTextBox.Text = value.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
+                WeightTextBox.Text = "0.01";
+                return;
             }
+
+            WeightTextBox.Text = formatted;
         }
     }
 }
