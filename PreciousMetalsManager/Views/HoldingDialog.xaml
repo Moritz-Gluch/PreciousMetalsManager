@@ -45,7 +45,9 @@
             <Label Content="{DynamicResource Common_Quantity}"/>
             <StackPanel Orientation="Horizontal">
                 <Button Content="▲" Width="25" Click="IncreaseQuantity_Click"/>
-                <TextBox Name="QuantityTextBox" Text="1" Width="50" HorizontalContentAlignment="Center"/>
+                <TextBox Name="QuantityTextBox" Text="1" Width="50" HorizontalContentAlignment="Center"
+                         PreviewTextInput="QuantityTextBox_PreviewTextInput"
+                         LostFocus="QuantityTextBox_LostFocus"/>
                 <Button Content="▼" Width="25" Click="DecreaseQuantity_Click"/>
             </StackPanel>
 

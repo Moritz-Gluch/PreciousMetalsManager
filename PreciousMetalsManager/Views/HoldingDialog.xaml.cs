@@ -119,5 +119,20 @@ namespace PreciousMetalsManager.Views
                 QuantityTextBox.Text = "1";
             }
         }
+
+        private void QuantityTextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            // Allows only numbers to be entered
+            e.Handled = !int.TryParse(e.Text, out int _);
+        }
+
+        private void QuantityTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            // Corrects invalid values to 1
+            if (!int.TryParse(QuantityTextBox.Text, out int value) || value < 1)
+            {
+                QuantityTextBox.Text = "1";
+            }
+        }
     }
 }
