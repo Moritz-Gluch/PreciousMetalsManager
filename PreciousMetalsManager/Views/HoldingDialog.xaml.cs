@@ -48,7 +48,7 @@ namespace PreciousMetalsManager.Views
                 return false;
             }
 
-            if (!decimal.TryParse(WeightTextBox.Text, out var weight) || weight <= 0)
+            if (!decimal.TryParse(WeightTextBox.Text.Replace(',', '.'), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var weight) || weight <= 0)
             {
                 MessageBox.Show(L("HoldingDialog_Msg_WeightPositive"));
                 return false;
