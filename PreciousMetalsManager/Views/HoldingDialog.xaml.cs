@@ -123,7 +123,7 @@ namespace PreciousMetalsManager.Views
         private void QuantityTextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
             // Allows only numbers to be entered
-            e.Handled = !int.TryParse(e.Text, out int _);
+            e.Handled = !System.Text.RegularExpressions.Regex.IsMatch(e.Text, @"^[0-9]+$");
         }
 
         private void QuantityTextBox_LostFocus(object sender, RoutedEventArgs e)
@@ -135,9 +135,20 @@ namespace PreciousMetalsManager.Views
             }
         }
 
-        private void PurityComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void PurityComboBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
+            // Allows only numbers, commas and dots to be entered
+            e.Handled = !System.Text.RegularExpressions.Regex.IsMatch(e.Text, @"^[0-9\.,]+$");
+        }
 
+        private void PurityComboBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            var text = PurityComboBox.Text.Replace(',', '.');
+            if (!decimal.TryParse(text, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var value) || value <= 0 || value >= 1000)
+            {
+                // Corrects invalid values to 999,9
+                PurityComboBox.Text = "999,9";
+            }
         }
     }
 }

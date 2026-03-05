@@ -34,10 +34,14 @@
             </Label>
             <ComboBox Name="PurityComboBox"
                       IsEditable="True"
+                      Text="999,9"
                       Width="100"
                       HorizontalAlignment="Left"
                       Margin="0,0,0,10"
-                      ItemsSource="{Binding CommonPurities}"/>
+                      PreviewTextInput="PurityComboBox_PreviewTextInput"
+                      LostFocus="PurityComboBox_LostFocus"
+                      ItemsSource="{Binding CommonPurities}">
+            </ComboBox>
             
             <Label>
                 <StackPanel Orientation="Horizontal">
@@ -50,7 +54,10 @@
             <Label Content="{DynamicResource Common_Quantity}"/>
             <StackPanel Orientation="Horizontal">
                 <Button Content="▲" Width="25" Click="IncreaseQuantity_Click"/>
-                <TextBox Name="QuantityTextBox" Text="1" Width="50" HorizontalContentAlignment="Center"
+                <TextBox Name="QuantityTextBox"
+                         Text="1"
+                         Width="50"
+                         HorizontalContentAlignment="Center"
                          PreviewTextInput="QuantityTextBox_PreviewTextInput"
                          LostFocus="QuantityTextBox_LostFocus"/>
                 <Button Content="▼" Width="25" Click="DecreaseQuantity_Click"/>
