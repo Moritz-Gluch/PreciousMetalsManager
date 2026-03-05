@@ -147,7 +147,7 @@ namespace PreciousMetalsManager.Views
             if (!decimal.TryParse(text, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var value))
             {
                 // Corrects invalid values to 999,9
-                PurityComboBox.Text = "999,9";
+                PurityComboBox.Text = "999.9";
                 return;
             }
 
@@ -159,7 +159,7 @@ namespace PreciousMetalsManager.Views
             else if (rounded < 0.1m)
                 rounded = 0.1m;
 
-            PurityComboBox.Text = rounded.ToString("F1", System.Globalization.CultureInfo.InvariantCulture).Replace('.', ',');
+            PurityComboBox.Text = rounded.ToString("F1", System.Globalization.CultureInfo.InvariantCulture);
         }
 
         private void PurchasePriceTextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
@@ -173,7 +173,7 @@ namespace PreciousMetalsManager.Views
             var text = PurchasePriceTextBox.Text.Replace(',', '.');
             if (!decimal.TryParse(text, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var value) || value < 0)
             {
-                // Corrects invalid values to 0
+                // Corrects invalid values to 0.00
                 PurchasePriceTextBox.Text = "0.00";
             }
             else

@@ -259,7 +259,7 @@ namespace PreciousMetalsManager.ViewModels
         // Common purities for metals for easy selection in the UI, may be adjusted in the future
         public ObservableCollection<string> CommonPurities { get; } = new()
         {
-            "999,9", "925,0", "900,0", "835,0", "800,0", "750,0", "625,0"
+            "999.9", "925.0", "900.0", "835.0", "800.0", "750.0", "625.0"
         };
 
         public string GoldPriceDisplay => $"{GoldPrice:F2}{PriceUnit}";

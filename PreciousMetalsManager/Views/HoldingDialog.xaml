@@ -45,7 +45,7 @@
             </Label>
             <ComboBox Name="PurityComboBox"
                       IsEditable="True"
-                      Text="999,9"
+                      Text="999.9"
                       Width="130"
                       HorizontalAlignment="Center"
                       HorizontalContentAlignment="Center"
