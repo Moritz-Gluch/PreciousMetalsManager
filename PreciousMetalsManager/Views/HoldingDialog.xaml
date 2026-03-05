@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PreciousMetalsManager.Views"
         mc:Ignorable="d"
-        Title="{DynamicResource HoldingDialog_Title}" Height="485" Width="800">
+        Title="{DynamicResource HoldingDialog_Title}" Height="485" Width="350">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -15,7 +15,9 @@
 
         <StackPanel>
             <Label Content="{DynamicResource Common_MetalType}"/>
-            <ComboBox Name="MetalTypeComboBox">
+            <ComboBox Name="MetalTypeComboBox"
+                      Width="130"
+                      HorizontalAlignment="Left">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Converter={StaticResource MetalTypeToLabelConverter}}" />
@@ -35,7 +37,7 @@
             <ComboBox Name="PurityComboBox"
                       IsEditable="True"
                       Text="999,9"
-                      Width="100"
+                      Width="130"
                       HorizontalAlignment="Left"
                       Margin="0,0,0,10"
                       PreviewTextInput="PurityComboBox_PreviewTextInput"
@@ -51,7 +53,7 @@
             </Label>
             <TextBox Name="WeightTextBox"
                      Text="1.00"
-                     Width="100"
+                     Width="130"
                      HorizontalAlignment="Left"
                      HorizontalContentAlignment="Left"
                      PreviewTextInput="WeightTextBox_PreviewTextInput"
@@ -62,7 +64,7 @@
                 <Button Content="▲" Width="25" Click="IncreaseQuantity_Click"/>
                 <TextBox Name="QuantityTextBox"
                          Text="1"
-                         Width="50"
+                         Width="80"
                          HorizontalContentAlignment="Center"
                          PreviewTextInput="QuantityTextBox_PreviewTextInput"
                          LostFocus="QuantityTextBox_LostFocus"/>
@@ -77,14 +79,16 @@
             </Label>
             <TextBox Name="PurchasePriceTextBox"
                      Text="0.00"
-                     Width="100"
+                     Width="130"
                      HorizontalAlignment="Left"
                      HorizontalContentAlignment="Left"
                      PreviewTextInput="PurchasePriceTextBox_PreviewTextInput"
                      LostFocus="PurchasePriceTextBox_LostFocus"/>
 
             <Label Content="{DynamicResource Common_PurchaseDate}"/>
-            <DatePicker Name="PurchaseDatePicker"/>
+            <DatePicker Name="PurchaseDatePicker"
+                        Width="130"
+                        HorizontalAlignment="Left"/>
 
             <Label Content="{DynamicResource Common_CollectableType}" />
             <StackPanel Orientation="Horizontal" Margin="3,0,0,10">
