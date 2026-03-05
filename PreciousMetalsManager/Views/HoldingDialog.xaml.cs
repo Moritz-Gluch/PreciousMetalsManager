@@ -41,7 +41,7 @@ namespace PreciousMetalsManager.Views
                 return;
             }
 
-            if (!decimal.TryParse(PurityTextBox.Text, out var purity) || purity <= 0)
+            if (!decimal.TryParse(PurityComboBox.Text.Replace(',', '.'), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var purity) || purity <= 0)
             {
                 MessageBox.Show(L("HoldingDialog_Msg_PurityPositive"));
                 return;
@@ -133,6 +133,11 @@ namespace PreciousMetalsManager.Views
             {
                 QuantityTextBox.Text = "1";
             }
+        }
+
+        private void PurityComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

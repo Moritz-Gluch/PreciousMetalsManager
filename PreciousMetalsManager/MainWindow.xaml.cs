@@ -49,7 +49,7 @@ namespace PreciousMetalsManager
                 // Load presets
                 editWindow.MetalTypeComboBox.SelectedItem = selected.MetalType;
                 editWindow.FormTextBox.Text = selected.Form;
-                editWindow.PurityTextBox.Text = selected.Purity.ToString();
+                editWindow.PurityComboBox.Text = selected.Purity.ToString();
                 editWindow.WeightTextBox.Text = selected.Weight.ToString();
                 editWindow.QuantityTextBox.Text = selected.Quantity.ToString();
                 editWindow.PurchasePriceTextBox.Text = selected.PurchasePrice.ToString();

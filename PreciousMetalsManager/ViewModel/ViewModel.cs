@@ -256,6 +256,11 @@ namespace PreciousMetalsManager.ViewModels
         public string WeightUnit => "(g)";
         public string PurityUnit => "(‰)";
 
+        // Common purities for metals for easy selection in the UI, may be adjusted in the future
+        public ObservableCollection<string> CommonPurities { get; } = new()
+        {
+            "999,9", "925", "900", "835", "800", "750", "625"
+        };
 
         public string GoldPriceDisplay => $"{GoldPrice:F2}{PriceUnit}";
         public string SilverPriceDisplay => $"{SilverPrice:F2}{PriceUnit}";

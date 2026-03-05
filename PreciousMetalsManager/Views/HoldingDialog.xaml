@@ -32,8 +32,13 @@
                     <TextBlock Text="{Binding PurityUnit}" Margin="6,0,0,0" />
                 </StackPanel>
             </Label>
-            <TextBox Name="PurityTextBox"/>
-
+            <ComboBox Name="PurityComboBox"
+                      IsEditable="True"
+                      Width="100"
+                      HorizontalAlignment="Left"
+                      Margin="0,0,0,10"
+                      ItemsSource="{Binding CommonPurities}"/>
+            
             <Label>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{DynamicResource Common_Weight}" />
