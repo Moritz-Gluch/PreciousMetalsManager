@@ -4,8 +4,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PreciousMetalsManager.Views"
+        xmlns:primitives="clr-namespace:System.Windows.Controls.Primitives;assembly=PresentationFramework"
         mc:Ignorable="d"
         Title="{DynamicResource HoldingDialog_Title}" Height="485" Width="350">
+    <Window.Resources>
+        <Style TargetType="{x:Type primitives:DatePickerTextBox}">
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="TextAlignment" Value="Center" />
+        </Style>
+    </Window.Resources>
+
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -91,8 +99,7 @@
             <Label Content="{DynamicResource Common_PurchaseDate}" HorizontalAlignment="Center" Margin="0,2,0,0"/>
             <DatePicker Name="PurchaseDatePicker"
                         Width="130"
-                        HorizontalAlignment="Center"
-                        HorizontalContentAlignment="Center"/>
+                        HorizontalAlignment="Center"/>
 
             <Label Content="{DynamicResource Common_CollectableType}" HorizontalAlignment="Center" Margin="0,2,0,0"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
