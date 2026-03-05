@@ -43,7 +43,11 @@
             <TextBox Name="WeightTextBox"/>
 
             <Label Content="{DynamicResource Common_Quantity}"/>
-            <TextBox Name="QuantityTextBox"/>
+            <StackPanel Orientation="Horizontal">
+                <Button Content="▲" Width="25" Click="IncreaseQuantity_Click"/>
+                <TextBox Name="QuantityTextBox" Text="1" Width="50" HorizontalContentAlignment="Center"/>
+                <Button Content="▼" Width="25" Click="DecreaseQuantity_Click"/>
+            </StackPanel>
 
             <Label>
                 <StackPanel Orientation="Horizontal">

@@ -95,5 +95,29 @@ namespace PreciousMetalsManager.Views
             DialogResult = false;
             Close();
         }
+
+        private void IncreaseQuantity_Click(object sender, RoutedEventArgs e)
+        {
+            if (int.TryParse(QuantityTextBox.Text, out int value))
+            {
+                QuantityTextBox.Text = (value + 1).ToString();
+            }
+            else
+            {
+                QuantityTextBox.Text = "1";
+            }
+        }
+
+        private void DecreaseQuantity_Click(object sender, RoutedEventArgs e)
+        {
+            if (int.TryParse(QuantityTextBox.Text, out int value) && value > 1)
+            {
+                QuantityTextBox.Text = (value - 1).ToString();
+            }
+            else
+            {
+                QuantityTextBox.Text = "1";
+            }
+        }
     }
 }
