@@ -56,7 +56,9 @@ namespace PreciousMetalsManager
             {
                 var editWindow = new HoldingDialog
                 {
-                    DataContext = DataContext
+                    DataContext = DataContext,
+                    Owner = this,
+                    IsEditMode = true
                 };
 
                 // Load presets

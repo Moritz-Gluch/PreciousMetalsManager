@@ -16,6 +16,8 @@ namespace PreciousMetalsManager.Views
         public MetalHolding? NewHolding { get; private set; }
         public bool AddAnotherRequested { get; private set; }
 
+        public bool IsEditMode { get; set; }
+
         public HoldingDialog()
         {
             InitializeComponent();
