@@ -4,8 +4,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PreciousMetalsManager.Views"
+        xmlns:primitives="clr-namespace:System.Windows.Controls.Primitives;assembly=PresentationFramework"
         mc:Ignorable="d"
-        Title="{DynamicResource HoldingDialog_Title}" Height="485" Width="800">
+        Title="{DynamicResource HoldingDialog_Title}" Height="485" Width="350">
+    <Window.Resources>
+        <Style TargetType="{x:Type primitives:DatePickerTextBox}">
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="TextAlignment" Value="Center" />
+        </Style>
+    </Window.Resources>
+
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -13,51 +21,88 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <StackPanel>
-            <Label Content="{DynamicResource Common_MetalType}"/>
-            <ComboBox Name="MetalTypeComboBox">
+        <StackPanel HorizontalAlignment="Center">
+            <Label Content="{DynamicResource Common_MetalType}" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+            <ComboBox Name="MetalTypeComboBox"
+                      Width="130"
+                      HorizontalAlignment="Center"
+                      HorizontalContentAlignment="Center">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Converter={StaticResource MetalTypeToLabelConverter}}" />
+                        <TextBlock Text="{Binding Converter={StaticResource MetalTypeToLabelConverter}}" TextAlignment="Center"/>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
 
-            <Label Content="{DynamicResource HoldingDialog_Lbl_FormVariant}"/>
-            <TextBox Name="FormTextBox"/>
+            <Label Content="{DynamicResource HoldingDialog_Lbl_FormVariant}" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+            <TextBox Name="FormTextBox" Width="130" HorizontalAlignment="Center"/>
 
-            <Label>
+            <Label HorizontalAlignment="Center" Margin="0,2,0,0">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{DynamicResource Common_Purity}" />
                     <TextBlock Text="{Binding PurityUnit}" Margin="6,0,0,0" />
                 </StackPanel>
             </Label>
-            <TextBox Name="PurityTextBox"/>
+            <ComboBox Name="PurityComboBox"
+                      IsEditable="True"
+                      Text="999.9"
+                      Width="130"
+                      HorizontalAlignment="Center"
+                      HorizontalContentAlignment="Center"
+                      Margin="0,0,0,10"
+                      PreviewTextInput="PurityComboBox_PreviewTextInput"
+                      LostFocus="PurityComboBox_LostFocus"
+                      ItemsSource="{Binding CommonPurities}">
+            </ComboBox>
 
-            <Label>
+            <Label HorizontalAlignment="Center" Margin="0,2,0,0">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{DynamicResource Common_Weight}" />
                     <TextBlock Text="{Binding WeightUnit}" Margin="6,0,0,0" />
                 </StackPanel>
             </Label>
-            <TextBox Name="WeightTextBox"/>
+            <TextBox Name="WeightTextBox"
+                     Text="1.00"
+                     Width="130"
+                     HorizontalAlignment="Center"
+                     HorizontalContentAlignment="Center"
+                     PreviewTextInput="WeightTextBox_PreviewTextInput"
+                     LostFocus="WeightTextBox_LostFocus"/>
 
-            <Label Content="{DynamicResource Common_Quantity}"/>
-            <TextBox Name="QuantityTextBox"/>
+            <Label Content="{DynamicResource Common_Quantity}" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="▲" Width="25" Click="IncreaseQuantity_Click"/>
+                <TextBox Name="QuantityTextBox"
+                         Text="1"
+                         Width="80"
+                         HorizontalContentAlignment="Center"
+                         HorizontalAlignment="Center"
+                         PreviewTextInput="QuantityTextBox_PreviewTextInput"
+                         LostFocus="QuantityTextBox_LostFocus"/>
+                <Button Content="▼" Width="25" Click="DecreaseQuantity_Click"/>
+            </StackPanel>
 
-            <Label>
+            <Label HorizontalAlignment="Center" Margin="0,2,0,0">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{DynamicResource Common_PurchasePrice}" />
                     <TextBlock Text="{Binding CurrencyUnit}" Margin="6,0,0,0" />
                 </StackPanel>
             </Label>
-            <TextBox Name="PurchasePriceTextBox"/>
+            <TextBox Name="PurchasePriceTextBox"
+                     Text="0.00"
+                     Width="130"
+                     HorizontalAlignment="Center"
+                     HorizontalContentAlignment="Center"
+                     PreviewTextInput="PurchasePriceTextBox_PreviewTextInput"
+                     LostFocus="PurchasePriceTextBox_LostFocus"/>
 
-            <Label Content="{DynamicResource Common_PurchaseDate}"/>
-            <DatePicker Name="PurchaseDatePicker"/>
+            <Label Content="{DynamicResource Common_PurchaseDate}" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+            <DatePicker Name="PurchaseDatePicker"
+                        Width="130"
+                        HorizontalAlignment="Center"/>
 
-            <Label Content="{DynamicResource Common_CollectableType}" />
-            <StackPanel Orientation="Horizontal" Margin="3,0,0,10">
+            <Label Content="{DynamicResource Common_CollectableType}" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <RadioButton Name="CollectableType_BullionRadioButton"
                              Content="{DynamicResource CollectableType_Bullion}"
                              IsChecked="{Binding SelectedCollectableType, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Bullion, Mode=TwoWay}"
@@ -75,8 +120,35 @@
             </StackPanel>
         </StackPanel>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
-            <Button Name="SaveButton" Content="{DynamicResource HoldingDialog_Btn_Save}" Width="80" Margin="5" Click="SaveButton_Click"/>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+            <Button Name="SaveButton" Width="80" Margin="5" Click="SaveButton_Click">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Content" Value="{DynamicResource HoldingDialog_Btn_Add}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsEditMode, RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
+                                <Setter Property="Content" Value="{DynamicResource HoldingDialog_Btn_Save}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button Name="AddAnotherButton"
+                    Content="{DynamicResource HoldingDialog_Btn_AddAnother}"
+                    Width="120"
+                    Margin="5"
+                    Click="AddAnotherButton_Click">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Visibility" Value="Visible" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsEditMode, RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
             <Button Name="CancelButton" Content="{DynamicResource HoldingDialog_Btn_Cancel}" Width="80" Margin="5" Click="CancelButton_Click"/>
         </StackPanel>
     </Grid>

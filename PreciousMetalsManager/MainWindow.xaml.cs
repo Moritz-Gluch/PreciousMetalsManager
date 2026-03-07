@@ -23,14 +23,27 @@ namespace PreciousMetalsManager
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            var addWindow = new HoldingDialog
-            {
-                DataContext = DataContext
-            };
+            if (DataContext is not ViewModel vm)
+                return;
 
-            if (addWindow.ShowDialog() == true && DataContext is ViewModel vm && addWindow.NewHolding is { } newHolding)
+            var keepAdding = true;
+            while (keepAdding)
             {
-                vm.AddHolding(newHolding);
+                var addWindow = new HoldingDialog
+                {
+                    DataContext = DataContext,
+                    Owner = this
+                };
+
+                if (addWindow.ShowDialog() == true && addWindow.NewHolding is { } newHolding)
+                {
+                    vm.AddHolding(newHolding);
+                    keepAdding = addWindow.AddAnotherRequested;
+                }
+                else
+                {
+                    keepAdding = false;
+                }
             }
         }
 
@@ -43,13 +56,15 @@ namespace PreciousMetalsManager
             {
                 var editWindow = new HoldingDialog
                 {
-                    DataContext = DataContext
+                    DataContext = DataContext,
+                    Owner = this,
+                    IsEditMode = true
                 };
 
                 // Load presets
                 editWindow.MetalTypeComboBox.SelectedItem = selected.MetalType;
                 editWindow.FormTextBox.Text = selected.Form;
-                editWindow.PurityTextBox.Text = selected.Purity.ToString();
+                editWindow.PurityComboBox.Text = selected.Purity.ToString();
                 editWindow.WeightTextBox.Text = selected.Weight.ToString();
                 editWindow.QuantityTextBox.Text = selected.Quantity.ToString();
                 editWindow.PurchasePriceTextBox.Text = selected.PurchasePrice.ToString();
