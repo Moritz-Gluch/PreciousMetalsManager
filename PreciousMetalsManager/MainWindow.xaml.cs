@@ -99,24 +99,45 @@ namespace PreciousMetalsManager
             if (DataContext is not ViewModel vm)
                 return;
 
-            if (MainDataGrid.SelectedItem is Models.MetalHolding selected)
+            var selectedItems = MainDataGrid.SelectedItems
+                .OfType<Models.MetalHolding>()
+                .ToList();
+
+            if (selectedItems.Count == 0)
             {
-                // Confirmation box
-                var result = MessageBox.Show(
+                MessageBox.Show(L("Msg_SelectHoldingToDelete"));
+                return;
+            }
+
+            MessageBoxResult result;
+            if (selectedItems.Count == 1)
+            {
+                // Confirmation box for single holding
+                result = MessageBox.Show(
                     L("Msg_ConfirmDeleteText"),
                     L("Msg_ConfirmDeleteTitle"),
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Warning
                 );
-
-                if (result == MessageBoxResult.Yes)
-                {
-                    vm.DeleteHolding(selected);
-                }
             }
             else
             {
-                MessageBox.Show(L("Msg_SelectHoldingToDelete"));
+                // Confirmation box for multiple holdings
+                result = MessageBox.Show(
+                    string.Format(L("Msg_ConfirmDeleteMultipleText"), selectedItems.Count),
+                    L("Msg_ConfirmDeleteTitle"),
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning
+                );
+            }
+
+            if (result == MessageBoxResult.Yes)
+            {
+                foreach (var holding in selectedItems)
+                {
+                    vm.DeleteHolding(holding);
+                }
+                MainDataGrid.Items.Refresh();
             }
         }
 
@@ -160,7 +181,7 @@ namespace PreciousMetalsManager
             RecalculateDataGridColumnWidths();
         }
 
-        // Neccessary workaround to prevent column width issues after language change 
+        // Necessary workaround to prevent column width issues after language change 
         private void RecalculateDataGridColumnWidths()
         {
             Dispatcher.InvokeAsync(() =>

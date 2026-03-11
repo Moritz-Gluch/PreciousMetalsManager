@@ -30,8 +30,8 @@
     <sys:String x:Key="Col_TaxFreeStatus">Steuerfrei</sys:String>
 
     <!-- MainWindow DataGrid -->
-    <sys:String x:Key="TaxFreeStatus_Yes">Ja</sys:String>
     <sys:String x:Key="TaxFreeStatus_DaysLeft">Tage</sys:String>
+    <sys:String x:Key="TaxFreeStatus_Yes">Ja</sys:String>
 
     <!-- MainWindow empty text -->
     <sys:String x:Key="Txt_NoHoldingsMatch">Keine Einträge passen zu deinen Kriterien.</sys:String>
@@ -40,6 +40,7 @@
     <sys:String x:Key="Msg_SelectHoldingToEdit">Bitte wähle einen Eintrag zum Bearbeiten aus.</sys:String>
     <sys:String x:Key="Msg_SelectHoldingToDelete">Bitte wähle einen Eintrag zum Löschen aus.</sys:String>
     <sys:String x:Key="Msg_ConfirmDeleteText">Möchtest du diesen Eintrag wirklich löschen?</sys:String>
+    <sys:String x:Key="Msg_ConfirmDeleteMultipleText">Möchtest du diese {0} Einträge wirklich löschen?</sys:String>
     <sys:String x:Key="Msg_ConfirmDeleteTitle">Löschen bestätigen</sys:String>
 
     <!-- Language Button -->
