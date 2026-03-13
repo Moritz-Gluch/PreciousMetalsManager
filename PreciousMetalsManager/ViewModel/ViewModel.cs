@@ -33,6 +33,7 @@ namespace PreciousMetalsManager.ViewModels
                     _formFilter = value;
                     OnPropertyChanged(nameof(FormFilter));
                     FilteredHoldings.Refresh();
+                    UpdateVisibleHoldingsTotalValue();
                 }
             }
         }
@@ -48,6 +49,7 @@ namespace PreciousMetalsManager.ViewModels
                     _selectedMetalTypeFilter = value;
                     OnPropertyChanged(nameof(SelectedMetalTypeFilter));
                     FilteredHoldings.Refresh();
+                    UpdateVisibleHoldingsTotalValue(); 
                 }
             }
         }
@@ -118,6 +120,7 @@ namespace PreciousMetalsManager.ViewModels
                     h.PropertyChanged -= Holding_PropertyChanged;
 
             UpdateCalculatedValues();
+            UpdateVisibleHoldingsTotalValue();
         }
 
         private bool FilterPredicate(object obj)
@@ -150,6 +153,7 @@ namespace PreciousMetalsManager.ViewModels
 
             OnPropertyChanged(nameof(Holdings));
             FilteredHoldings.Refresh();
+            UpdateVisibleHoldingsTotalValue();
         }
 
         private decimal _goldPrice;
@@ -312,8 +316,36 @@ namespace PreciousMetalsManager.ViewModels
                     _taxFreeOnly = value;
                     OnPropertyChanged(nameof(TaxFreeOnly));
                     FilteredHoldings.Refresh();
+                    UpdateVisibleHoldingsTotalValue(); 
                 }
             }
+        }
+
+        private decimal _visibleHoldingsTotalValue;
+        public decimal VisibleHoldingsTotalValue
+        {
+            get => _visibleHoldingsTotalValue;
+            private set
+            {
+                if (_visibleHoldingsTotalValue != value)
+                {
+                    _visibleHoldingsTotalValue = value;
+                    OnPropertyChanged(nameof(VisibleHoldingsTotalValue));
+                }
+            }
+        }
+
+        // Calculates total value of visible holdings
+        private void UpdateVisibleHoldingsTotalValue()
+        {
+            var view = FilteredHoldings;
+            decimal total = 0m;
+            foreach (var item in view)
+            {
+                if (item is MetalHolding holding)
+                    total += holding.TotalValue;
+            }
+            VisibleHoldingsTotalValue = total;
         }
 
         public void AddHolding(MetalHolding holding)
