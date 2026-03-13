@@ -32,8 +32,7 @@ namespace PreciousMetalsManager.ViewModels
                 {
                     _formFilter = value;
                     OnPropertyChanged(nameof(FormFilter));
-                    FilteredHoldings.Refresh();
-                    UpdateVisibleHoldingsTotalValue();
+                    RefreshFilteredView();
                 }
             }
         }
@@ -48,8 +47,7 @@ namespace PreciousMetalsManager.ViewModels
                 {
                     _selectedMetalTypeFilter = value;
                     OnPropertyChanged(nameof(SelectedMetalTypeFilter));
-                    FilteredHoldings.Refresh();
-                    UpdateVisibleHoldingsTotalValue(); 
+                    RefreshFilteredView();
                 }
             }
         }
@@ -72,6 +70,7 @@ namespace PreciousMetalsManager.ViewModels
         private readonly MetalPriceApiService _metalPriceApiService = new MetalPriceApiService();
 
         private readonly DispatcherTimer _autoRefreshTimer;
+        private bool _isReloadingHoldings;
 
         public ViewModel(LocalStorageService? storage = null)
         {
@@ -85,11 +84,6 @@ namespace PreciousMetalsManager.ViewModels
             foreach (var holding in Holdings)
                 holding.PropertyChanged += Holding_PropertyChanged;
 
-            UpdateCalculatedValues();
-
-            // Fetch current market prices on startup
-            _ = UpdateMarketPricesAsync();
-
             RefreshPricesCommand = new RelayCommand(async _ => await UpdateMarketPricesAsync());
 
             // Auto-refresh every 15 minutes
@@ -100,10 +94,12 @@ namespace PreciousMetalsManager.ViewModels
             _autoRefreshTimer.Tick += async (s, e) => await UpdateMarketPricesAsync();
             _autoRefreshTimer.Start();
 
-            UpdateMetalTypeFilterOptions();
-            SelectedMetalTypeFilter = MetalTypeFilterOptions.FirstOrDefault(); // Set 'All' as default
-            Holdings.CollectionChanged += (s, e) => UpdateMetalTypeFilterOptions();
-            
+            UpdateMetalTypeFilterOptions(resetSelection: true);
+            RecalculateAndRefreshView();
+
+            // Fetch current market prices on startup
+            _ = UpdateMarketPricesAsync();
+
             ExportSimpleCommand = new RelayCommand(_ => ExportSimpleHoldings());
             ExportDetailedCommand = new RelayCommand(_ => ExportDetailedHoldings());
             ImportCommand = new RelayCommand(async _ => await ImportSimpleHoldingsAsync());
@@ -119,8 +115,11 @@ namespace PreciousMetalsManager.ViewModels
                 foreach (MetalHolding h in e.OldItems)
                     h.PropertyChanged -= Holding_PropertyChanged;
 
-            UpdateCalculatedValues();
-            UpdateVisibleHoldingsTotalValue();
+            if (_isReloadingHoldings)
+                return;
+
+            UpdateMetalTypeFilterOptions(resetSelection: true);
+            RecalculateAndRefreshView();
         }
 
         private bool FilterPredicate(object obj)
@@ -141,7 +140,7 @@ namespace PreciousMetalsManager.ViewModels
             return true;
         }
 
-        private void UpdateCalculatedValues()
+        private void RecalculateHoldingValues()
         {
             foreach (var holding in Holdings)
             {
@@ -150,10 +149,29 @@ namespace PreciousMetalsManager.ViewModels
                 holding.CurrentValue = holding.Weight * (holding.Purity / 999.9m) * price;
                 holding.TotalValue = holding.CurrentValue * holding.Quantity;
             }
+        }
 
-            OnPropertyChanged(nameof(Holdings));
+        private void RefreshFilteredView()
+        {
             FilteredHoldings.Refresh();
             UpdateVisibleHoldingsTotalValue();
+        }
+
+        private void RecalculateAndRefreshView()
+        {
+            RecalculateHoldingValues();
+            RefreshFilteredView();
+        }
+
+        private bool SetPriceCore(ref decimal field, decimal value, string propertyName, string displayPropertyName)
+        {
+            if (field == value)
+                return false;
+
+            field = value;
+            OnPropertyChanged(propertyName);
+            OnPropertyChanged(displayPropertyName);
+            return true;
         }
 
         private decimal _goldPrice;
@@ -162,13 +180,8 @@ namespace PreciousMetalsManager.ViewModels
             get => _goldPrice;
             set
             {
-                if (_goldPrice != value)
-                {
-                    _goldPrice = value;
-                    OnPropertyChanged(nameof(GoldPrice));
-                    OnPropertyChanged(nameof(GoldPriceDisplay));
-                    UpdateCalculatedValues();
-                }
+                if (SetPriceCore(ref _goldPrice, value, nameof(GoldPrice), nameof(GoldPriceDisplay)))
+                    RecalculateAndRefreshView();
             }
         }
 
@@ -178,13 +191,8 @@ namespace PreciousMetalsManager.ViewModels
             get => _silverPrice;
             set
             {
-                if (_silverPrice != value)
-                {
-                    _silverPrice = value;
-                    OnPropertyChanged(nameof(SilverPrice));
-                    OnPropertyChanged(nameof(SilverPriceDisplay));
-                    UpdateCalculatedValues();
-                }
+                if (SetPriceCore(ref _silverPrice, value, nameof(SilverPrice), nameof(SilverPriceDisplay)))
+                    RecalculateAndRefreshView();
             }
         }
 
@@ -194,13 +202,8 @@ namespace PreciousMetalsManager.ViewModels
             get => _platinumPrice;
             set
             {
-                if (_platinumPrice != value)
-                {
-                    _platinumPrice = value;
-                    OnPropertyChanged(nameof(PlatinumPrice));
-                    OnPropertyChanged(nameof(PlatinumPriceDisplay));
-                    UpdateCalculatedValues();
-                }
+                if (SetPriceCore(ref _platinumPrice, value, nameof(PlatinumPrice), nameof(PlatinumPriceDisplay)))
+                    RecalculateAndRefreshView();
             }
         }
 
@@ -210,13 +213,8 @@ namespace PreciousMetalsManager.ViewModels
             get => _palladiumPrice;
             set
             {
-                if (_palladiumPrice != value)
-                {
-                    _palladiumPrice = value;
-                    OnPropertyChanged(nameof(PalladiumPrice));
-                    OnPropertyChanged(nameof(PalladiumPriceDisplay));
-                    UpdateCalculatedValues();
-                }
+                if (SetPriceCore(ref _palladiumPrice, value, nameof(PalladiumPrice), nameof(PalladiumPriceDisplay)))
+                    RecalculateAndRefreshView();
             }
         }
 
@@ -226,13 +224,8 @@ namespace PreciousMetalsManager.ViewModels
             get => _broncePrice;
             set
             {
-                if (_broncePrice != value)
-                {
-                    _broncePrice = value;
-                    OnPropertyChanged(nameof(BroncePrice));
-                    OnPropertyChanged(nameof(BroncePriceDisplay));
-                    UpdateCalculatedValues();
-                }
+                if (SetPriceCore(ref _broncePrice, value, nameof(BroncePrice), nameof(BroncePriceDisplay)))
+                    RecalculateAndRefreshView();
             }
         }
 
@@ -292,16 +285,22 @@ namespace PreciousMetalsManager.ViewModels
                 e.PropertyName == nameof(MetalHolding.Quantity) ||
                 e.PropertyName == nameof(MetalHolding.MetalType))
             {
-                UpdateCalculatedValues();
+                RecalculateAndRefreshView();
+                return;
+            }
+
+            if (e.PropertyName == nameof(MetalHolding.Form))
+            {
+                RefreshFilteredView();
+                return;
             }
 
             // Forward TaxFreeStatus and IsTaxFree property changes when PurchaseDate changes
-            if (e.PropertyName == nameof(MetalHolding.PurchaseDate))
+            if (e.PropertyName == nameof(MetalHolding.PurchaseDate) &&
+                sender is MetalHolding holding)
             {
-                if (sender is MetalHolding holding)
-                {
-                    holding.NotifyTaxFreeStatusChanged();
-                }
+                holding.NotifyTaxFreeStatusChanged();
+                RefreshFilteredView();
             }
         }
 
@@ -315,8 +314,7 @@ namespace PreciousMetalsManager.ViewModels
                 {
                     _taxFreeOnly = value;
                     OnPropertyChanged(nameof(TaxFreeOnly));
-                    FilteredHoldings.Refresh();
-                    UpdateVisibleHoldingsTotalValue(); 
+                    RefreshFilteredView();
                 }
             }
         }
@@ -338,13 +336,14 @@ namespace PreciousMetalsManager.ViewModels
         // Calculates total value of visible holdings
         private void UpdateVisibleHoldingsTotalValue()
         {
-            var view = FilteredHoldings;
             decimal total = 0m;
-            foreach (var item in view)
+
+            foreach (var item in FilteredHoldings)
             {
                 if (item is MetalHolding holding)
                     total += holding.TotalValue;
             }
+
             VisibleHoldingsTotalValue = total;
         }
 
@@ -373,22 +372,37 @@ namespace PreciousMetalsManager.ViewModels
 
             var view = CollectionViewSource.GetDefaultView(Holdings);
             var oldFilter = view.Filter;
-            view.Filter = null;
 
-            Holdings.Clear();
-            var loaded = _storage.LoadHoldings();
-            System.Diagnostics.Debug.WriteLine($"ReloadHoldings() loaded {loaded.Count} entries from DB.");
-            foreach (var h in loaded)
-                Holdings.Add(h);
+            _isReloadingHoldings = true;
 
-            view.Filter = oldFilter; 
+            try
+            {
+                view.Filter = null;
+
+                Holdings.Clear();
+                var loaded = _storage.LoadHoldings();
+                System.Diagnostics.Debug.WriteLine($"ReloadHoldings() loaded {loaded.Count} entries from DB.");
+
+                foreach (var h in loaded)
+                    Holdings.Add(h);
+            }
+            finally
+            {
+                _isReloadingHoldings = false;
+                view.Filter = oldFilter;
+            }
+
+            UpdateMetalTypeFilterOptions(resetSelection: true);
+            RecalculateAndRefreshView();
+
             System.Diagnostics.Debug.WriteLine($"ReloadHoldings() after add: {Holdings.Count}");
         }
 
         public void ToggleLanguage()
         {
             App.SetLanguage(App.CurrentLanguage == "en" ? "de" : "en");
-            UpdateMetalTypeFilterOptions(); // Needed to update 'All' option text in metal type filter
+            UpdateMetalTypeFilterOptions(resetSelection: false); // Needed to update 'All' option text in metal type filter
+            RefreshFilteredView();
         }
 
         public async Task UpdateMarketPricesAsync()
@@ -402,14 +416,25 @@ namespace PreciousMetalsManager.ViewModels
 
             // 1 troy ounce = 31.1g (may be adjusted to the exact value in the future)
             const decimal gramsPerOunce = 31.1m;
-            GoldPrice = Math.Round(dto.GoldEur / gramsPerOunce, 2);
-            SilverPrice = Math.Round(dto.SilverEur / gramsPerOunce, 2);
-            PlatinumPrice = Math.Round(dto.PlatinumEur / gramsPerOunce, 2);
-            PalladiumPrice = Math.Round(dto.PalladiumEur / gramsPerOunce, 2);
-            // Bronce price is not avaiable on used api, must currently be added manually  
+
+            var goldPrice = Math.Round(dto.GoldEur / gramsPerOunce, 2);
+            var silverPrice = Math.Round(dto.SilverEur / gramsPerOunce, 2);
+            var platinumPrice = Math.Round(dto.PlatinumEur / gramsPerOunce, 2);
+            var palladiumPrice = Math.Round(dto.PalladiumEur / gramsPerOunce, 2);
+
+            var hasChanges = false;
+            hasChanges |= SetPriceCore(ref _goldPrice, goldPrice, nameof(GoldPrice), nameof(GoldPriceDisplay));
+            hasChanges |= SetPriceCore(ref _silverPrice, silverPrice, nameof(SilverPrice), nameof(SilverPriceDisplay));
+            hasChanges |= SetPriceCore(ref _platinumPrice, platinumPrice, nameof(PlatinumPrice), nameof(PlatinumPriceDisplay));
+            hasChanges |= SetPriceCore(ref _palladiumPrice, palladiumPrice, nameof(PalladiumPrice), nameof(PalladiumPriceDisplay));
+
+            if (hasChanges)
+                RecalculateAndRefreshView();
+
+            // Bronce price is not available on used api, must currently be added manually
         }
 
-        private void UpdateMetalTypeFilterOptions()
+        private void UpdateMetalTypeFilterOptions(bool resetSelection)
         {
             var typesInHoldings = Holdings
                 .Select(h => h.MetalType)
@@ -418,12 +443,31 @@ namespace PreciousMetalsManager.ViewModels
                 .ToList();
 
             var allOption = L("Filter_All");
-            // 'All' option always first
             typesInHoldings.Insert(0, allOption);
+
             MetalTypeFilterOptions = new ObservableCollection<object>(typesInHoldings);
 
-            // Set filter value to 'All' after add, edit and delete
-            SelectedMetalTypeFilter = allOption;
+            object? newSelection = _selectedMetalTypeFilter;
+
+            if (resetSelection)
+            {
+                newSelection = allOption;
+            }
+            else if (_selectedMetalTypeFilter is string)
+            {
+                newSelection = allOption;
+            }
+            else if (_selectedMetalTypeFilter is MetalType selectedType &&
+                     !typesInHoldings.Contains(selectedType))
+            {
+                newSelection = allOption;
+            }
+
+            if (!Equals(_selectedMetalTypeFilter, newSelection))
+            {
+                _selectedMetalTypeFilter = newSelection;
+                OnPropertyChanged(nameof(SelectedMetalTypeFilter));
+            }
         }
 
         public ICommand RefreshPricesCommand { get; }
