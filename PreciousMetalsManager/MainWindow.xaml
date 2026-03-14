@@ -102,8 +102,8 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right">
                 <Label Content="{DynamicResource Lbl_TotalValueDisplayed}" VerticalAlignment="Center"/>
-                <TextBlock Text="{Binding VisibleHoldingsTotalValue, StringFormat=F2}" FontWeight="Bold" VerticalAlignment="Center" Margin="5,0"/>
-                <Label Content="{Binding CurrencyUnit}" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding VisibleHoldingsTotalValue, StringFormat=F2}" FontWeight="Bold" VerticalAlignment="Center"/>
+                <Label Content="{Binding CurrencyUnitSimplyfied}" VerticalAlignment="Center"/>
             </StackPanel>
         </Grid>
 

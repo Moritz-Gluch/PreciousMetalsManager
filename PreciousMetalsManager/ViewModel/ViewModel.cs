@@ -250,6 +250,7 @@ namespace PreciousMetalsManager.ViewModels
         }
 
         public string CurrencyUnit => "(€)";
+        public string CurrencyUnitSimplyfied => "€";
         public string WeightUnit => "(g)";
         public string PurityUnit => "(‰)";
 
