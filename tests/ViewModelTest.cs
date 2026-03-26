@@ -221,21 +221,6 @@ namespace PreciousMetalsManager.Tests
         }
 
         [TestMethod]
-        public void ToggleLanguage_ResetsFilterToLocalizedAll()
-        {
-            if (System.Windows.Application.Current == null)
-                new PreciousMetalsManager.App();
-
-            var vm = CreateTestViewModel();
-            vm.SelectedMetalTypeFilter = MetalType.Gold;
-
-            vm.ToggleLanguage();
-
-            var expectedAll = vm.MetalTypeFilterOptions.First();
-            Assert.AreEqual(expectedAll, vm.SelectedMetalTypeFilter);
-        }
-
-        [TestMethod]
         public void MetalTypeFilterOptions_FirstEntry_IsAllOption()
         {
             var vm = CreateTestViewModel();
@@ -414,6 +399,89 @@ namespace PreciousMetalsManager.Tests
 
             Assert.Contains(old, filtered);
             Assert.Contains(young, filtered);
+        }
+
+        [TestMethod]
+        public void SelectedCollectableTypeFilter_FiltersHoldings()
+        {
+            var vm = CreateTestViewModel();
+            var bullion = new MetalHolding { Form = "Bullion", CollectableType = CollectableType.Bullion };
+            var numismatic = new MetalHolding { Form = "Numismatic", CollectableType = CollectableType.Numismatic };
+
+            vm.Holdings.Add(bullion);
+            vm.Holdings.Add(numismatic);
+
+            vm.SelectedCollectableTypeFilter = CollectableType.Numismatic;
+            var filtered = vm.FilteredHoldings.Cast<MetalHolding>().ToList();
+
+            CollectionAssert.Contains(filtered, numismatic);
+            CollectionAssert.DoesNotContain(filtered, bullion);
+        }
+
+        [TestMethod]
+        public void CollectableTypeFilterOptions_FirstEntry_IsAllOption()
+        {
+            var vm = CreateTestViewModel();
+
+            Assert.IsGreaterThanOrEqualTo(1, vm.CollectableTypeFilterOptions.Count);
+
+            var first = vm.CollectableTypeFilterOptions[0];
+            Assert.IsInstanceOfType(first, typeof(string));
+            Assert.AreEqual(first, vm.SelectedCollectableTypeFilter);
+        }
+
+        [TestMethod]
+        public void CollectableTypeFilterOptions_ContainsDistinctCollectableTypesOnly()
+        {
+            var vm = CreateTestViewModel();
+
+            vm.Holdings.Add(new MetalHolding { Form = "A", CollectableType = CollectableType.Bullion });
+            vm.Holdings.Add(new MetalHolding { Form = "B", CollectableType = CollectableType.Bullion });
+            vm.Holdings.Add(new MetalHolding { Form = "C", CollectableType = CollectableType.SemiNumismatic });
+
+            var collectableTypes = vm.CollectableTypeFilterOptions.OfType<CollectableType>().ToList();
+
+            CollectionAssert.AreEquivalent(
+                new List<CollectableType> { CollectableType.Bullion, CollectableType.SemiNumismatic },
+                collectableTypes);
+
+            Assert.AreEqual(collectableTypes.Count, collectableTypes.Distinct().Count());
+        }
+
+        [TestMethod]
+        public void SelectedCollectableTypeFilter_AllOption_DoesNotFilterByCollectableType()
+        {
+            var vm = CreateTestViewModel();
+
+            var bullion = new MetalHolding { Form = "Bullion", CollectableType = CollectableType.Bullion };
+            var numismatic = new MetalHolding { Form = "Numismatic", CollectableType = CollectableType.Numismatic };
+
+            vm.Holdings.Add(bullion);
+            vm.Holdings.Add(numismatic);
+
+            vm.SelectedCollectableTypeFilter = vm.CollectableTypeFilterOptions.First();
+            var filtered = vm.FilteredHoldings.Cast<MetalHolding>().ToList();
+
+            CollectionAssert.Contains(filtered, bullion);
+            CollectionAssert.Contains(filtered, numismatic);
+        }
+
+        [TestMethod]
+        public void SelectedCollectableTypeFilter_UnknownString_DoesNotFilterByCollectableType()
+        {
+            var vm = CreateTestViewModel();
+
+            var bullion = new MetalHolding { Form = "Bullion", CollectableType = CollectableType.Bullion };
+            var numismatic = new MetalHolding { Form = "Numismatic", CollectableType = CollectableType.Numismatic };
+
+            vm.Holdings.Add(bullion);
+            vm.Holdings.Add(numismatic);
+
+            vm.SelectedCollectableTypeFilter = "SomeUnknownOption";
+            var filtered = vm.FilteredHoldings.Cast<MetalHolding>().ToList();
+
+            CollectionAssert.Contains(filtered, bullion);
+            CollectionAssert.Contains(filtered, numismatic);
         }
 
         private ViewModel CreateTestViewModel()

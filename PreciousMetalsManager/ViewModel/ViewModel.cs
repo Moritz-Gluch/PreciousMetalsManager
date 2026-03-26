@@ -66,6 +66,35 @@ namespace PreciousMetalsManager.ViewModels
             }
         }
 
+        private object? _selectedCollectableTypeFilter;
+        public object? SelectedCollectableTypeFilter
+        {
+            get => _selectedCollectableTypeFilter;
+            set
+            {
+                if (_selectedCollectableTypeFilter != value)
+                {
+                    _selectedCollectableTypeFilter = value;
+                    OnPropertyChanged(nameof(SelectedCollectableTypeFilter));
+                    RefreshFilteredView();
+                }
+            }
+        }
+
+        private ObservableCollection<object> _collectableTypeFilterOptions = new ObservableCollection<object>();
+        public ObservableCollection<object> CollectableTypeFilterOptions
+        {
+            get => _collectableTypeFilterOptions;
+            private set
+            {
+                if (_collectableTypeFilterOptions != value)
+                {
+                    _collectableTypeFilterOptions = value;
+                    OnPropertyChanged(nameof(CollectableTypeFilterOptions));
+                }
+            }
+        }
+
         private readonly LocalStorageService _storage = new LocalStorageService();
         private readonly MetalPriceApiService _metalPriceApiService = new MetalPriceApiService();
 
@@ -94,7 +123,7 @@ namespace PreciousMetalsManager.ViewModels
             _autoRefreshTimer.Tick += async (s, e) => await UpdateMarketPricesAsync();
             _autoRefreshTimer.Start();
 
-            UpdateMetalTypeFilterOptions(resetSelection: true);
+            UpdateFilterOptions(resetSelection: true);
             RecalculateAndRefreshView();
 
             // Fetch current market prices on startup
@@ -118,7 +147,7 @@ namespace PreciousMetalsManager.ViewModels
             if (_isReloadingHoldings)
                 return;
 
-            UpdateMetalTypeFilterOptions(resetSelection: true);
+            UpdateFilterOptions(resetSelection: false);
             RecalculateAndRefreshView();
         }
 
@@ -128,6 +157,10 @@ namespace PreciousMetalsManager.ViewModels
                 return false;
 
             if (SelectedMetalTypeFilter is MetalType type && holding.MetalType != type)
+                return false;
+
+            if (SelectedCollectableTypeFilter is CollectableType collectableType &&
+                holding.CollectableType != collectableType)
                 return false;
 
             if (!string.IsNullOrWhiteSpace(FormFilter) &&
@@ -290,7 +323,8 @@ namespace PreciousMetalsManager.ViewModels
                 return;
             }
 
-            if (e.PropertyName == nameof(MetalHolding.Form))
+            if (e.PropertyName == nameof(MetalHolding.Form) ||
+                e.PropertyName == nameof(MetalHolding.CollectableType))
             {
                 RefreshFilteredView();
                 return;
@@ -393,7 +427,7 @@ namespace PreciousMetalsManager.ViewModels
                 view.Filter = oldFilter;
             }
 
-            UpdateMetalTypeFilterOptions(resetSelection: true);
+            UpdateFilterOptions(resetSelection: true);
             RecalculateAndRefreshView();
 
             System.Diagnostics.Debug.WriteLine($"ReloadHoldings() after add: {Holdings.Count}");
@@ -402,7 +436,7 @@ namespace PreciousMetalsManager.ViewModels
         public void ToggleLanguage()
         {
             App.SetLanguage(App.CurrentLanguage == "en" ? "de" : "en");
-            UpdateMetalTypeFilterOptions(resetSelection: false); // Needed to update 'All' option text in metal type filter
+            UpdateFilterOptions(resetSelection: false);
             RefreshFilteredView();
         }
 
@@ -469,6 +503,48 @@ namespace PreciousMetalsManager.ViewModels
                 _selectedMetalTypeFilter = newSelection;
                 OnPropertyChanged(nameof(SelectedMetalTypeFilter));
             }
+        }
+
+        private void UpdateCollectableTypeFilterOptions(bool resetSelection)
+        {
+            var typesInHoldings = Holdings
+                .Select(h => h.CollectableType)
+                .Distinct()
+                .Cast<object>()
+                .ToList();
+
+            var allOption = L("Filter_All");
+            typesInHoldings.Insert(0, allOption);
+
+            CollectableTypeFilterOptions = new ObservableCollection<object>(typesInHoldings);
+
+            object? newSelection = _selectedCollectableTypeFilter;
+
+            if (resetSelection)
+            {
+                newSelection = allOption;
+            }
+            else if (_selectedCollectableTypeFilter is string)
+            {
+                newSelection = allOption;
+            }
+            else if (_selectedCollectableTypeFilter is CollectableType selectedType &&
+                     !typesInHoldings.Contains(selectedType))
+            {
+                newSelection = allOption;
+            }
+
+            if (!Equals(_selectedCollectableTypeFilter, newSelection))
+            {
+                _selectedCollectableTypeFilter = newSelection;
+                OnPropertyChanged(nameof(SelectedCollectableTypeFilter));
+            }
+        }
+
+        private void UpdateFilterOptions(bool resetSelection)
+        {
+            UpdateMetalTypeFilterOptions(resetSelection);
+            UpdateCollectableTypeFilterOptions(resetSelection);
         }
 
         public ICommand RefreshPricesCommand { get; }
