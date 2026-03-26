@@ -123,8 +123,7 @@ namespace PreciousMetalsManager.ViewModels
             _autoRefreshTimer.Tick += async (s, e) => await UpdateMarketPricesAsync();
             _autoRefreshTimer.Start();
 
-            UpdateMetalTypeFilterOptions(resetSelection: true);
-            UpdateCollectableTypeFilterOptions(resetSelection: true);
+            UpdateFilterOptions(resetSelection: true);
             RecalculateAndRefreshView();
 
             // Fetch current market prices on startup
@@ -148,8 +147,7 @@ namespace PreciousMetalsManager.ViewModels
             if (_isReloadingHoldings)
                 return;
 
-            UpdateMetalTypeFilterOptions(resetSelection: true);
-            UpdateCollectableTypeFilterOptions(resetSelection: true);
+            UpdateFilterOptions(resetSelection: false);
             RecalculateAndRefreshView();
         }
 
@@ -429,8 +427,7 @@ namespace PreciousMetalsManager.ViewModels
                 view.Filter = oldFilter;
             }
 
-            UpdateMetalTypeFilterOptions(resetSelection: true);
-            UpdateCollectableTypeFilterOptions(resetSelection: true);
+            UpdateFilterOptions(resetSelection: true);
             RecalculateAndRefreshView();
 
             System.Diagnostics.Debug.WriteLine($"ReloadHoldings() after add: {Holdings.Count}");
@@ -439,8 +436,7 @@ namespace PreciousMetalsManager.ViewModels
         public void ToggleLanguage()
         {
             App.SetLanguage(App.CurrentLanguage == "en" ? "de" : "en");
-            UpdateMetalTypeFilterOptions(resetSelection: false); // Needed to update 'All' option text in metal type filter
-            UpdateCollectableTypeFilterOptions(resetSelection: false);
+            UpdateFilterOptions(resetSelection: false);
             RefreshFilteredView();
         }
 
@@ -543,6 +539,12 @@ namespace PreciousMetalsManager.ViewModels
                 _selectedCollectableTypeFilter = newSelection;
                 OnPropertyChanged(nameof(SelectedCollectableTypeFilter));
             }
+        }
+
+        private void UpdateFilterOptions(bool resetSelection)
+        {
+            UpdateMetalTypeFilterOptions(resetSelection);
+            UpdateCollectableTypeFilterOptions(resetSelection);
         }
 
         public ICommand RefreshPricesCommand { get; }
