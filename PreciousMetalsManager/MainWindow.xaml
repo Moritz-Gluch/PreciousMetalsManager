@@ -90,11 +90,26 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
+
                 <Label Content="{DynamicResource Lbl_FormVariantFilter}" VerticalAlignment="Center"/>
                 <TextBox x:Name="FormFilterTextBox"
                          Width="120"
                          Margin="5,0"
                          Text="{Binding FormFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <Label Content="{DynamicResource Common_CollectableType}" VerticalAlignment="Center"/>
+                <ComboBox x:Name="ClassificationFilterComboBox"
+                          Width="150"
+                          Margin="5,0"
+                          ItemsSource="{Binding CollectableTypeFilterOptions}"
+                          SelectedItem="{Binding SelectedCollectableTypeFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource CollectableTypeToLabelConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
                 <CheckBox Content="{DynamicResource TaxFreeOnly_Checkbox}" 
                           Margin="10,0,0,0"
                           VerticalAlignment="Center"
