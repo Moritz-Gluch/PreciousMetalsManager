@@ -18,12 +18,24 @@ namespace PreciousMetalsManager.Views
 
         public bool IsEditMode { get; set; }
 
+        private string _originalFormText = string.Empty;
+
         public HoldingDialog()
         {
             InitializeComponent();
             MetalTypeComboBox.ItemsSource = Enum.GetValues(typeof(MetalType));
             MetalTypeComboBox.SelectedIndex = 0;
             PurchaseDatePicker.SelectedDate = DateTime.Today;
+
+            Loaded += HoldingDialog_Loaded;
+        }
+
+        private void HoldingDialog_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (IsEditMode)
+            {
+                _originalFormText = FormTextBox.Text;
+            }
         }
 
         private static string L(string key)
@@ -158,6 +170,14 @@ namespace PreciousMetalsManager.Views
             }
         }
 
+        private void FormTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (IsEditMode && string.IsNullOrWhiteSpace(FormTextBox.Text))
+            {
+                FormTextBox.Text = _originalFormText;
+            }
+        }
+
         private void PurityComboBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
             // Allows only numbers, commas and dots to be entered
@@ -224,7 +244,7 @@ namespace PreciousMetalsManager.Views
             }
 
             var formatted = value.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
-            
+
             if (formatted == "0.00")
             {
                 WeightTextBox.Text = "0.01";

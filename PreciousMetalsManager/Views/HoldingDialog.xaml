@@ -35,7 +35,10 @@
             </ComboBox>
 
             <Label Content="{DynamicResource HoldingDialog_Lbl_FormVariant}" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-            <TextBox Name="FormTextBox" Width="130" HorizontalAlignment="Center"/>
+            <TextBox Name="FormTextBox"
+                     Width="130"
+                     HorizontalAlignment="Center"
+                     LostFocus="FormTextBox_LostFocus"/>
 
             <Label HorizontalAlignment="Center" Margin="0,2,0,0">
                 <StackPanel Orientation="Horizontal">
