@@ -99,7 +99,8 @@
             <Label Content="{DynamicResource Common_PurchaseDate}" HorizontalAlignment="Center" Margin="0,2,0,0"/>
             <DatePicker Name="PurchaseDatePicker"
                         Width="130"
-                        HorizontalAlignment="Center"/>
+                        HorizontalAlignment="Center"
+                        LostFocus="PurchaseDatePicker_LostFocus"/>
 
             <Label Content="{DynamicResource Common_CollectableType}" HorizontalAlignment="Center" Margin="0,2,0,0"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">

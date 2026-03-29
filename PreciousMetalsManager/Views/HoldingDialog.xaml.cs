@@ -23,7 +23,7 @@ namespace PreciousMetalsManager.Views
             InitializeComponent();
             MetalTypeComboBox.ItemsSource = Enum.GetValues(typeof(MetalType));
             MetalTypeComboBox.SelectedIndex = 0;
-            PurchaseDatePicker.SelectedDate = DateTime.Now;
+            PurchaseDatePicker.SelectedDate = DateTime.Today;
         }
 
         private static string L(string key)
@@ -232,6 +232,14 @@ namespace PreciousMetalsManager.Views
             }
 
             WeightTextBox.Text = formatted;
+        }
+
+        private void PurchaseDatePicker_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (PurchaseDatePicker.SelectedDate == null)
+            {
+                PurchaseDatePicker.SelectedDate = DateTime.Today;
+            }
         }
     }
 }
