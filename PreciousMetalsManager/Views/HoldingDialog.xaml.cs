@@ -79,7 +79,7 @@ namespace PreciousMetalsManager.Views
                 return false;
             }
 
-            if (!decimal.TryParse(PurchasePriceTextBox.Text, out var price) || price < 0)
+            if (!decimal.TryParse(PurchasePriceTextBox.Text.Replace(',', '.'), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var price) || price < 0)
             {
                 MessageBox.Show(L("HoldingDialog_Msg_PurchasePriceNonNegative"));
                 return false;
