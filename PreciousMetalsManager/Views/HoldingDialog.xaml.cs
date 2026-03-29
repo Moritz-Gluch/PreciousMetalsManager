@@ -52,9 +52,14 @@ namespace PreciousMetalsManager.Views
 
             if (string.IsNullOrWhiteSpace(FormTextBox.Text))
             {
-                MessageBox.Show(L("HoldingDialog_Msg_FormRequired"));
+                FormTextBox.BorderBrush = System.Windows.Media.Brushes.IndianRed;
+                FormTextBox.BorderThickness = new Thickness(2);
+                FormTextBox.Focus();
                 return false;
             }
+
+            FormTextBox.ClearValue(BorderBrushProperty);
+            FormTextBox.ClearValue(BorderThicknessProperty);
 
             if (!decimal.TryParse(PurityComboBox.Text.Replace(',', '.'), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var purity) || purity <= 0)
             {
@@ -175,6 +180,12 @@ namespace PreciousMetalsManager.Views
             if (IsEditMode && string.IsNullOrWhiteSpace(FormTextBox.Text))
             {
                 FormTextBox.Text = _originalFormText;
+            }
+
+            if (!string.IsNullOrWhiteSpace(FormTextBox.Text))
+            {
+                FormTextBox.ClearValue(BorderBrushProperty);
+                FormTextBox.ClearValue(BorderThicknessProperty);
             }
         }
 
