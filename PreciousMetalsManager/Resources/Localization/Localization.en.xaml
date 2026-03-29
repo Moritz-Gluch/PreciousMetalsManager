@@ -56,23 +56,11 @@
     <sys:String x:Key="HoldingDialog_Btn_Cancel">Cancel</sys:String>
     <sys:String x:Key="HoldingDialog_Btn_AddAnother">Add another</sys:String>
 
-    <!-- HoldingDialog (validation) -->
-    <sys:String x:Key="HoldingDialog_Msg_SelectMetalType">Please select a metal type.</sys:String>
-    <sys:String x:Key="HoldingDialog_Msg_FormRequired">Form / Variant is required.</sys:String>
-    <sys:String x:Key="HoldingDialog_Msg_PurityPositive">Purity must be a positive number.</sys:String>
-    <sys:String x:Key="HoldingDialog_Msg_WeightPositive">Weight must be a positive number.</sys:String>
-    <sys:String x:Key="HoldingDialog_Msg_QuantityPositiveWhole">Quantity must be a positive whole number.</sys:String>
-    <sys:String x:Key="HoldingDialog_Msg_PurchasePriceNonNegative">Purchase price must be zero or greater.</sys:String>
-    <sys:String x:Key="HoldingDialog_Msg_SelectPurchaseDate">Please select a purchase date.</sys:String>
-
     <!-- EditPricesDialog -->
     <sys:String x:Key="EditPricesDialog_Title">Edit metal prices</sys:String>
     <sys:String x:Key="EditPricesDialog_HintText">Please enter the current prices:</sys:String>
     <sys:String x:Key="EditPricesDialog_Btn_Save">Save</sys:String>
     <sys:String x:Key="EditPricesDialog_Btn_Cancel">Cancel</sys:String>
-
-    <!-- EditPricesDialog (validation) -->
-    <sys:String x:Key="EditPricesDialog_Msg_InvalidPrice">Please enter a valid, non-negative price for all metals.</sys:String>
 
     <!-- Window titles -->
     <sys:String x:Key="MainWindow_Title">Precious Metals Manager</sys:String>
