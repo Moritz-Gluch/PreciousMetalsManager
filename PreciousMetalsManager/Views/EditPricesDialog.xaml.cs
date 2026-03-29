@@ -33,9 +33,6 @@ namespace PreciousMetalsManager.Views
             DataContext = this;
         }
 
-        private static string L(string key)
-            => Application.Current?.TryFindResource(key) as string ?? key;
-
         private static bool TryParseNonNegativePrice(string text, out decimal value)
             => decimal.TryParse(text.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out value) && value >= 0;
 
@@ -51,31 +48,31 @@ namespace PreciousMetalsManager.Views
         {
             if (!TryParseNonNegativePrice(GoldPriceTextBox.Text, out var gold))
             {
-                MessageBox.Show(L("EditPricesDialog_Msg_InvalidPrice"));
+                GoldPriceTextBox.Focus();
                 return;
             }
 
             if (!TryParseNonNegativePrice(SilverPriceTextBox.Text, out var silver))
             {
-                MessageBox.Show(L("EditPricesDialog_Msg_InvalidPrice"));
+                SilverPriceTextBox.Focus();
                 return;
             }
 
             if (!TryParseNonNegativePrice(PlatinumPriceTextBox.Text, out var platinum))
             {
-                MessageBox.Show(L("EditPricesDialog_Msg_InvalidPrice"));
+                PlatinumPriceTextBox.Focus();
                 return;
             }
 
             if (!TryParseNonNegativePrice(PalladiumPriceTextBox.Text, out var palladium))
             {
-                MessageBox.Show(L("EditPricesDialog_Msg_InvalidPrice"));
+                PalladiumPriceTextBox.Focus();
                 return;
             }
 
             if (!TryParseNonNegativePrice(BroncePriceTextBox.Text, out var bronce))
             {
-                MessageBox.Show(L("EditPricesDialog_Msg_InvalidPrice"));
+                BroncePriceTextBox.Focus();
                 return;
             }
 

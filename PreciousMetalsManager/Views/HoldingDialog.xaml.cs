@@ -38,15 +38,12 @@ namespace PreciousMetalsManager.Views
             }
         }
 
-        private static string L(string key)
-            => Application.Current?.TryFindResource(key) as string ?? key;
-
         private bool TryCreateHolding()
         {
             // Goes sure no field is empty or unvalid
             if (MetalTypeComboBox.SelectedItem == null)
             {
-                MessageBox.Show(L("HoldingDialog_Msg_SelectMetalType"));
+                MetalTypeComboBox.Focus();
                 return false;
             }
 
@@ -63,31 +60,31 @@ namespace PreciousMetalsManager.Views
 
             if (!decimal.TryParse(PurityComboBox.Text.Replace(',', '.'), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var purity) || purity <= 0)
             {
-                MessageBox.Show(L("HoldingDialog_Msg_PurityPositive"));
+                PurityComboBox.Focus();
                 return false;
             }
 
             if (!decimal.TryParse(WeightTextBox.Text.Replace(',', '.'), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var weight) || weight <= 0)
             {
-                MessageBox.Show(L("HoldingDialog_Msg_WeightPositive"));
+                WeightTextBox.Focus();
                 return false;
             }
 
             if (!int.TryParse(QuantityTextBox.Text, out var quantity) || quantity <= 0)
             {
-                MessageBox.Show(L("HoldingDialog_Msg_QuantityPositiveWhole"));
+                QuantityTextBox.Focus();
                 return false;
             }
 
             if (!decimal.TryParse(PurchasePriceTextBox.Text.Replace(',', '.'), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var price) || price < 0)
             {
-                MessageBox.Show(L("HoldingDialog_Msg_PurchasePriceNonNegative"));
+                PurchasePriceTextBox.Focus();
                 return false;
             }
 
             if (PurchaseDatePicker.SelectedDate == null)
             {
-                MessageBox.Show(L("HoldingDialog_Msg_SelectPurchaseDate"));
+                PurchaseDatePicker.Focus();
                 return false;
             }
 
