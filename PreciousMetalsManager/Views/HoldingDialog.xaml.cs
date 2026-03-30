@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Globalization;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using PreciousMetalsManager.Domain;
 using PreciousMetalsManager.Models;
 
 namespace PreciousMetalsManager.Views
@@ -11,6 +14,20 @@ namespace PreciousMetalsManager.Views
     /// </summary>
     public partial class HoldingDialog : Window
     {
+        private const int MinimumQuantity = 1;
+        private const int MinimumPrice = 0;
+        private const decimal MinimumWeight = 0.01m;
+        private const decimal MinimumPurity = 0.1m;
+        private const int PurityDecimalPlaces = 1;
+        private const int WeightDecimalPlaces = 2;
+        private const string PurityNumberFormat = "F1";
+        private const string WeightNumberFormat = "F2";
+        private const string PriceNumberFormat = "F2";
+        private const decimal MinimumPositiveWeight = 0.01m;
+
+        private static readonly Regex IntegerInputRegex = new(@"^[0-9]+$");
+        private static readonly Regex DecimalInputRegex = new(@"^[0-9\.,]+$");
+
         public CollectableType SelectedCollectableType { get; set; } = CollectableType.Bullion;
 
         public MetalHolding? NewHolding { get; private set; }
@@ -20,6 +37,18 @@ namespace PreciousMetalsManager.Views
 
         private string _originalFormText = string.Empty;
 
+        private static string DefaultPurityText =>
+            DomainReferenceData.PreciousMetals.MaximumFinenessPermille.ToString(PurityNumberFormat, CultureInfo.InvariantCulture);
+
+        private static string DefaultWeightText =>
+            1m.ToString(WeightNumberFormat, CultureInfo.InvariantCulture);
+
+        private static string DefaultQuantityText =>
+            MinimumQuantity.ToString(CultureInfo.InvariantCulture);
+
+        private static string DefaultPurchasePriceText =>
+            0m.ToString(PriceNumberFormat, CultureInfo.InvariantCulture);
+
         public HoldingDialog()
         {
             InitializeComponent();
@@ -27,8 +56,32 @@ namespace PreciousMetalsManager.Views
             MetalTypeComboBox.SelectedIndex = 0;
             PurchaseDatePicker.SelectedDate = DateTime.Today;
 
+            PurityComboBox.Text = DefaultPurityText;
+            WeightTextBox.Text = DefaultWeightText;
+            QuantityTextBox.Text = DefaultQuantityText;
+            PurchasePriceTextBox.Text = DefaultPurchasePriceText;
+
             Loaded += HoldingDialog_Loaded;
         }
+
+        private static string NormalizeDecimalInput(string text)
+            => text.Replace(',', '.');
+
+        private static bool TryParseInvariantDecimal(string text, out decimal value)
+            => decimal.TryParse(
+                NormalizeDecimalInput(text),
+                NumberStyles.Any,
+                CultureInfo.InvariantCulture,
+                out value);
+
+        private static string FormatPurity(decimal value)
+            => value.ToString(PurityNumberFormat, CultureInfo.InvariantCulture);
+
+        private static string FormatWeight(decimal value)
+            => value.ToString(WeightNumberFormat, CultureInfo.InvariantCulture);
+
+        private static string FormatPrice(decimal value)
+            => value.ToString(PriceNumberFormat, CultureInfo.InvariantCulture);
 
         private void HoldingDialog_Loaded(object sender, RoutedEventArgs e)
         {
@@ -40,7 +93,6 @@ namespace PreciousMetalsManager.Views
 
         private bool TryCreateHolding()
         {
-            // Goes sure no field is empty or unvalid
             if (MetalTypeComboBox.SelectedItem == null)
             {
                 MetalTypeComboBox.Focus();
@@ -58,25 +110,25 @@ namespace PreciousMetalsManager.Views
             FormTextBox.ClearValue(BorderBrushProperty);
             FormTextBox.ClearValue(BorderThicknessProperty);
 
-            if (!decimal.TryParse(PurityComboBox.Text.Replace(',', '.'), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var purity) || purity <= 0)
+            if (!TryParseInvariantDecimal(PurityComboBox.Text, out var purity) || purity < MinimumPurity)
             {
                 PurityComboBox.Focus();
                 return false;
             }
 
-            if (!decimal.TryParse(WeightTextBox.Text.Replace(',', '.'), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var weight) || weight <= 0)
+            if (!TryParseInvariantDecimal(WeightTextBox.Text, out var weight) || weight < MinimumWeight)
             {
                 WeightTextBox.Focus();
                 return false;
             }
 
-            if (!int.TryParse(QuantityTextBox.Text, out var quantity) || quantity <= 0)
+            if (!int.TryParse(QuantityTextBox.Text, out var quantity) || quantity < MinimumQuantity)
             {
                 QuantityTextBox.Focus();
                 return false;
             }
 
-            if (!decimal.TryParse(PurchasePriceTextBox.Text.Replace(',', '.'), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var price) || price < 0)
+            if (!TryParseInvariantDecimal(PurchasePriceTextBox.Text, out var price) || price < MinimumPrice)
             {
                 PurchasePriceTextBox.Focus();
                 return false;
@@ -88,7 +140,6 @@ namespace PreciousMetalsManager.Views
                 return false;
             }
 
-            // Saves new values
             NewHolding = new MetalHolding
             {
                 MetalType = (MetalType)MetalTypeComboBox.SelectedItem,
@@ -99,8 +150,6 @@ namespace PreciousMetalsManager.Views
                 PurchasePrice = price,
                 PurchaseDate = PurchaseDatePicker.SelectedDate.Value,
                 CollectableType = SelectedCollectableType,
-                CurrentValue = 0,
-                TotalValue = 0
             };
 
             return true;
@@ -135,40 +184,38 @@ namespace PreciousMetalsManager.Views
 
         private void IncreaseQuantity_Click(object sender, RoutedEventArgs e)
         {
-            if (int.TryParse(QuantityTextBox.Text, out int value))
+            if (int.TryParse(QuantityTextBox.Text, out var value))
             {
-                QuantityTextBox.Text = (value + 1).ToString();
+                QuantityTextBox.Text = (value + 1).ToString(CultureInfo.InvariantCulture);
             }
             else
             {
-                QuantityTextBox.Text = "1";
+                QuantityTextBox.Text = DefaultQuantityText;
             }
         }
 
         private void DecreaseQuantity_Click(object sender, RoutedEventArgs e)
         {
-            if (int.TryParse(QuantityTextBox.Text, out int value) && value > 1)
+            if (int.TryParse(QuantityTextBox.Text, out var value) && value > MinimumQuantity)
             {
-                QuantityTextBox.Text = (value - 1).ToString();
+                QuantityTextBox.Text = (value - 1).ToString(CultureInfo.InvariantCulture);
             }
             else
             {
-                QuantityTextBox.Text = "1";
+                QuantityTextBox.Text = DefaultQuantityText;
             }
         }
 
         private void QuantityTextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
-            // Allows only numbers to be entered
-            e.Handled = !System.Text.RegularExpressions.Regex.IsMatch(e.Text, @"^[0-9]+$");
+            e.Handled = !IntegerInputRegex.IsMatch(e.Text);
         }
 
         private void QuantityTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            // Corrects invalid values to 1
-            if (!int.TryParse(QuantityTextBox.Text, out int value) || value < 1)
+            if (!int.TryParse(QuantityTextBox.Text, out var value) || value < MinimumQuantity)
             {
-                QuantityTextBox.Text = "1";
+                QuantityTextBox.Text = DefaultQuantityText;
             }
         }
 
@@ -188,78 +235,65 @@ namespace PreciousMetalsManager.Views
 
         private void PurityComboBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
-            // Allows only numbers, commas and dots to be entered
-            e.Handled = !System.Text.RegularExpressions.Regex.IsMatch(e.Text, @"^[0-9\.,]+$");
+            e.Handled = !DecimalInputRegex.IsMatch(e.Text);
         }
 
         private void PurityComboBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            var text = PurityComboBox.Text.Replace(',', '.');
-            if (!decimal.TryParse(text, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var value))
+            if (!TryParseInvariantDecimal(PurityComboBox.Text, out var value))
             {
-                // Corrects invalid values to 999,9
-                PurityComboBox.Text = "999.9";
+                PurityComboBox.Text = DefaultPurityText;
                 return;
             }
 
-            // Rounds the value to 1 decimal place
-            var rounded = Math.Round(value, 1, MidpointRounding.AwayFromZero);
+            var rounded = Math.Round(value, PurityDecimalPlaces, MidpointRounding.AwayFromZero);
 
-            if (rounded > 999.9m)
-                rounded = 999.9m;
-            else if (rounded < 0.1m)
-                rounded = 0.1m;
+            if (rounded > DomainReferenceData.PreciousMetals.MaximumFinenessPermille)
+                rounded = DomainReferenceData.PreciousMetals.MaximumFinenessPermille;
+            else if (rounded < DomainReferenceData.PreciousMetals.MinimumFinenessPermille)
+                rounded = DomainReferenceData.PreciousMetals.MinimumFinenessPermille;
 
-            PurityComboBox.Text = rounded.ToString("F1", System.Globalization.CultureInfo.InvariantCulture);
+            PurityComboBox.Text = FormatPurity(rounded);
         }
 
         private void PurchasePriceTextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
-            // Allows only numbers, commas and dots to be entered
-            e.Handled = !System.Text.RegularExpressions.Regex.IsMatch(e.Text, @"^[0-9\.,]+$");
+            e.Handled = !DecimalInputRegex.IsMatch(e.Text);
         }
 
         private void PurchasePriceTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            var text = PurchasePriceTextBox.Text.Replace(',', '.');
-            if (!decimal.TryParse(text, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var value) || value < 0)
+            if (!TryParseInvariantDecimal(PurchasePriceTextBox.Text, out var value) || value < 0)
             {
-                // Corrects invalid values to 0.00
-                PurchasePriceTextBox.Text = "0.00";
+                PurchasePriceTextBox.Text = DefaultPurchasePriceText;
             }
             else
             {
-                // Formats the value to 2 decimal places
-                PurchasePriceTextBox.Text = value.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
+                PurchasePriceTextBox.Text = FormatPrice(value);
             }
         }
 
         private void WeightTextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
-            // Allows only numbers, commas and dots to be entered
-            e.Handled = !System.Text.RegularExpressions.Regex.IsMatch(e.Text, @"^[0-9\.,]+$");
+            e.Handled = !DecimalInputRegex.IsMatch(e.Text);
         }
 
         private void WeightTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            var text = WeightTextBox.Text.Replace(',', '.');
-
-            // Corrects invalid values
-            if (!decimal.TryParse(text, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var value) || value <= 0)
+            if (!TryParseInvariantDecimal(WeightTextBox.Text, out var value) || value <= 0)
             {
-                WeightTextBox.Text = "1.00";
+                WeightTextBox.Text = DefaultWeightText;
                 return;
             }
 
-            var formatted = value.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
-
-            if (formatted == "0.00")
+            var rounded = Math.Round(value, WeightDecimalPlaces, MidpointRounding.AwayFromZero);
+            if (rounded < MinimumPositiveWeight)
             {
-                WeightTextBox.Text = "0.01";
+                WeightTextBox.Text = FormatWeight(MinimumPositiveWeight);
                 return;
             }
 
-            WeightTextBox.Text = formatted;
+            WeightTextBox.Text = FormatWeight(rounded);
         }
 
         private void PurchaseDatePicker_LostFocus(object sender, RoutedEventArgs e)

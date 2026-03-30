@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Microsoft.Win32;
+using System.Globalization;
+using PreciousMetalsManager.Domain;
 
 namespace PreciousMetalsManager.ViewModels
 {
@@ -101,6 +103,22 @@ namespace PreciousMetalsManager.ViewModels
         private readonly DispatcherTimer _autoRefreshTimer;
         private bool _isReloadingHoldings;
 
+        // Auto-refresh every 15 minutes
+        private const int AutoRefreshIntervalMinutes = 15;
+        private const int PriceDecimalPlaces = 2;
+        private const string PriceNumberFormat = "F2";
+        private const string PurityNumberFormat = "F1";
+        private const string ExportFileDateFormat = "dd-MM-yyyy";
+        private const string ImportExportCsvDateFormat = "yyyy-MM-dd";
+
+        private static decimal ConvertOuncePriceToGramPrice(decimal ouncePrice)
+            => Math.Round(
+                ouncePrice / DomainReferenceData.PreciousMetals.RoundedTroyOunceInGrams,
+                PriceDecimalPlaces);
+
+        private static string FormatPrice(decimal value)
+            => value.ToString(PriceNumberFormat, CultureInfo.InvariantCulture);
+
         public ViewModel(LocalStorageService? storage = null)
         {
             _storage = storage ?? new LocalStorageService();
@@ -115,10 +133,9 @@ namespace PreciousMetalsManager.ViewModels
 
             RefreshPricesCommand = new RelayCommand(async _ => await UpdateMarketPricesAsync());
 
-            // Auto-refresh every 15 minutes
             _autoRefreshTimer = new DispatcherTimer
             {
-                Interval = TimeSpan.FromMinutes(15)
+                Interval = TimeSpan.FromMinutes(AutoRefreshIntervalMinutes)
             };
             _autoRefreshTimer.Tick += async (s, e) => await UpdateMarketPricesAsync();
             _autoRefreshTimer.Start();
@@ -178,8 +195,10 @@ namespace PreciousMetalsManager.ViewModels
             foreach (var holding in Holdings)
             {
                 var price = GetMarketPrice(holding.MetalType);
-                // A Purity of 999.9 is considered as highest purity (100%)
-                holding.CurrentValue = holding.Weight * (holding.Purity / 999.9m) * price;
+                holding.CurrentValue =
+                    holding.Weight *
+                    (holding.Purity / DomainReferenceData.PreciousMetals.MaximumFinenessPermille) *
+                    price;
                 holding.TotalValue = holding.CurrentValue * holding.Quantity;
             }
         }
@@ -262,8 +281,7 @@ namespace PreciousMetalsManager.ViewModels
             }
         }
 
-        // Hardcoded here for now, may be extended in the future to also use different currencies and units
-        private string _priceUnit = "€/g";
+        private string _priceUnit = DomainReferenceData.Currency.PricePerGramUnit;
         public string PriceUnit
         {
             get => _priceUnit;
@@ -282,22 +300,20 @@ namespace PreciousMetalsManager.ViewModels
             }
         }
 
-        public string CurrencyUnit => "(€)";
-        public string CurrencyUnitSimplyfied => "€";
-        public string WeightUnit => "(g)";
-        public string PurityUnit => "(‰)";
+        public string CurrencyUnit => DomainReferenceData.Currency.CurrencyUnit;
+        public string CurrencyUnitSimplyfied => DomainReferenceData.Currency.SimplifiedCurrencyUnit;
+        public string WeightUnit => DomainReferenceData.Currency.WeightUnit;
+        public string PurityUnit => DomainReferenceData.Currency.PurityUnit;
 
-        // Common purities for metals for easy selection in the UI, may be adjusted in the future
-        public ObservableCollection<string> CommonPurities { get; } = new()
-        {
-            "999.9", "925.0", "900.0", "835.0", "800.0", "750.0", "625.0"
-        };
+        public ObservableCollection<string> CommonPurities { get; } = new(
+            DomainReferenceData.PreciousMetals.CommonFinenessValues
+                .Select(value => value.ToString(PurityNumberFormat, CultureInfo.InvariantCulture)));
 
-        public string GoldPriceDisplay => $"{GoldPrice:F2}{PriceUnit}";
-        public string SilverPriceDisplay => $"{SilverPrice:F2}{PriceUnit}";
-        public string PlatinumPriceDisplay => $"{PlatinumPrice:F2}{PriceUnit}";
-        public string PalladiumPriceDisplay => $"{PalladiumPrice:F2}{PriceUnit}";
-        public string BroncePriceDisplay => $"{BroncePrice:F2}{PriceUnit}";
+        public string GoldPriceDisplay => $"{FormatPrice(GoldPrice)}{PriceUnit}";
+        public string SilverPriceDisplay => $"{FormatPrice(SilverPrice)}{PriceUnit}";
+        public string PlatinumPriceDisplay => $"{FormatPrice(PlatinumPrice)}{PriceUnit}";
+        public string PalladiumPriceDisplay => $"{FormatPrice(PalladiumPrice)}{PriceUnit}";
+        public string BroncePriceDisplay => $"{FormatPrice(BroncePrice)}{PriceUnit}";
 
         private decimal GetMarketPrice(MetalType type)
         {
@@ -449,13 +465,10 @@ namespace PreciousMetalsManager.ViewModels
                 return;
             }
 
-            // 1 troy ounce = 31.1g (may be adjusted to the exact value in the future)
-            const decimal gramsPerOunce = 31.1m;
-
-            var goldPrice = Math.Round(dto.GoldEur / gramsPerOunce, 2);
-            var silverPrice = Math.Round(dto.SilverEur / gramsPerOunce, 2);
-            var platinumPrice = Math.Round(dto.PlatinumEur / gramsPerOunce, 2);
-            var palladiumPrice = Math.Round(dto.PalladiumEur / gramsPerOunce, 2);
+            var goldPrice = ConvertOuncePriceToGramPrice(dto.GoldEur);
+            var silverPrice = ConvertOuncePriceToGramPrice(dto.SilverEur);
+            var platinumPrice = ConvertOuncePriceToGramPrice(dto.PlatinumEur);
+            var palladiumPrice = ConvertOuncePriceToGramPrice(dto.PalladiumEur);
 
             var hasChanges = false;
             hasChanges |= SetPriceCore(ref _goldPrice, goldPrice, nameof(GoldPrice), nameof(GoldPriceDisplay));
@@ -566,7 +579,7 @@ namespace PreciousMetalsManager.ViewModels
 
         private void ExportSimpleHoldings()
         {
-            var dateString = DateTime.Now.ToString("dd-MM-yyyy");
+            var dateString = DateTime.Now.ToString(ExportFileDateFormat, CultureInfo.InvariantCulture);
             var exportFileName = $"{L("ExportButton")}_{dateString}.csv";
 
             var saveFileDialog = new SaveFileDialog
@@ -599,7 +612,7 @@ namespace PreciousMetalsManager.ViewModels
 
         private void ExportDetailedHoldings()
         {
-            var dateString = DateTime.Now.ToString("dd-MM-yyyy");
+            var dateString = DateTime.Now.ToString(ExportFileDateFormat, CultureInfo.InvariantCulture);
             var detailedSuffix = L("ExportDialog_Detailed");
             var exportFileName = $"{L("ExportButton")}_{dateString}_{detailedSuffix}.csv";
 
@@ -635,11 +648,12 @@ namespace PreciousMetalsManager.ViewModels
         {
             try
             {
-                var dialog = new Microsoft.Win32.OpenFileDialog
+                var dialog = new OpenFileDialog
                 {
-                    Filter = "CSV-Dateien (*.csv)|*.csv",
+                    Filter = L("ImportDialog_Filter"),
                     Title = L("ImportDialog_Title")
                 };
+
                 if (dialog.ShowDialog() != true)
                     return;
 
@@ -648,10 +662,13 @@ namespace PreciousMetalsManager.ViewModels
                     throw new InvalidOperationException(L("ImportDialog_NoData"));
 
                 var newHoldings = new List<MetalHolding>();
-                int lineNumber = 1;
+                var lineNumber = 1;
+
                 foreach (var line in lines)
                 {
-                    if (string.IsNullOrWhiteSpace(line)) continue;
+                    if (string.IsNullOrWhiteSpace(line))
+                        continue;
+
                     var values = line.Split(';');
                     if (values.Length < 8)
                         throw new FormatException($"{L("ImportDialog_InvalidFormat")} (Line {lineNumber})");
@@ -667,14 +684,16 @@ namespace PreciousMetalsManager.ViewModels
                             Weight = decimal.Parse(values[4]),
                             Quantity = int.Parse(values[5]),
                             PurchasePrice = decimal.Parse(values[6]),
-                            PurchaseDate = DateTime.ParseExact(values[7], "yyyy-MM-dd", null)
+                            PurchaseDate = DateTime.ParseExact(values[7], ImportExportCsvDateFormat, CultureInfo.InvariantCulture)
                         };
+
                         newHoldings.Add(holding);
                     }
                     catch (Exception)
                     {
                         throw new FormatException($"{L("ImportDialog_InvalidFormat")} (Line {lineNumber})");
                     }
+
                     lineNumber++;
                 }
 

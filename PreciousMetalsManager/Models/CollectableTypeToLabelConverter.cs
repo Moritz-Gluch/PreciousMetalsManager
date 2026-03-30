@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
+using PreciousMetalsManager.Domain;
 using PreciousMetalsManager.Models;
 
 namespace PreciousMetalsManager.Models
@@ -35,15 +36,7 @@ namespace PreciousMetalsManager.Models
 
         private static string GetLabelWithoutColon(CollectableType collectableType)
         {
-            var key = collectableType switch
-            {
-                CollectableType.Bullion => "CollectableType_Bullion",
-                CollectableType.SemiNumismatic => "CollectableType_SemiNumismatic",
-                CollectableType.Numismatic => "CollectableType_Numismatic",
-                _ => null
-            };
-
-            if (key is null)
+            if (!DomainReferenceData.TryGetCollectableLabelResourceKey(collectableType, out var key))
                 return collectableType.ToString();
 
             var label = Application.Current.TryFindResource(key) as string;

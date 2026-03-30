@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using PreciousMetalsManager.Domain;
 
 namespace PreciousMetalsManager.Models
 {
@@ -106,7 +107,7 @@ namespace PreciousMetalsManager.Models
                 if (PurchaseDate == default)
                     return string.Empty;
 
-                var taxFreeDate = PurchaseDate.Date.AddYears(1);
+                var taxFreeDate = PurchaseDate.Date.AddYears(DomainReferenceData.Tax.TaxFreeHoldingPeriodYears);
                 if (DateTime.Today >= taxFreeDate)
                     return L("TaxFreeStatus_Yes");
                 else
@@ -118,7 +119,7 @@ namespace PreciousMetalsManager.Models
         /// True if the holding period is at least 1 year.
         /// </summary>
         public bool IsTaxFree =>
-            PurchaseDate != default && DateTime.Today >= PurchaseDate.Date.AddYears(1);
+            PurchaseDate != default && DateTime.Today >= PurchaseDate.Date.AddYears(DomainReferenceData.Tax.TaxFreeHoldingPeriodYears);
 
         /// <summary>
         /// Notifies the UI that TaxFreeStatus and IsTaxFree have changed.
@@ -137,8 +138,9 @@ namespace PreciousMetalsManager.Models
             get
             {
                 if (PurchaseDate == default)
-                    return int.MaxValue; // Unset dates last
-                var taxFreeDate = PurchaseDate.Date.AddYears(1);
+                    return int.MaxValue;
+
+                var taxFreeDate = PurchaseDate.Date.AddYears(DomainReferenceData.Tax.TaxFreeHoldingPeriodYears);
                 return DateTime.Today >= taxFreeDate ? 0 : (taxFreeDate - DateTime.Today).Days;
             }
         }
