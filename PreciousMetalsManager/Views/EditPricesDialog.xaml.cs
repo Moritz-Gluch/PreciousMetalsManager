@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,6 +11,10 @@ namespace PreciousMetalsManager.Views
     /// </summary>
     public partial class EditPricesDialog : Window
     {
+        private const string PriceNumberFormat = "F2";
+        private static readonly string DefaultPriceText = 0m.ToString(PriceNumberFormat, CultureInfo.InvariantCulture);
+        private static readonly Regex PriceInputRegex = new(@"^[0-9\.,]+$");
+
         public decimal GoldPrice { get; private set; }
         public decimal SilverPrice { get; private set; }
         public decimal PlatinumPrice { get; private set; }
@@ -19,29 +22,40 @@ namespace PreciousMetalsManager.Views
         public decimal BroncePrice { get; private set; }
         public string PriceUnit { get; }
 
-        private static readonly Regex PriceInputRegex = new(@"^[0-9\.,]+$");
-
         public EditPricesDialog(decimal gold, decimal silver, decimal platinum, decimal palladium, decimal bronce, string priceUnit)
         {
             InitializeComponent();
-            GoldPriceTextBox.Text = gold.ToString("F2", CultureInfo.InvariantCulture);
-            SilverPriceTextBox.Text = silver.ToString("F2", CultureInfo.InvariantCulture);
-            PlatinumPriceTextBox.Text = platinum.ToString("F2", CultureInfo.InvariantCulture);
-            PalladiumPriceTextBox.Text = palladium.ToString("F2", CultureInfo.InvariantCulture);
-            BroncePriceTextBox.Text = bronce.ToString("F2", CultureInfo.InvariantCulture);
+            GoldPriceTextBox.Text = FormatPrice(gold);
+            SilverPriceTextBox.Text = FormatPrice(silver);
+            PlatinumPriceTextBox.Text = FormatPrice(platinum);
+            PalladiumPriceTextBox.Text = FormatPrice(palladium);
+            BroncePriceTextBox.Text = FormatPrice(bronce);
             PriceUnit = priceUnit;
             DataContext = this;
         }
 
+        private static string NormalizeDecimalInput(string text)
+            => text.Replace(',', '.');
+
+        private static bool TryParseInvariantDecimal(string text, out decimal value)
+            => decimal.TryParse(
+                NormalizeDecimalInput(text),
+                NumberStyles.Any,
+                CultureInfo.InvariantCulture,
+                out value);
+
+        private static string FormatPrice(decimal value)
+            => value.ToString(PriceNumberFormat, CultureInfo.InvariantCulture);
+
         private static bool TryParseNonNegativePrice(string text, out decimal value)
-            => decimal.TryParse(text.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out value) && value >= 0;
+            => TryParseInvariantDecimal(text, out value) && value >= 0;
 
         private static string NormalizeNonNegativePrice(string text)
         {
             if (!TryParseNonNegativePrice(text, out var value))
-                return "0.00";
+                return DefaultPriceText;
 
-            return value.ToString("F2", CultureInfo.InvariantCulture);
+            return FormatPrice(value);
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
@@ -88,7 +102,6 @@ namespace PreciousMetalsManager.Views
 
         private void PriceTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            // Allows only numbers, commas and dots to be entered
             e.Handled = !PriceInputRegex.IsMatch(e.Text);
         }
 

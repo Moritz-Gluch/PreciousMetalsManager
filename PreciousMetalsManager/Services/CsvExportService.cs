@@ -1,19 +1,25 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Windows;
+using PreciousMetalsManager.Domain;
 using PreciousMetalsManager.Models;
 
 namespace PreciousMetalsManager.Services
 {
     public static class CsvExportService
     {
+        private const string SimpleExportDateFormat = "yyyy-MM-dd";
+        private const string DetailedExportDateFormat = "dd.MM.yyyy";
+        private const string PriceNumberFormat = "F2";
+
         public static void ExportHoldings(IEnumerable<MetalHolding> holdings, string filePath)
         {
             var sb = new StringBuilder();
             foreach (var h in holdings)
             {
-                sb.AppendLine($"{(int)h.MetalType};{h.Form};{(int)h.CollectableType};{h.Purity};{h.Weight};{h.Quantity};{h.PurchasePrice};{h.PurchaseDate:yyyy-MM-dd}");
+                sb.AppendLine($"{(int)h.MetalType};{h.Form};{(int)h.CollectableType};{h.Purity};{h.Weight};{h.Quantity};{h.PurchasePrice};{h.PurchaseDate.ToString(SimpleExportDateFormat, CultureInfo.InvariantCulture)}");
             }
             File.WriteAllText(filePath, sb.ToString(), Encoding.UTF8);
         }
@@ -24,23 +30,15 @@ namespace PreciousMetalsManager.Services
 
             string L(string key) => Application.Current?.TryFindResource(key) as string ?? key;
 
-            static string GetMetalTypeKey(MetalType metalType) => metalType switch
-            {
-                MetalType.Gold => "Lbl_Gold",
-                MetalType.Silver => "Lbl_Silver",
-                MetalType.Platinum => "Lbl_Platinum",
-                MetalType.Palladium => "Lbl_Palladium",
-                MetalType.Bronce => "Lbl_Bronce",
-                _ => metalType.ToString()
-            };
+            static string GetMetalTypeKey(MetalType metalType)
+                => DomainReferenceData.TryGetMetalLabelResourceKey(metalType, out var key)
+                    ? key
+                    : metalType.ToString();
 
-            static string GetCollectableTypeKey(CollectableType collectableType) => collectableType switch
-            {
-                CollectableType.Bullion => "CollectableType_Bullion",
-                CollectableType.SemiNumismatic => "CollectableType_SemiNumismatic",
-                CollectableType.Numismatic => "CollectableType_Numismatic",
-                _ => collectableType.ToString()
-            };
+            static string GetCollectableTypeKey(CollectableType collectableType)
+                => DomainReferenceData.TryGetCollectableLabelResourceKey(collectableType, out var key)
+                    ? key
+                    : collectableType.ToString();
 
             static string TrimTrailingColon(string s) => string.IsNullOrWhiteSpace(s) ? s : s.TrimEnd().TrimEnd(':');
 
@@ -67,8 +65,8 @@ namespace PreciousMetalsManager.Services
                     $"{h.Purity}; " +
                     $"{h.Weight}; " +
                     $"{h.Quantity}; " +
-                    $"{h.PurchasePrice:F2}; " +
-                    $"{h.PurchaseDate:dd.MM.yyyy}; "
+                    $"{h.PurchasePrice.ToString(PriceNumberFormat, CultureInfo.InvariantCulture)}; " +
+                    $"{h.PurchaseDate.ToString(DetailedExportDateFormat, CultureInfo.InvariantCulture)}; "
                 );
             }
 

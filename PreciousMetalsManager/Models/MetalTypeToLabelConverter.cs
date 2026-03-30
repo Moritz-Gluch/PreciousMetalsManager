@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
+using PreciousMetalsManager.Domain;
 using PreciousMetalsManager.Models;
 
 namespace PreciousMetalsManager.Models
@@ -37,17 +38,7 @@ namespace PreciousMetalsManager.Models
 
         private static string GetLabelWithoutColon(MetalType metalType)
         {
-            var key = metalType switch
-            {
-                MetalType.Gold => "Lbl_Gold",
-                MetalType.Silver => "Lbl_Silver",
-                MetalType.Platinum => "Lbl_Platinum",
-                MetalType.Palladium => "Lbl_Palladium",
-                MetalType.Bronce => "Lbl_Bronce",
-                _ => null
-            };
-
-            if (key is null)
+            if (!DomainReferenceData.TryGetMetalLabelResourceKey(metalType, out var key))
                 return metalType.ToString();
 
             var label = Application.Current.TryFindResource(key) as string;
