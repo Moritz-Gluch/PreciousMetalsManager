@@ -18,59 +18,73 @@ namespace PreciousMetalsManager.Views
 
         public bool IsEditMode { get; set; }
 
+        private string _originalFormText = string.Empty;
+
         public HoldingDialog()
         {
             InitializeComponent();
             MetalTypeComboBox.ItemsSource = Enum.GetValues(typeof(MetalType));
             MetalTypeComboBox.SelectedIndex = 0;
-            PurchaseDatePicker.SelectedDate = DateTime.Now;
+            PurchaseDatePicker.SelectedDate = DateTime.Today;
+
+            Loaded += HoldingDialog_Loaded;
         }
 
-        private static string L(string key)
-            => Application.Current?.TryFindResource(key) as string ?? key;
+        private void HoldingDialog_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (IsEditMode)
+            {
+                _originalFormText = FormTextBox.Text;
+            }
+        }
 
         private bool TryCreateHolding()
         {
             // Goes sure no field is empty or unvalid
             if (MetalTypeComboBox.SelectedItem == null)
             {
-                MessageBox.Show(L("HoldingDialog_Msg_SelectMetalType"));
+                MetalTypeComboBox.Focus();
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(FormTextBox.Text))
             {
-                MessageBox.Show(L("HoldingDialog_Msg_FormRequired"));
+                FormTextBox.BorderBrush = System.Windows.Media.Brushes.IndianRed;
+                FormTextBox.BorderThickness = new Thickness(2);
+                FormTextBox.Focus();
                 return false;
             }
 
+            FormTextBox.ClearValue(BorderBrushProperty);
+            FormTextBox.ClearValue(BorderThicknessProperty);
+
             if (!decimal.TryParse(PurityComboBox.Text.Replace(',', '.'), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var purity) || purity <= 0)
             {
-                MessageBox.Show(L("HoldingDialog_Msg_PurityPositive"));
+                PurityComboBox.Focus();
                 return false;
             }
 
             if (!decimal.TryParse(WeightTextBox.Text.Replace(',', '.'), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var weight) || weight <= 0)
             {
-                MessageBox.Show(L("HoldingDialog_Msg_WeightPositive"));
+                WeightTextBox.Focus();
                 return false;
             }
 
             if (!int.TryParse(QuantityTextBox.Text, out var quantity) || quantity <= 0)
             {
-                MessageBox.Show(L("HoldingDialog_Msg_QuantityPositiveWhole"));
+                QuantityTextBox.Focus();
                 return false;
             }
 
-            if (!decimal.TryParse(PurchasePriceTextBox.Text, out var price) || price < 0)
+            if (!decimal.TryParse(PurchasePriceTextBox.Text.Replace(',', '.'), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var price) || price < 0)
             {
-                MessageBox.Show(L("HoldingDialog_Msg_PurchasePriceNonNegative"));
+                PurchasePriceTextBox.Focus();
                 return false;
             }
 
             if (PurchaseDatePicker.SelectedDate == null)
             {
-                MessageBox.Show(L("HoldingDialog_Msg_SelectPurchaseDate"));
+                PurchaseDatePicker.Focus();
                 return false;
             }
 
@@ -158,6 +172,20 @@ namespace PreciousMetalsManager.Views
             }
         }
 
+        private void FormTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (IsEditMode && string.IsNullOrWhiteSpace(FormTextBox.Text))
+            {
+                FormTextBox.Text = _originalFormText;
+            }
+
+            if (!string.IsNullOrWhiteSpace(FormTextBox.Text))
+            {
+                FormTextBox.ClearValue(BorderBrushProperty);
+                FormTextBox.ClearValue(BorderThicknessProperty);
+            }
+        }
+
         private void PurityComboBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
             // Allows only numbers, commas and dots to be entered
@@ -224,7 +252,7 @@ namespace PreciousMetalsManager.Views
             }
 
             var formatted = value.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
-            
+
             if (formatted == "0.00")
             {
                 WeightTextBox.Text = "0.01";
@@ -232,6 +260,14 @@ namespace PreciousMetalsManager.Views
             }
 
             WeightTextBox.Text = formatted;
+        }
+
+        private void PurchaseDatePicker_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (PurchaseDatePicker.SelectedDate == null)
+            {
+                PurchaseDatePicker.SelectedDate = DateTime.Today;
+            }
         }
     }
 }
