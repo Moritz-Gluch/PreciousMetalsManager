@@ -199,6 +199,7 @@ namespace PreciousMetalsManager.ViewModels
 
         public event PropertyChangedEventHandler? PropertyChanged;
         public event EventHandler<bool>? RequestCloseRequested;
+        public event EventHandler? RequestFormTextFocus;
 
         private static string NormalizeDecimalInput(string text)
             => text.Replace(',', '.');
@@ -291,9 +292,22 @@ namespace PreciousMetalsManager.ViewModels
                 QuantityText = DefaultQuantityText;
         }
 
+        private bool ValidateFormText()
+        {
+            if (!string.IsNullOrWhiteSpace(FormText))
+                return true;
+
+            RequestFormTextFocus?.Invoke(this, EventArgs.Empty);
+            return false;
+        }
+
         private void Save()
         {
             AddAnotherRequested = false;
+
+            if (!ValidateFormText())
+                return;
+
             if (!TryCreateHolding(out var holding))
                 return;
 
@@ -304,6 +318,10 @@ namespace PreciousMetalsManager.ViewModels
         private void AddAnother()
         {
             AddAnotherRequested = true;
+
+            if (!ValidateFormText())
+                return;
+
             if (!TryCreateHolding(out var holding))
                 return;
 

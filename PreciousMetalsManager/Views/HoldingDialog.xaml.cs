@@ -19,6 +19,13 @@ namespace PreciousMetalsManager.Views
         {
             DataContext = viewModel;
 
+            viewModel.RequestFormTextFocus += (_, _) =>
+            {
+                FormTextBox.BorderBrush = System.Windows.Media.Brushes.IndianRed;
+                FormTextBox.BorderThickness = new Thickness(2);
+                FormTextBox.Focus();
+            };
+
             viewModel.RequestCloseRequested += (_, accepted) =>
             {
                 DialogResult = accepted;
@@ -49,10 +56,20 @@ namespace PreciousMetalsManager.Views
         }
 
         private void QuantityTextBox_LostFocus(object sender, RoutedEventArgs e) => ViewModel?.NormalizeQuantityText();
-        private void FormTextBox_LostFocus(object sender, RoutedEventArgs e) => ViewModel?.RestoreFormTextIfNeeded();
         private void PurityComboBox_LostFocus(object sender, RoutedEventArgs e) => ViewModel?.NormalizePurityText();
         private void PurchasePriceTextBox_LostFocus(object sender, RoutedEventArgs e) => ViewModel?.NormalizePurchasePriceText();
         private void WeightTextBox_LostFocus(object sender, RoutedEventArgs e) => ViewModel?.NormalizeWeightText();
         private void PurchaseDatePicker_LostFocus(object sender, RoutedEventArgs e) => ViewModel?.EnsurePurchaseDate();
+
+        private void FormTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            ViewModel?.RestoreFormTextIfNeeded();
+
+            if (!string.IsNullOrWhiteSpace(FormTextBox.Text))
+            {
+                FormTextBox.ClearValue(BorderBrushProperty);
+                FormTextBox.ClearValue(BorderThicknessProperty);
+            }
+        }
     }
 }
