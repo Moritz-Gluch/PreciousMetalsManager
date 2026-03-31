@@ -75,24 +75,6 @@ namespace PreciousMetalsManager
             DispatcherPriority.Background);
         }
 
-        private void ExportButton_Click(object sender, RoutedEventArgs e)
-        {
-            var button = sender as Button;
-            if (button?.ContextMenu != null)
-            {
-                button.ContextMenu.PlacementTarget = button;
-                button.ContextMenu.IsOpen = true;
-            }
-        }
-
-        private void MainDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (DataContext is not ViewModel vm)
-                return;
-
-            vm.UpdateSelection(MainDataGrid.SelectedItems.OfType<Models.MetalHolding>());
-        }
-
         private void ViewModel_LanguageLayoutRefreshRequested(object? sender, EventArgs e)
         {
             MetalTypeFilterComboBox.Items.Refresh();

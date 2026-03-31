@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:models="clr-namespace:PreciousMetalsManager.Models"
+        xmlns:behaviors="clr-namespace:PreciousMetalsManager.Behaviors"
         mc:Ignorable="d"
         Title="{DynamicResource MainWindow_Title}" Height="450" Width="1000">
 
@@ -59,7 +60,10 @@
 
             <Border Padding="4" Background="#FFF8F8F8" CornerRadius="4">
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="{DynamicResource ExportButton}" Width="80" Margin="0,0,5,0" Click="ExportButton_Click">
+                    <Button Content="{DynamicResource ExportButton}"
+                            Width="80"
+                            Margin="0,0,5,0"
+                            behaviors:ButtonContextMenuBehavior.OpenOnClick="True">
                         <Button.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="{DynamicResource ExportDialog_Simple}" Command="{Binding ExportSimpleCommand}" />
@@ -140,7 +144,7 @@
             <DataGrid x:Name="MainDataGrid"
                       ItemsSource="{Binding FilteredHoldings}"
                       SelectedItem="{Binding SelectedHolding, Mode=TwoWay}"
-                      SelectionChanged="MainDataGrid_SelectionChanged"
+                      behaviors:DataGridSelectionBehavior.SelectionChangedCommand="{Binding UpdateSelectionCommand}"
                       AutoGenerateColumns="False"
                       CanUserAddRows="False"
                       IsReadOnly="True"
