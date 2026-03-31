@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Windows;
+using PreciousMetalsManager.ViewModels;
 using PreciousMetalsManager.Views;
 
 namespace PreciousMetalsManager.Services
@@ -14,13 +15,15 @@ namespace PreciousMetalsManager.Services
             decimal broncePrice,
             string priceUnit)
         {
-            var dialog = new EditPricesDialog(
+            var dialogViewModel = new EditPricesDialogViewModel(
                 goldPrice,
                 silverPrice,
                 platinumPrice,
                 palladiumPrice,
                 broncePrice,
-                priceUnit)
+                priceUnit);
+
+            var dialog = new EditPricesDialog(dialogViewModel)
             {
                 Owner = GetOwnerWindow()
             };
@@ -28,13 +31,12 @@ namespace PreciousMetalsManager.Services
             if (dialog.ShowDialog() != true)
                 return null;
 
-            var vm = dialog.ViewModel;
             return new PriceEditResult(
-                vm.GoldPrice,
-                vm.SilverPrice,
-                vm.PlatinumPrice,
-                vm.PalladiumPrice,
-                vm.BroncePrice);
+                dialogViewModel.GoldPrice,
+                dialogViewModel.SilverPrice,
+                dialogViewModel.PlatinumPrice,
+                dialogViewModel.PalladiumPrice,
+                dialogViewModel.BroncePrice);
         }
 
         private static Window? GetOwnerWindow()
