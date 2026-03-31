@@ -3,16 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:models="clr-namespace:PreciousMetalsManager.Models"
+        xmlns:converters="clr-namespace:PreciousMetalsManager.Converters"
         xmlns:behaviors="clr-namespace:PreciousMetalsManager.Behaviors"
         mc:Ignorable="d"
         Title="{DynamicResource MainWindow_Title}" Height="450" Width="1000">
 
     <Window.Resources>
-        <models:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-        <models:CollectableTypeToLabelConverter x:Key="CollectableTypeToLabelConverter"/>
-        <models:MetalTypeToLabelConverter x:Key="MetalTypeToLabelConverter"/>
-        <models:TaxFreeStatusConverter x:Key="TaxFreeStatusConverter"/>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <converters:MetalTypeToLabelConverter x:Key="MetalTypeToLabelConverter" />
+        <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+        <converters:CollectableTypeToLabelConverter x:Key="CollectableTypeToLabelConverter"/>
+        <converters:TaxFreeStatusConverter x:Key="TaxFreeStatusConverter"/>
     </Window.Resources>
 
     <Grid Margin="10">

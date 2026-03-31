@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace PreciousMetalsManager.Models
+namespace PreciousMetalsManager.Converters
 {
     public class EnumToBooleanConverter : IValueConverter
     {
