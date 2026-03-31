@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.ObjectModel;
 using PreciousMetalsManager.Models;
 using System.ComponentModel;
@@ -180,6 +181,18 @@ namespace PreciousMetalsManager.ViewModels
                 ToggleLanguage();
                 LanguageLayoutRefreshRequested?.Invoke(this, EventArgs.Empty);
             });
+            UpdateSelectionCommand = new RelayCommand(ExecuteUpdateSelection);
+        }
+
+        private void ExecuteUpdateSelection(object? parameter)
+        {
+            if (parameter is IEnumerable items)
+            {
+                UpdateSelection(items.OfType<MetalHolding>());
+                return;
+            }
+
+            UpdateSelection(Array.Empty<MetalHolding>());
         }
 
         private void Holdings_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -769,6 +782,7 @@ namespace PreciousMetalsManager.ViewModels
         public ICommand DeleteSelectedHoldingsCommand { get; }
         public ICommand EditPricesCommand { get; }
         public ICommand ToggleLanguageCommand { get; }
+        public ICommand UpdateSelectionCommand { get; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
