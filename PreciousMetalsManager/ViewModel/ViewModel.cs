@@ -377,7 +377,6 @@ namespace PreciousMetalsManager.ViewModels
                 return;
             }
 
-            // Forward TaxFreeStatus and IsTaxFree property changes when PurchaseDate changes
             if (e.PropertyName == nameof(MetalHolding.PurchaseDate) &&
                 sender is MetalHolding holding)
             {

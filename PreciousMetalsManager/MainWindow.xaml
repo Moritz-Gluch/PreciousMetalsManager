@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PreciousMetalsManager"
         xmlns:models="clr-namespace:PreciousMetalsManager.Models"
         mc:Ignorable="d"
         Title="{DynamicResource MainWindow_Title}" Height="450" Width="1000">
@@ -251,9 +250,9 @@
                     </DataGridTextColumn>
 
                     <DataGridTextColumn Binding="{Binding Converter={StaticResource TaxFreeStatusConverter}}"
-                        IsReadOnly="True"
-                        SortMemberPath="TaxFreeSortValue"
-                        Width="Auto">
+                                        IsReadOnly="True"
+                                        SortMemberPath="TaxFreeSortValue"
+                                        Width="Auto">
                         <DataGridTextColumn.HeaderTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{DynamicResource Col_TaxFreeStatus}" />
