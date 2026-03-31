@@ -1,4 +1,5 @@
-﻿using PreciousMetalsManager.ViewModels;
+﻿using PreciousMetalsManager.Services;
+using PreciousMetalsManager.ViewModels;
 using System;
 using System.Linq;
 using System.Windows;
@@ -16,7 +17,14 @@ namespace PreciousMetalsManager
         {
             InitializeComponent();
 
-            var viewModel = new ViewModel();
+            var viewModel = new ViewModel(
+                messageService: new MessageService(),
+                fileDialogService: new FileDialogService(),
+                languageService: new LanguageService(),
+                textProvider: new TextProvider(),
+                holdingDialogService: new HoldingDialogService(),
+                editPricesDialogService: new EditPricesDialogService());
+
             viewModel.LanguageLayoutRefreshRequested += ViewModel_LanguageLayoutRefreshRequested;
             DataContext = viewModel;
         }

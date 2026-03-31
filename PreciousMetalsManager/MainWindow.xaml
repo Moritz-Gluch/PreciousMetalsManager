@@ -33,14 +33,12 @@
                     <Button Content="{DynamicResource AddButton}"
                             Width="80"
                             Margin="0,0,5,0"
-                            Command="{Binding AddHoldingCommand}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                            Command="{Binding AddHoldingCommand}"/>
 
                     <Button Content="{DynamicResource EditButton}"
                             Width="80"
                             Margin="0,0,5,0"
-                            Command="{Binding EditHoldingCommand}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                            Command="{Binding EditHoldingCommand}"/>
 
                     <Button Content="{DynamicResource DeleteButton}"
                             Width="80"
@@ -53,8 +51,7 @@
                     <Button Content="{DynamicResource EditPricesButton}"
                             Width="100"
                             Margin="0,0,5,0"
-                            Command="{Binding EditPricesCommand}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                            Command="{Binding EditPricesCommand}"/>
 
                     <Button Content="{DynamicResource RefreshPricesButton}" Width="120" Command="{Binding RefreshPricesCommand}"/>
                 </StackPanel>
