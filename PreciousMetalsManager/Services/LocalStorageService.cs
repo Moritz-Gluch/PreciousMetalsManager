@@ -3,22 +3,28 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.Data.Sqlite;
 using PreciousMetalsManager.Models;
-using System.Windows;
 
 namespace PreciousMetalsManager.Services
 {
     public class LocalStorageService
     {
         private readonly string _dbPath;
+        private readonly IMessageService _messageService;
+        private readonly ITextProvider _textProvider;
 
-        public LocalStorageService(string? dbPath = null)
+        public LocalStorageService(
+            string? dbPath = null,
+            IMessageService? messageService = null,
+            ITextProvider? textProvider = null)
         {
             _dbPath = dbPath ?? "holdings.db";
+            _messageService = messageService ?? new MessageService();
+            _textProvider = textProvider ?? new TextProvider();
             InitializeDatabase();
         }
 
-        private static string L(string key)
-            => Application.Current?.TryFindResource(key) as string ?? key;
+        private string L(string key)
+            => _textProvider.GetString(key);
 
         private void InitializeDatabase()
         {
@@ -73,11 +79,9 @@ namespace PreciousMetalsManager.Services
                     catch (Exception ex)
                     {
                         System.Diagnostics.Debug.WriteLine("Corrupt record ignored: " + ex.Message);
-                        MessageBox.Show(
+                        _messageService.ShowWarning(
                             $"{L("Db_Msg_CorruptRecordIgnored")}\n{ex.Message}",
-                            L("Db_Title_Warning"),
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Warning);
+                            L("Db_Title_Warning"));
                     }
                 }
             }
@@ -85,12 +89,11 @@ namespace PreciousMetalsManager.Services
             {
                 System.Diagnostics.Debug.WriteLine("DB error: " + ex.Message);
                 LogError("DB error", ex);
-                MessageBox.Show(
+                _messageService.ShowError(
                     $"{L("Db_Msg_LoadError")}\n{ex.Message}",
-                    L("Db_Title_Error"),
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                    L("Db_Title_Error"));
             }
+
             return holdings;
         }
 
@@ -121,11 +124,9 @@ namespace PreciousMetalsManager.Services
             {
                 System.Diagnostics.Debug.WriteLine("DB error: " + ex.Message);
                 LogError("DB error", ex);
-                MessageBox.Show(
+                _messageService.ShowError(
                     $"{L("Db_Msg_SaveError")}\n{ex.Message}",
-                    L("Db_Title_Error"),
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                    L("Db_Title_Error"));
             }
         }
 
@@ -162,11 +163,9 @@ namespace PreciousMetalsManager.Services
             {
                 System.Diagnostics.Debug.WriteLine("DB error: " + ex.Message);
                 LogError("DB error", ex);
-                MessageBox.Show(
+                _messageService.ShowError(
                     $"{L("Db_Msg_UpdateError")}\n{ex.Message}",
-                    L("Db_Title_Error"),
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                    L("Db_Title_Error"));
             }
         }
 
@@ -185,11 +184,9 @@ namespace PreciousMetalsManager.Services
             {
                 System.Diagnostics.Debug.WriteLine("DB error: " + ex.Message);
                 LogError("DB error", ex);
-                MessageBox.Show(
+                _messageService.ShowError(
                     $"{L("Db_Msg_DeleteError")}\n{ex.Message}",
-                    L("Db_Title_Error"),
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                    L("Db_Title_Error"));
             }
         }
 

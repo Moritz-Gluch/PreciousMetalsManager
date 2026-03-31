@@ -6,13 +6,12 @@ using System.Windows.Data;
 using System.Linq;
 using System.Collections.Specialized;
 using PreciousMetalsManager.Services;
-using System.Windows;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
-using Microsoft.Win32;
 using System.Globalization;
 using PreciousMetalsManager.Domain;
+using System.Collections.Generic;
 
 namespace PreciousMetalsManager.ViewModels
 {
@@ -21,8 +20,17 @@ namespace PreciousMetalsManager.ViewModels
         public ObservableCollection<MetalHolding> Holdings { get; }
         public ICollectionView FilteredHoldings { get; }
 
-        private static string L(string key)
-            => Application.Current?.TryFindResource(key) as string ?? key;
+        private readonly LocalStorageService _storage;
+        private readonly MetalPriceApiService _metalPriceApiService;
+        private readonly IMessageService _messageService;
+        private readonly IFileDialogService _fileDialogService;
+        private readonly ILanguageService _languageService;
+        private readonly ITextProvider _textProvider;
+        private readonly IHoldingDialogService _holdingDialogService;
+        private readonly IEditPricesDialogService _editPricesDialogService;
+
+        private string L(string key)
+            => _textProvider.GetString(key);
 
         private string _formFilter = string.Empty;
         public string FormFilter
@@ -97,9 +105,6 @@ namespace PreciousMetalsManager.ViewModels
             }
         }
 
-        private readonly LocalStorageService _storage = new LocalStorageService();
-        private readonly MetalPriceApiService _metalPriceApiService = new MetalPriceApiService();
-
         private readonly DispatcherTimer _autoRefreshTimer;
         private bool _isReloadingHoldings;
 
@@ -119,9 +124,25 @@ namespace PreciousMetalsManager.ViewModels
         private static string FormatPrice(decimal value)
             => value.ToString(PriceNumberFormat, CultureInfo.InvariantCulture);
 
-        public ViewModel(LocalStorageService? storage = null)
+        public ViewModel(
+            LocalStorageService? storage = null,
+            MetalPriceApiService? metalPriceApiService = null,
+            IMessageService? messageService = null,
+            IFileDialogService? fileDialogService = null,
+            ILanguageService? languageService = null,
+            ITextProvider? textProvider = null,
+            IHoldingDialogService? holdingDialogService = null,
+            IEditPricesDialogService? editPricesDialogService = null)
         {
             _storage = storage ?? new LocalStorageService();
+            _metalPriceApiService = metalPriceApiService ?? new MetalPriceApiService();
+            _messageService = messageService ?? new MessageService();
+            _fileDialogService = fileDialogService ?? new FileDialogService();
+            _languageService = languageService ?? new LanguageService();
+            _textProvider = textProvider ?? new TextProvider();
+            _holdingDialogService = holdingDialogService ?? new HoldingDialogService();
+            _editPricesDialogService = editPricesDialogService ?? new EditPricesDialogService();
+
             Holdings = new ObservableCollection<MetalHolding>(_storage.LoadHoldings());
             Holdings.CollectionChanged += Holdings_CollectionChanged;
 
@@ -149,6 +170,16 @@ namespace PreciousMetalsManager.ViewModels
             ExportSimpleCommand = new RelayCommand(_ => ExportSimpleHoldings());
             ExportDetailedCommand = new RelayCommand(_ => ExportDetailedHoldings());
             ImportCommand = new RelayCommand(async _ => await ImportSimpleHoldingsAsync());
+
+            AddHoldingCommand = new RelayCommand(ExecuteAddHolding);
+            EditHoldingCommand = new RelayCommand(ExecuteEditHolding, _ => SelectedHolding is not null);
+            DeleteSelectedHoldingsCommand = new RelayCommand(ExecuteDeleteSelectedHoldings, _ => HasSelection);
+            EditPricesCommand = new RelayCommand(ExecuteEditPrices);
+            ToggleLanguageCommand = new RelayCommand(_ =>
+            {
+                ToggleLanguage();
+                LanguageLayoutRefreshRequested?.Invoke(this, EventArgs.Empty);
+            });
         }
 
         private void Holdings_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -346,7 +377,6 @@ namespace PreciousMetalsManager.ViewModels
                 return;
             }
 
-            // Forward TaxFreeStatus and IsTaxFree property changes when PurchaseDate changes
             if (e.PropertyName == nameof(MetalHolding.PurchaseDate) &&
                 sender is MetalHolding holding)
             {
@@ -451,7 +481,7 @@ namespace PreciousMetalsManager.ViewModels
 
         public void ToggleLanguage()
         {
-            App.SetLanguage(App.CurrentLanguage == "en" ? "de" : "en");
+            _languageService.ToggleLanguage();
             UpdateFilterOptions(resetSelection: false);
             RefreshFilteredView();
         }
@@ -560,10 +590,185 @@ namespace PreciousMetalsManager.ViewModels
             UpdateCollectableTypeFilterOptions(resetSelection);
         }
 
+        private MetalHolding? _selectedHolding;
+        public MetalHolding? SelectedHolding
+        {
+            get => _selectedHolding;
+            set
+            {
+                if (!ReferenceEquals(_selectedHolding, value))
+                {
+                    _selectedHolding = value;
+                    OnPropertyChanged(nameof(SelectedHolding));
+                    OnPropertyChanged(nameof(HasSingleSelection));
+                    CommandManager.InvalidateRequerySuggested();
+                }
+            }
+        }
+
+        private IReadOnlyList<MetalHolding> _selectedHoldings = Array.Empty<MetalHolding>();
+        public IReadOnlyList<MetalHolding> SelectedHoldings
+        {
+            get => _selectedHoldings;
+            private set
+            {
+                if (!ReferenceEquals(_selectedHoldings, value))
+                {
+                    _selectedHoldings = value;
+                    OnPropertyChanged(nameof(SelectedHoldings));
+                    OnPropertyChanged(nameof(HasSelection));
+                    CommandManager.InvalidateRequerySuggested();
+                }
+            }
+        }
+
+        public bool HasSelection => SelectedHoldings.Count > 0;
+        public bool HasSingleSelection => SelectedHolding is not null;
+
+        public event EventHandler? LanguageLayoutRefreshRequested;
+
+        public void UpdateSelection(IEnumerable<MetalHolding> selectedHoldings)
+        {
+            var snapshot = selectedHoldings.ToList();
+            SelectedHoldings = snapshot;
+
+            if (snapshot.Count == 1)
+            {
+                SelectedHolding = snapshot[0];
+            }
+            else if (SelectedHolding is not null && !snapshot.Contains(SelectedHolding))
+            {
+                SelectedHolding = snapshot.FirstOrDefault();
+            }
+            else if (snapshot.Count == 0)
+            {
+                SelectedHolding = null;
+            }
+        }
+
+        private void ExecuteAddHolding(object? parameter)
+        {
+            var keepAdding = true;
+            while (keepAdding)
+            {
+                var result = _holdingDialogService.ShowAddDialog(this);
+                if (result.Accepted && result.Holding is { } newHolding)
+                {
+                    AddHolding(newHolding);
+                    keepAdding = result.AddAnotherRequested;
+                }
+                else
+                {
+                    keepAdding = false;
+                }
+            }
+        }
+
+        private void ExecuteEditHolding(object? parameter)
+        {
+            if (SelectedHolding is not MetalHolding selected)
+            {
+                _messageService.ShowInformation(L("Msg_SelectHoldingToEdit"));
+                return;
+            }
+
+            var result = _holdingDialogService.ShowEditDialog(this, selected);
+            if (result.Accepted && result.Holding is { } edited)
+            {
+                selected.MetalType = edited.MetalType;
+                selected.Form = edited.Form;
+                selected.Purity = edited.Purity;
+                selected.Weight = edited.Weight;
+                selected.Quantity = edited.Quantity;
+                selected.PurchasePrice = edited.PurchasePrice;
+                selected.PurchaseDate = edited.PurchaseDate;
+                selected.CollectableType = edited.CollectableType;
+
+                UpdateHolding(selected);
+            }
+        }
+
+        private void ExecuteDeleteSelectedHoldings(object? parameter)
+        {
+            var selectedItems = SelectedHoldings.ToList();
+
+            if (selectedItems.Count == 0)
+            {
+                _messageService.ShowInformation(L("Msg_SelectHoldingToDelete"));
+                return;
+            }
+
+            var confirmed = selectedItems.Count == 1
+                ? _messageService.ShowConfirmation(
+                    L("Msg_ConfirmDeleteText"),
+                    L("Msg_ConfirmDeleteTitle"))
+                : _messageService.ShowConfirmation(
+                    string.Format(L("Msg_ConfirmDeleteMultipleText"), selectedItems.Count),
+                    L("Msg_ConfirmDeleteTitle"));
+
+            if (confirmed)
+            {
+                foreach (var holding in selectedItems)
+                    DeleteHolding(holding);
+
+                UpdateSelection(Array.Empty<MetalHolding>());
+            }
+        }
+
+        private void ExecuteEditPrices(object? parameter)
+        {
+            var result = _editPricesDialogService.ShowEditPricesDialog(
+                GoldPrice,
+                SilverPrice,
+                PlatinumPrice,
+                PalladiumPrice,
+                BroncePrice,
+                PriceUnit);
+
+            if (result is null)
+                return;
+
+            GoldPrice = result.GoldPrice;
+            SilverPrice = result.SilverPrice;
+            PlatinumPrice = result.PlatinumPrice;
+            PalladiumPrice = result.PalladiumPrice;
+            BroncePrice = result.BroncePrice;
+        }
+
+        private DetailedExportTexts CreateDetailedExportTexts()
+        {
+            return new DetailedExportTexts
+            {
+                MetalTypeHeader = L("Common_MetalType"),
+                FormHeader = L("Common_Form"),
+                CollectableTypeHeader = L("Common_CollectableType"),
+                PurityHeader = L("Common_Purity"),
+                WeightHeader = L("Common_Weight"),
+                QuantityHeader = L("Common_Quantity"),
+                PurchasePriceHeader = L("Common_PurchasePrice"),
+                PurchaseDateHeader = L("Common_PurchaseDate"),
+
+                GoldLabel = L("Lbl_Gold").TrimEnd().TrimEnd(':'),
+                SilverLabel = L("Lbl_Silver").TrimEnd().TrimEnd(':'),
+                BronceLabel = L("Lbl_Bronce").TrimEnd().TrimEnd(':'),
+                PlatinumLabel = L("Lbl_Platinum").TrimEnd().TrimEnd(':'),
+                PalladiumLabel = L("Lbl_Palladium").TrimEnd().TrimEnd(':'),
+
+                BullionLabel = L("CollectableType_Bullion"),
+                SemiNumismaticLabel = L("CollectableType_SemiNumismatic"),
+                NumismaticLabel = L("CollectableType_Numismatic")
+            };
+        }
+
         public ICommand RefreshPricesCommand { get; }
         public ICommand ExportSimpleCommand { get; }
         public ICommand ExportDetailedCommand { get; }
         public ICommand ImportCommand { get; }
+        public ICommand AddHoldingCommand { get; }
+        public ICommand EditHoldingCommand { get; }
+        public ICommand DeleteSelectedHoldingsCommand { get; }
+        public ICommand EditPricesCommand { get; }
+        public ICommand ToggleLanguageCommand { get; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -574,7 +779,7 @@ namespace PreciousMetalsManager.ViewModels
 
         protected virtual void ShowErrorMessage(string message, string title)
         {
-            MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Error);
+            _messageService.ShowError(message, title);
         }
 
         private void ExportSimpleHoldings()
@@ -582,31 +787,29 @@ namespace PreciousMetalsManager.ViewModels
             var dateString = DateTime.Now.ToString(ExportFileDateFormat, CultureInfo.InvariantCulture);
             var exportFileName = $"{L("ExportButton")}_{dateString}.csv";
 
-            var saveFileDialog = new SaveFileDialog
-            {
-                Filter = L("ExportDialog_Filter"),
-                Title = L("ExportButton"),
-                FileName = exportFileName
-            };
+            var filePath = _fileDialogService.ShowSaveFileDialog(
+                L("ExportDialog_Filter"),
+                L("ExportButton"),
+                exportFileName);
 
-            if (saveFileDialog.ShowDialog() == true)
-            {
-                var holdings = FilteredHoldings.Cast<MetalHolding>().ToList();
-                if (holdings.Count == 0)
-                {
-                    MessageBox.Show(L("ExportDialog_NoHoldings"), L("ExportButton"), MessageBoxButton.OK, MessageBoxImage.Information);
-                    return;
-                }
+            if (string.IsNullOrWhiteSpace(filePath))
+                return;
 
-                try
-                {
-                    CsvExportService.ExportHoldings(holdings, saveFileDialog.FileName);
-                    MessageBox.Show(L("ExportDialog_Success"), L("ExportButton"), MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"{L("ExportDialog_Error")}: {ex.Message}", L("ExportButton"), MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+            var holdings = FilteredHoldings.Cast<MetalHolding>().ToList();
+            if (holdings.Count == 0)
+            {
+                _messageService.ShowInformation(L("ExportDialog_NoHoldings"), L("ExportButton"));
+                return;
+            }
+
+            try
+            {
+                CsvExportService.ExportHoldings(holdings, filePath);
+                _messageService.ShowInformation(L("ExportDialog_Success"), L("ExportButton"));
+            }
+            catch (Exception ex)
+            {
+                _messageService.ShowError($"{L("ExportDialog_Error")}: {ex.Message}", L("ExportButton"));
             }
         }
 
@@ -616,31 +819,29 @@ namespace PreciousMetalsManager.ViewModels
             var detailedSuffix = L("ExportDialog_Detailed");
             var exportFileName = $"{L("ExportButton")}_{dateString}_{detailedSuffix}.csv";
 
-            var saveFileDialog = new SaveFileDialog
-            {
-                Filter = L("ExportDialog_Filter"),
-                Title = L("ExportButton"),
-                FileName = exportFileName
-            };
+            var filePath = _fileDialogService.ShowSaveFileDialog(
+                L("ExportDialog_Filter"),
+                L("ExportButton"),
+                exportFileName);
 
-            if (saveFileDialog.ShowDialog() == true)
-            {
-                var holdings = FilteredHoldings.Cast<MetalHolding>().ToList();
-                if (holdings.Count == 0)
-                {
-                    MessageBox.Show(L("ExportDialog_NoHoldings"), L("ExportButton"), MessageBoxButton.OK, MessageBoxImage.Information);
-                    return;
-                }
+            if (string.IsNullOrWhiteSpace(filePath))
+                return;
 
-                try
-                {
-                    CsvExportService.ExportHoldingsDetailed(holdings, saveFileDialog.FileName);
-                    MessageBox.Show(L("ExportDialog_Success"), L("ExportButton"), MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"{L("ExportDialog_Error")}: {ex.Message}", L("ExportButton"), MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+            var holdings = FilteredHoldings.Cast<MetalHolding>().ToList();
+            if (holdings.Count == 0)
+            {
+                _messageService.ShowInformation(L("ExportDialog_NoHoldings"), L("ExportButton"));
+                return;
+            }
+
+            try
+            {
+                CsvExportService.ExportHoldingsDetailed(holdings, filePath, CreateDetailedExportTexts());
+                _messageService.ShowInformation(L("ExportDialog_Success"), L("ExportButton"));
+            }
+            catch (Exception ex)
+            {
+                _messageService.ShowError($"{L("ExportDialog_Error")}: {ex.Message}", L("ExportButton"));
             }
         }
 
@@ -648,16 +849,14 @@ namespace PreciousMetalsManager.ViewModels
         {
             try
             {
-                var dialog = new OpenFileDialog
-                {
-                    Filter = L("ImportDialog_Filter"),
-                    Title = L("ImportDialog_Title")
-                };
+                var filePath = _fileDialogService.ShowOpenFileDialog(
+                    L("ImportDialog_Filter"),
+                    L("ImportDialog_Title"));
 
-                if (dialog.ShowDialog() != true)
+                if (string.IsNullOrWhiteSpace(filePath))
                     return;
 
-                var lines = await System.IO.File.ReadAllLinesAsync(dialog.FileName);
+                var lines = await System.IO.File.ReadAllLinesAsync(filePath);
                 if (lines.Length == 0)
                     throw new InvalidOperationException(L("ImportDialog_NoData"));
 
@@ -700,14 +899,11 @@ namespace PreciousMetalsManager.ViewModels
                 // Asks user if they want to overwrite existing data if any data exists
                 if (Holdings.Any())
                 {
-                    var result = MessageBox.Show(
+                    var overwrite = _messageService.ShowConfirmation(
                         L("ImportDialog_OverwritePrompt"),
-                        L("ImportDialog_OverwritePrompt_Title"),
-                        MessageBoxButton.YesNo,
-                        MessageBoxImage.Question,
-                        MessageBoxResult.No);
+                        L("ImportDialog_OverwritePrompt_Title"));
 
-                    if (result == MessageBoxResult.Yes)
+                    if (overwrite)
                     {
                         // Deletes all existing data before import
                         foreach (var holding in Holdings.ToList())
@@ -718,11 +914,11 @@ namespace PreciousMetalsManager.ViewModels
                 foreach (var holding in newHoldings)
                     AddHolding(holding);
 
-                MessageBox.Show(L("ImportDialog_Success"), L("ImportButton"), MessageBoxButton.OK, MessageBoxImage.Information);
+                _messageService.ShowInformation(L("ImportDialog_Success"), L("ImportButton"));
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"{L("ImportDialog_Error")}: {ex.Message}", L("ImportButton"), MessageBoxButton.OK, MessageBoxImage.Error);
+                _messageService.ShowError($"{L("ImportDialog_Error")}: {ex.Message}", L("ImportButton"));
             }
         }
     }

@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PreciousMetalsManager"
         xmlns:models="clr-namespace:PreciousMetalsManager.Models"
         mc:Ignorable="d"
         Title="{DynamicResource MainWindow_Title}" Height="450" Width="1000">
@@ -12,6 +11,7 @@
         <models:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <models:CollectableTypeToLabelConverter x:Key="CollectableTypeToLabelConverter"/>
         <models:MetalTypeToLabelConverter x:Key="MetalTypeToLabelConverter"/>
+        <models:TaxFreeStatusConverter x:Key="TaxFreeStatusConverter"/>
     </Window.Resources>
 
     <Grid Margin="10">
@@ -30,15 +30,29 @@
             
             <Border Margin="0,0,50,0" Padding="4" Background="#FFF8F8F8" CornerRadius="4">
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="{DynamicResource AddButton}" Width="80" Click="AddButton_Click" Margin="0,0,5,0"/>
-                    <Button Content="{DynamicResource EditButton}" Width="80" Click="EditButton_Click" Margin="0,0,5,0"/>
-                    <Button Content="{DynamicResource DeleteButton}" Width="80" Click="DeleteButton_Click"/>
+                    <Button Content="{DynamicResource AddButton}"
+                            Width="80"
+                            Margin="0,0,5,0"
+                            Command="{Binding AddHoldingCommand}"/>
+
+                    <Button Content="{DynamicResource EditButton}"
+                            Width="80"
+                            Margin="0,0,5,0"
+                            Command="{Binding EditHoldingCommand}"/>
+
+                    <Button Content="{DynamicResource DeleteButton}"
+                            Width="80"
+                            Command="{Binding DeleteSelectedHoldingsCommand}"/>
                 </StackPanel>
             </Border>
 
             <Border Margin="0,0,50,0" Padding="4" Background="#FFF8F8F8" CornerRadius="4">
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="{DynamicResource EditPricesButton}" Width="100" Click="EditPricesButton_Click" Margin="0,0,5,0"/>
+                    <Button Content="{DynamicResource EditPricesButton}"
+                            Width="100"
+                            Margin="0,0,5,0"
+                            Command="{Binding EditPricesCommand}"/>
+
                     <Button Content="{DynamicResource RefreshPricesButton}" Width="120" Command="{Binding RefreshPricesCommand}"/>
                 </StackPanel>
             </Border>
@@ -125,6 +139,8 @@
         <Grid Grid.Row="3" Grid.ColumnSpan="2">
             <DataGrid x:Name="MainDataGrid"
                       ItemsSource="{Binding FilteredHoldings}"
+                      SelectedItem="{Binding SelectedHolding, Mode=TwoWay}"
+                      SelectionChanged="MainDataGrid_SelectionChanged"
                       AutoGenerateColumns="False"
                       CanUserAddRows="False"
                       IsReadOnly="True"
@@ -233,7 +249,10 @@
                         </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Binding="{Binding TaxFreeStatus}" IsReadOnly="True" SortMemberPath="TaxFreeSortValue" Width="Auto">
+                    <DataGridTextColumn Binding="{Binding Converter={StaticResource TaxFreeStatusConverter}}"
+                                        IsReadOnly="True"
+                                        SortMemberPath="TaxFreeSortValue"
+                                        Width="Auto">
                         <DataGridTextColumn.HeaderTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{DynamicResource Col_TaxFreeStatus}" />
@@ -292,7 +311,10 @@
                 Content="{DynamicResource LanguageButtonShort}"
                 Height="20"
                 VerticalAlignment="Top"
-                Click="LanguageButton_Click" Grid.Column="1" HorizontalAlignment="Center" Width="30"/>
+                Grid.Column="1"
+                HorizontalAlignment="Center"
+                Width="30"
+                Command="{Binding ToggleLanguageCommand}"/>
     </Grid>
 
 </Window>

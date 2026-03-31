@@ -94,46 +94,11 @@ namespace PreciousMetalsManager.Models
             set { if (_collectableType != value) { _collectableType = value; OnPropertyChanged(nameof(CollectableType)); } }
         }
 
-        private static string L(string key)
-            => System.Windows.Application.Current?.TryFindResource(key) as string ?? key;
-
-        /// <summary>
-        /// Returns "Yes" if the holding period is at least 1 year, otherwise "X days"
-        /// </summary>
-        public string TaxFreeStatus
-        {
-            get
-            {
-                if (PurchaseDate == default)
-                    return string.Empty;
-
-                var taxFreeDate = PurchaseDate.Date.AddYears(DomainReferenceData.Tax.TaxFreeHoldingPeriodYears);
-                if (DateTime.Today >= taxFreeDate)
-                    return L("TaxFreeStatus_Yes");
-                else
-                    return $"{(taxFreeDate - DateTime.Today).Days} {L("TaxFreeStatus_DaysLeft")}";
-            }
-        }
-
-        /// <summary>
-        /// True if the holding period is at least 1 year.
-        /// </summary>
         public bool IsTaxFree =>
-            PurchaseDate != default && DateTime.Today >= PurchaseDate.Date.AddYears(DomainReferenceData.Tax.TaxFreeHoldingPeriodYears);
+            PurchaseDate != default &&
+            DateTime.Today >= PurchaseDate.Date.AddYears(DomainReferenceData.Tax.TaxFreeHoldingPeriodYears);
 
-        /// <summary>
-        /// Notifies the UI that TaxFreeStatus and IsTaxFree have changed.
-        /// </summary>
-        public void NotifyTaxFreeStatusChanged()
-        {
-            OnPropertyChanged(nameof(TaxFreeStatus));
-            OnPropertyChanged(nameof(IsTaxFree));
-        }
-
-        /// <summary>
-        /// Returns 0 if tax-free, otherwise the number of days left.
-        /// </summary>
-        public int TaxFreeSortValue
+        public int TaxFreeDaysLeft
         {
             get
             {
@@ -145,7 +110,17 @@ namespace PreciousMetalsManager.Models
             }
         }
 
+        public int TaxFreeSortValue => TaxFreeDaysLeft;
+
+        public void NotifyTaxFreeStatusChanged()
+        {
+            OnPropertyChanged(nameof(IsTaxFree));
+            OnPropertyChanged(nameof(TaxFreeDaysLeft));
+            OnPropertyChanged(nameof(TaxFreeSortValue));
+        }
+
         public event PropertyChangedEventHandler? PropertyChanged;
+
         protected void OnPropertyChanged(string propertyName)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
