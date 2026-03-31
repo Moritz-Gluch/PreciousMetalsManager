@@ -2,13 +2,13 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:PreciousMetalsManager"
-             xmlns:models="clr-namespace:PreciousMetalsManager.Models"
+             xmlns:converters="clr-namespace:PreciousMetalsManager.Converters"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
-            <models:MetalTypeToLabelConverter x:Key="MetalTypeToLabelConverter" />
-            <models:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
-            <models:CollectableTypeToLabelConverter x:Key="CollectableTypeToLabelConverter" />
+            <converters:MetalTypeToLabelConverter x:Key="MetalTypeToLabelConverter" />
+            <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+            <converters:CollectableTypeToLabelConverter x:Key="CollectableTypeToLabelConverter" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Localization/Localization.en.xaml" />
             </ResourceDictionary.MergedDictionaries>

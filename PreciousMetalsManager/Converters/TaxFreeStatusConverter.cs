@@ -1,9 +1,10 @@
+using PreciousMetalsManager.Models;
 using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace PreciousMetalsManager.Models
+namespace PreciousMetalsManager.Converters
 {
     public sealed class TaxFreeStatusConverter : IValueConverter
     {

@@ -5,7 +5,7 @@ using System.Windows.Data;
 using PreciousMetalsManager.Domain;
 using PreciousMetalsManager.Models;
 
-namespace PreciousMetalsManager.Models
+namespace PreciousMetalsManager.Converters
 {
     public sealed class CollectableTypeToLabelConverter : IValueConverter
     {
