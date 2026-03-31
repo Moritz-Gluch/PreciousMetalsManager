@@ -9,18 +9,17 @@ namespace PreciousMetalsManager.Views
     {
         private static readonly Regex PriceInputRegex = new(@"^[0-9\.,]+$");
 
-        public EditPricesDialog(decimal gold, decimal silver, decimal platinum, decimal palladium, decimal bronce, string priceUnit)
+        public EditPricesDialog(EditPricesDialogViewModel viewModel)
         {
             InitializeComponent();
 
-            var viewModel = new EditPricesDialogViewModel(gold, silver, platinum, palladium, bronce, priceUnit);
+            DataContext = viewModel;
+
             viewModel.RequestCloseRequested += (_, accepted) =>
             {
                 DialogResult = accepted;
                 Close();
             };
-
-            DataContext = viewModel;
         }
 
         public EditPricesDialogViewModel ViewModel => (EditPricesDialogViewModel)DataContext;
