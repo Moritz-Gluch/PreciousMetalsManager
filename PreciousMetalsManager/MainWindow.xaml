@@ -12,6 +12,7 @@
         <models:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <models:CollectableTypeToLabelConverter x:Key="CollectableTypeToLabelConverter"/>
         <models:MetalTypeToLabelConverter x:Key="MetalTypeToLabelConverter"/>
+        <models:TaxFreeStatusConverter x:Key="TaxFreeStatusConverter"/>
     </Window.Resources>
 
     <Grid Margin="10">
@@ -249,7 +250,10 @@
                         </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Binding="{Binding TaxFreeStatus}" IsReadOnly="True" SortMemberPath="TaxFreeSortValue" Width="Auto">
+                    <DataGridTextColumn Binding="{Binding Converter={StaticResource TaxFreeStatusConverter}}"
+                        IsReadOnly="True"
+                        SortMemberPath="TaxFreeSortValue"
+                        Width="Auto">
                         <DataGridTextColumn.HeaderTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{DynamicResource Col_TaxFreeStatus}" />

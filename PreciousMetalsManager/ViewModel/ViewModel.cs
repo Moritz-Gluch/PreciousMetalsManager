@@ -6,13 +6,11 @@ using System.Windows.Data;
 using System.Linq;
 using System.Collections.Specialized;
 using PreciousMetalsManager.Services;
-using System.Windows;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
 using System.Globalization;
 using PreciousMetalsManager.Domain;
-using PreciousMetalsManager.Views;
 using System.Collections.Generic;
 
 namespace PreciousMetalsManager.ViewModels
@@ -648,9 +646,6 @@ namespace PreciousMetalsManager.ViewModels
                 SelectedHolding = null;
             }
         }
-
-        private static Window? GetOwnerWindow(object? parameter)
-            => parameter as Window;
 
         private void ExecuteAddHolding(object? parameter)
         {
