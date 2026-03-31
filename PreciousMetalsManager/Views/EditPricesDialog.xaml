@@ -14,34 +14,57 @@
         <StackPanel Grid.Row="1" Margin="0,0,0,10">
             <StackPanel Orientation="Horizontal" Margin="0,5">
                 <Label Content="{DynamicResource Lbl_Gold}" Width="80"/>
-                <TextBox Name="GoldPriceTextBox" Width="120" PreviewTextInput="PriceTextBox_PreviewTextInput" LostFocus="PriceTextBox_LostFocus"/>
+                <TextBox Width="120"
+                         Text="{Binding GoldPriceText, UpdateSourceTrigger=PropertyChanged}"
+                         PreviewTextInput="PriceTextBox_PreviewTextInput"
+                         LostFocus="GoldPriceTextBox_LostFocus"/>
                 <Label Content="{Binding PriceUnit}" VerticalAlignment="Center" Margin="5,0,0,0"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5">
                 <Label Content="{DynamicResource Lbl_Silver}" Width="80"/>
-                <TextBox Name="SilverPriceTextBox" Width="120" PreviewTextInput="PriceTextBox_PreviewTextInput" LostFocus="PriceTextBox_LostFocus"/>
+                <TextBox Width="120"
+                         Text="{Binding SilverPriceText, UpdateSourceTrigger=PropertyChanged}"
+                         PreviewTextInput="PriceTextBox_PreviewTextInput"
+                         LostFocus="SilverPriceTextBox_LostFocus"/>
                 <Label Content="{Binding PriceUnit}" VerticalAlignment="Center" Margin="5,0,0,0"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5">
                 <Label Content="{DynamicResource Lbl_Platinum}" Width="80"/>
-                <TextBox Name="PlatinumPriceTextBox" Width="120" PreviewTextInput="PriceTextBox_PreviewTextInput" LostFocus="PriceTextBox_LostFocus"/>
+                <TextBox Width="120"
+                         Text="{Binding PlatinumPriceText, UpdateSourceTrigger=PropertyChanged}"
+                         PreviewTextInput="PriceTextBox_PreviewTextInput"
+                         LostFocus="PlatinumPriceTextBox_LostFocus"/>
                 <Label Content="{Binding PriceUnit}" VerticalAlignment="Center" Margin="5,0,0,0"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5">
                 <Label Content="{DynamicResource Lbl_Palladium}" Width="80"/>
-                <TextBox Name="PalladiumPriceTextBox" Width="120" PreviewTextInput="PriceTextBox_PreviewTextInput" LostFocus="PriceTextBox_LostFocus"/>
+                <TextBox Width="120"
+                         Text="{Binding PalladiumPriceText, UpdateSourceTrigger=PropertyChanged}"
+                         PreviewTextInput="PriceTextBox_PreviewTextInput"
+                         LostFocus="PalladiumPriceTextBox_LostFocus"/>
                 <Label Content="{Binding PriceUnit}" VerticalAlignment="Center" Margin="5,0,0,0"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5">
                 <Label Content="{DynamicResource Lbl_Bronce}" Width="80"/>
-                <TextBox Name="BroncePriceTextBox" Width="120" PreviewTextInput="PriceTextBox_PreviewTextInput" LostFocus="PriceTextBox_LostFocus"/>
+                <TextBox Width="120"
+                         Text="{Binding BroncePriceText, UpdateSourceTrigger=PropertyChanged}"
+                         PreviewTextInput="PriceTextBox_PreviewTextInput"
+                         LostFocus="BroncePriceTextBox_LostFocus"/>
                 <Label Content="{Binding PriceUnit}" VerticalAlignment="Center" Margin="5,0,0,0"/>
             </StackPanel>
         </StackPanel>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="{DynamicResource EditPricesDialog_Btn_Save}" Width="90" Margin="5" IsDefault="True" Click="SaveButton_Click"/>
-            <Button Content="{DynamicResource EditPricesDialog_Btn_Cancel}" Width="90" Margin="5" IsCancel="True"/>
+            <Button Content="{DynamicResource EditPricesDialog_Btn_Save}"
+                    Width="90"
+                    Margin="5"
+                    IsDefault="True"
+                    Command="{Binding SaveCommand}"/>
+            <Button Content="{DynamicResource EditPricesDialog_Btn_Cancel}"
+                    Width="90"
+                    Margin="5"
+                    IsCancel="True"
+                    Command="{Binding CancelCommand}"/>
         </StackPanel>
     </Grid>
 </Window>

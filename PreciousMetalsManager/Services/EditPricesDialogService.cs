@@ -25,14 +25,16 @@ namespace PreciousMetalsManager.Services
                 Owner = GetOwnerWindow()
             };
 
-            return dialog.ShowDialog() == true
-                ? new PriceEditResult(
-                    dialog.GoldPrice,
-                    dialog.SilverPrice,
-                    dialog.PlatinumPrice,
-                    dialog.PalladiumPrice,
-                    dialog.BroncePrice)
-                : null;
+            if (dialog.ShowDialog() != true)
+                return null;
+
+            var vm = dialog.ViewModel;
+            return new PriceEditResult(
+                vm.GoldPrice,
+                vm.SilverPrice,
+                vm.PlatinumPrice,
+                vm.PalladiumPrice,
+                vm.BroncePrice);
         }
 
         private static Window? GetOwnerWindow()
