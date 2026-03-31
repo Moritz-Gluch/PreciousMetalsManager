@@ -30,15 +30,32 @@
             
             <Border Margin="0,0,50,0" Padding="4" Background="#FFF8F8F8" CornerRadius="4">
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="{DynamicResource AddButton}" Width="80" Click="AddButton_Click" Margin="0,0,5,0"/>
-                    <Button Content="{DynamicResource EditButton}" Width="80" Click="EditButton_Click" Margin="0,0,5,0"/>
-                    <Button Content="{DynamicResource DeleteButton}" Width="80" Click="DeleteButton_Click"/>
+                    <Button Content="{DynamicResource AddButton}"
+                            Width="80"
+                            Margin="0,0,5,0"
+                            Command="{Binding AddHoldingCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+                    <Button Content="{DynamicResource EditButton}"
+                            Width="80"
+                            Margin="0,0,5,0"
+                            Command="{Binding EditHoldingCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+                    <Button Content="{DynamicResource DeleteButton}"
+                            Width="80"
+                            Command="{Binding DeleteSelectedHoldingsCommand}"/>
                 </StackPanel>
             </Border>
 
             <Border Margin="0,0,50,0" Padding="4" Background="#FFF8F8F8" CornerRadius="4">
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="{DynamicResource EditPricesButton}" Width="100" Click="EditPricesButton_Click" Margin="0,0,5,0"/>
+                    <Button Content="{DynamicResource EditPricesButton}"
+                            Width="100"
+                            Margin="0,0,5,0"
+                            Command="{Binding EditPricesCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+
                     <Button Content="{DynamicResource RefreshPricesButton}" Width="120" Command="{Binding RefreshPricesCommand}"/>
                 </StackPanel>
             </Border>
@@ -125,6 +142,8 @@
         <Grid Grid.Row="3" Grid.ColumnSpan="2">
             <DataGrid x:Name="MainDataGrid"
                       ItemsSource="{Binding FilteredHoldings}"
+                      SelectedItem="{Binding SelectedHolding, Mode=TwoWay}"
+                      SelectionChanged="MainDataGrid_SelectionChanged"
                       AutoGenerateColumns="False"
                       CanUserAddRows="False"
                       IsReadOnly="True"
@@ -292,7 +311,10 @@
                 Content="{DynamicResource LanguageButtonShort}"
                 Height="20"
                 VerticalAlignment="Top"
-                Click="LanguageButton_Click" Grid.Column="1" HorizontalAlignment="Center" Width="30"/>
+                Grid.Column="1"
+                HorizontalAlignment="Center"
+                Width="30"
+                Command="{Binding ToggleLanguageCommand}"/>
     </Grid>
 
 </Window>

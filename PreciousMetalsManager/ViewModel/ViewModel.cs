@@ -13,6 +13,8 @@ using System.Windows.Threading;
 using Microsoft.Win32;
 using System.Globalization;
 using PreciousMetalsManager.Domain;
+using PreciousMetalsManager.Views;
+using System.Collections.Generic;
 
 namespace PreciousMetalsManager.ViewModels
 {
@@ -149,6 +151,16 @@ namespace PreciousMetalsManager.ViewModels
             ExportSimpleCommand = new RelayCommand(_ => ExportSimpleHoldings());
             ExportDetailedCommand = new RelayCommand(_ => ExportDetailedHoldings());
             ImportCommand = new RelayCommand(async _ => await ImportSimpleHoldingsAsync());
+
+            AddHoldingCommand = new RelayCommand(ExecuteAddHolding);
+            EditHoldingCommand = new RelayCommand(ExecuteEditHolding, _ => SelectedHolding is not null);
+            DeleteSelectedHoldingsCommand = new RelayCommand(ExecuteDeleteSelectedHoldings, _ => HasSelection);
+            EditPricesCommand = new RelayCommand(ExecuteEditPrices);
+            ToggleLanguageCommand = new RelayCommand(_ =>
+            {
+                ToggleLanguage();
+                LanguageLayoutRefreshRequested?.Invoke(this, EventArgs.Empty);
+            });
         }
 
         private void Holdings_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -560,10 +572,198 @@ namespace PreciousMetalsManager.ViewModels
             UpdateCollectableTypeFilterOptions(resetSelection);
         }
 
+        private MetalHolding? _selectedHolding;
+        public MetalHolding? SelectedHolding
+        {
+            get => _selectedHolding;
+            set
+            {
+                if (!ReferenceEquals(_selectedHolding, value))
+                {
+                    _selectedHolding = value;
+                    OnPropertyChanged(nameof(SelectedHolding));
+                    OnPropertyChanged(nameof(HasSingleSelection));
+                    CommandManager.InvalidateRequerySuggested();
+                }
+            }
+        }
+
+        private IReadOnlyList<MetalHolding> _selectedHoldings = Array.Empty<MetalHolding>();
+        public IReadOnlyList<MetalHolding> SelectedHoldings
+        {
+            get => _selectedHoldings;
+            private set
+            {
+                if (!ReferenceEquals(_selectedHoldings, value))
+                {
+                    _selectedHoldings = value;
+                    OnPropertyChanged(nameof(SelectedHoldings));
+                    OnPropertyChanged(nameof(HasSelection));
+                    CommandManager.InvalidateRequerySuggested();
+                }
+            }
+        }
+
+        public bool HasSelection => SelectedHoldings.Count > 0;
+        public bool HasSingleSelection => SelectedHolding is not null;
+
+        public event EventHandler? LanguageLayoutRefreshRequested;
+
+        public void UpdateSelection(IEnumerable<MetalHolding> selectedHoldings)
+        {
+            var snapshot = selectedHoldings.ToList();
+            SelectedHoldings = snapshot;
+
+            if (snapshot.Count == 1)
+            {
+                SelectedHolding = snapshot[0];
+            }
+            else if (SelectedHolding is not null && !snapshot.Contains(SelectedHolding))
+            {
+                SelectedHolding = snapshot.FirstOrDefault();
+            }
+            else if (snapshot.Count == 0)
+            {
+                SelectedHolding = null;
+            }
+        }
+
+        private static Window? GetOwnerWindow(object? parameter)
+            => parameter as Window;
+
+        private void ExecuteAddHolding(object? parameter)
+        {
+            var owner = GetOwnerWindow(parameter);
+
+            var keepAdding = true;
+            while (keepAdding)
+            {
+                var addWindow = new HoldingDialog
+                {
+                    DataContext = this,
+                    Owner = owner
+                };
+
+                if (addWindow.ShowDialog() == true && addWindow.NewHolding is { } newHolding)
+                {
+                    AddHolding(newHolding);
+                    keepAdding = addWindow.AddAnotherRequested;
+                }
+                else
+                {
+                    keepAdding = false;
+                }
+            }
+        }
+
+        private void ExecuteEditHolding(object? parameter)
+        {
+            if (SelectedHolding is not MetalHolding selected)
+            {
+                MessageBox.Show(L("Msg_SelectHoldingToEdit"));
+                return;
+            }
+
+            var editWindow = new HoldingDialog
+            {
+                DataContext = this,
+                Owner = GetOwnerWindow(parameter),
+                IsEditMode = true
+            };
+
+            editWindow.MetalTypeComboBox.SelectedItem = selected.MetalType;
+            editWindow.FormTextBox.Text = selected.Form;
+            editWindow.PurityComboBox.Text = selected.Purity.ToString();
+            editWindow.WeightTextBox.Text = selected.Weight.ToString();
+            editWindow.QuantityTextBox.Text = selected.Quantity.ToString();
+            editWindow.PurchasePriceTextBox.Text = selected.PurchasePrice.ToString();
+            editWindow.PurchaseDatePicker.SelectedDate = selected.PurchaseDate;
+            editWindow.SelectedCollectableType = selected.CollectableType;
+
+            if (editWindow.ShowDialog() == true && editWindow.NewHolding is { } edited)
+            {
+                selected.MetalType = edited.MetalType;
+                selected.Form = edited.Form;
+                selected.Purity = edited.Purity;
+                selected.Weight = edited.Weight;
+                selected.Quantity = edited.Quantity;
+                selected.PurchasePrice = edited.PurchasePrice;
+                selected.PurchaseDate = edited.PurchaseDate;
+                selected.CollectableType = edited.CollectableType;
+
+                UpdateHolding(selected);
+            }
+        }
+
+        private void ExecuteDeleteSelectedHoldings(object? parameter)
+        {
+            var selectedItems = SelectedHoldings.ToList();
+
+            if (selectedItems.Count == 0)
+            {
+                MessageBox.Show(L("Msg_SelectHoldingToDelete"));
+                return;
+            }
+
+            MessageBoxResult result;
+            if (selectedItems.Count == 1)
+            {
+                result = MessageBox.Show(
+                    L("Msg_ConfirmDeleteText"),
+                    L("Msg_ConfirmDeleteTitle"),
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning);
+            }
+            else
+            {
+                result = MessageBox.Show(
+                    string.Format(L("Msg_ConfirmDeleteMultipleText"), selectedItems.Count),
+                    L("Msg_ConfirmDeleteTitle"),
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning);
+            }
+
+            if (result == MessageBoxResult.Yes)
+            {
+                foreach (var holding in selectedItems)
+                    DeleteHolding(holding);
+
+                UpdateSelection(Array.Empty<MetalHolding>());
+            }
+        }
+
+        private void ExecuteEditPrices(object? parameter)
+        {
+            var dlg = new EditPricesDialog(
+                GoldPrice,
+                SilverPrice,
+                PlatinumPrice,
+                PalladiumPrice,
+                BroncePrice,
+                PriceUnit)
+            {
+                Owner = GetOwnerWindow(parameter)
+            };
+
+            if (dlg.ShowDialog() == true)
+            {
+                GoldPrice = dlg.GoldPrice;
+                SilverPrice = dlg.SilverPrice;
+                PlatinumPrice = dlg.PlatinumPrice;
+                PalladiumPrice = dlg.PalladiumPrice;
+                BroncePrice = dlg.BroncePrice;
+            }
+        }
+
         public ICommand RefreshPricesCommand { get; }
         public ICommand ExportSimpleCommand { get; }
         public ICommand ExportDetailedCommand { get; }
         public ICommand ImportCommand { get; }
+        public ICommand AddHoldingCommand { get; }
+        public ICommand EditHoldingCommand { get; }
+        public ICommand DeleteSelectedHoldingsCommand { get; }
+        public ICommand EditPricesCommand { get; }
+        public ICommand ToggleLanguageCommand { get; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
