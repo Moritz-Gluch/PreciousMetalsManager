@@ -736,6 +736,31 @@ namespace PreciousMetalsManager.ViewModels
             BroncePrice = result.BroncePrice;
         }
 
+        private DetailedExportTexts CreateDetailedExportTexts()
+        {
+            return new DetailedExportTexts
+            {
+                MetalTypeHeader = L("Common_MetalType"),
+                FormHeader = L("Common_Form"),
+                CollectableTypeHeader = L("Common_CollectableType"),
+                PurityHeader = L("Common_Purity"),
+                WeightHeader = L("Common_Weight"),
+                QuantityHeader = L("Common_Quantity"),
+                PurchasePriceHeader = L("Common_PurchasePrice"),
+                PurchaseDateHeader = L("Common_PurchaseDate"),
+
+                GoldLabel = L("Lbl_Gold").TrimEnd().TrimEnd(':'),
+                SilverLabel = L("Lbl_Silver").TrimEnd().TrimEnd(':'),
+                BronceLabel = L("Lbl_Bronce").TrimEnd().TrimEnd(':'),
+                PlatinumLabel = L("Lbl_Platinum").TrimEnd().TrimEnd(':'),
+                PalladiumLabel = L("Lbl_Palladium").TrimEnd().TrimEnd(':'),
+
+                BullionLabel = L("CollectableType_Bullion"),
+                SemiNumismaticLabel = L("CollectableType_SemiNumismatic"),
+                NumismaticLabel = L("CollectableType_Numismatic")
+            };
+        }
+
         public ICommand RefreshPricesCommand { get; }
         public ICommand ExportSimpleCommand { get; }
         public ICommand ExportDetailedCommand { get; }
@@ -812,7 +837,7 @@ namespace PreciousMetalsManager.ViewModels
 
             try
             {
-                CsvExportService.ExportHoldingsDetailed(holdings, filePath);
+                CsvExportService.ExportHoldingsDetailed(holdings, filePath, CreateDetailedExportTexts());
                 _messageService.ShowInformation(L("ExportDialog_Success"), L("ExportButton"));
             }
             catch (Exception ex)
