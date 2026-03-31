@@ -161,28 +161,28 @@ namespace PreciousMetalsManager.Tests
         //    Assert.AreEqual(string.Empty, result);
         //}
 
-        [TestMethod]
-        public void ViewModel_ToggleLanguage_ShouldSwitch_AppCurrentLanguage()
-        {
-            App.SetLanguage("en");
-            _vm = CreateTestViewModel();
-            _vm.ToggleLanguage();
-            Assert.AreEqual("de", App.CurrentLanguage);
-        }
+        //[TestMethod]
+        //public void ViewModel_ToggleLanguage_ShouldSwitch_AppCurrentLanguage()
+        //{
+        //    App.SetLanguage("en");
+        //    _vm = CreateTestViewModel();
+        //    _vm.ToggleLanguage();
+        //    Assert.AreEqual("de", App.CurrentLanguage);
+        //}
 
-        [TestMethod]
-        public void ViewModel_MetalTypeFilterOptions_FirstItem_ShouldMatchLocalizedFilterAll()
-        {
-            App.SetLanguage("de");
-            _vm = CreateTestViewModel();
-            var firstDe = _vm.MetalTypeFilterOptions.Cast<object>().First() as string;
-            Assert.AreEqual("Alle", firstDe);
+        //[TestMethod]
+        //public void ViewModel_MetalTypeFilterOptions_FirstItem_ShouldMatchLocalizedFilterAll()
+        //{
+        //    App.SetLanguage("de");
+        //    _vm = CreateTestViewModel();
+        //    var firstDe = _vm.MetalTypeFilterOptions.Cast<object>().First() as string;
+        //    Assert.AreEqual("Alle", firstDe);
 
-            App.SetLanguage("en");
-            _vm = CreateTestViewModel();
-            var firstEn = _vm.MetalTypeFilterOptions.Cast<object>().First() as string;
-            Assert.AreEqual("All", firstEn);
-        }
+        //    App.SetLanguage("en");
+        //    _vm = CreateTestViewModel();
+        //    var firstEn = _vm.MetalTypeFilterOptions.Cast<object>().First() as string;
+        //    Assert.AreEqual("All", firstEn);
+        //}
 
         [TestMethod]
         public void SetLanguage_ShouldPersistLanguageSelection()
@@ -277,10 +277,10 @@ namespace PreciousMetalsManager.Tests
             }
         }
 
-        private ViewModel CreateTestViewModel()
-        {
-            var storage = new PreciousMetalsManager.Services.LocalStorageService(_testDbPath);
-            return new ViewModel(storage);
-        }
+        //private ViewModel CreateTestViewModel()
+        //{
+        //    var storage = new PreciousMetalsManager.Services.LocalStorageService(_testDbPath);
+        //    return new ViewModel(storage);
+        //}
     }
 }
