@@ -126,23 +126,23 @@ namespace PreciousMetalsManager.ViewModels
             => value.ToString(PriceNumberFormat, CultureInfo.InvariantCulture);
 
         public ViewModel(
-            LocalStorageService? storage = null,
-            MetalPriceApiService? metalPriceApiService = null,
-            IMessageService? messageService = null,
-            IFileDialogService? fileDialogService = null,
-            ILanguageService? languageService = null,
-            ITextProvider? textProvider = null,
-            IHoldingDialogService? holdingDialogService = null,
-            IEditPricesDialogService? editPricesDialogService = null)
+            LocalStorageService storage,
+            MetalPriceApiService metalPriceApiService,
+            IMessageService messageService,
+            IFileDialogService fileDialogService,
+            ILanguageService languageService,
+            ITextProvider textProvider,
+            IHoldingDialogService holdingDialogService,
+            IEditPricesDialogService editPricesDialogService)
         {
-            _storage = storage ?? new LocalStorageService();
-            _metalPriceApiService = metalPriceApiService ?? new MetalPriceApiService();
-            _messageService = messageService ?? new MessageService();
-            _fileDialogService = fileDialogService ?? new FileDialogService();
-            _languageService = languageService ?? new LanguageService();
-            _textProvider = textProvider ?? new TextProvider();
-            _holdingDialogService = holdingDialogService ?? new HoldingDialogService();
-            _editPricesDialogService = editPricesDialogService ?? new EditPricesDialogService();
+            _storage = storage ?? throw new ArgumentNullException(nameof(storage));
+            _metalPriceApiService = metalPriceApiService ?? throw new ArgumentNullException(nameof(metalPriceApiService));
+            _messageService = messageService ?? throw new ArgumentNullException(nameof(messageService));
+            _fileDialogService = fileDialogService ?? throw new ArgumentNullException(nameof(fileDialogService));
+            _languageService = languageService ?? throw new ArgumentNullException(nameof(languageService));
+            _textProvider = textProvider ?? throw new ArgumentNullException(nameof(textProvider));
+            _holdingDialogService = holdingDialogService ?? throw new ArgumentNullException(nameof(holdingDialogService));
+            _editPricesDialogService = editPricesDialogService ?? throw new ArgumentNullException(nameof(editPricesDialogService));
 
             Holdings = new ObservableCollection<MetalHolding>(_storage.LoadHoldings());
             Holdings.CollectionChanged += Holdings_CollectionChanged;

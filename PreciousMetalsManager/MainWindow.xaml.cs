@@ -17,13 +17,24 @@ namespace PreciousMetalsManager
         {
             InitializeComponent();
 
+            var storage = new LocalStorageService();
+            var metalPriceApiService = new MetalPriceApiService();
+            var messageService = new MessageService();
+            var fileDialogService = new FileDialogService();
+            var languageService = new LanguageService();
+            var textProvider = new TextProvider();
+            var holdingDialogService = new HoldingDialogService();
+            var editPricesDialogService = new EditPricesDialogService();
+
             var viewModel = new ViewModel(
-                messageService: new MessageService(),
-                fileDialogService: new FileDialogService(),
-                languageService: new LanguageService(),
-                textProvider: new TextProvider(),
-                holdingDialogService: new HoldingDialogService(),
-                editPricesDialogService: new EditPricesDialogService());
+                storage,
+                metalPriceApiService,
+                messageService,
+                fileDialogService,
+                languageService,
+                textProvider,
+                holdingDialogService,
+                editPricesDialogService);
 
             viewModel.LanguageLayoutRefreshRequested += ViewModel_LanguageLayoutRefreshRequested;
             DataContext = viewModel;
@@ -70,8 +81,8 @@ namespace PreciousMetalsManager
                 // Restore virtualization settings
                 VirtualizingPanel.SetIsVirtualizing(MainDataGrid, oldEnableRowVirt);
                 VirtualizingPanel.SetVirtualizationMode(MainDataGrid, oldVirtMode);
-            }, 
-            
+            },
+
             DispatcherPriority.Background);
         }
 
