@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PreciousMetalsManager.Views"
         xmlns:primitives="clr-namespace:System.Windows.Controls.Primitives;assembly=PresentationFramework"
+        xmlns:models="clr-namespace:PreciousMetalsManager.Models"
         mc:Ignorable="d"
         Title="{DynamicResource HoldingDialog_Title}" Height="485" Width="350">
     <Window.Resources>
@@ -26,7 +26,9 @@
             <ComboBox Name="MetalTypeComboBox"
                       Width="130"
                       HorizontalAlignment="Center"
-                      HorizontalContentAlignment="Center">
+                      HorizontalContentAlignment="Center"
+                      ItemsSource="{Binding Source={x:Static models:MetalTypeHelper.GetValues}}"
+                      SelectedItem="{Binding SelectedMetalType, Mode=TwoWay}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Converter={StaticResource MetalTypeToLabelConverter}}" TextAlignment="Center"/>
@@ -38,6 +40,7 @@
             <TextBox Name="FormTextBox"
                      Width="130"
                      HorizontalAlignment="Center"
+                     Text="{Binding FormText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      LostFocus="FormTextBox_LostFocus"/>
 
             <Label HorizontalAlignment="Center" Margin="0,2,0,0">
@@ -54,7 +57,8 @@
                       Margin="0,0,0,10"
                       PreviewTextInput="PurityComboBox_PreviewTextInput"
                       LostFocus="PurityComboBox_LostFocus"
-                      ItemsSource="{Binding CommonPurities}">
+                      ItemsSource="{Binding CommonPurities}"
+                      Text="{Binding PurityText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             </ComboBox>
 
             <Label HorizontalAlignment="Center" Margin="0,2,0,0">
@@ -67,19 +71,21 @@
                      Width="130"
                      HorizontalAlignment="Center"
                      HorizontalContentAlignment="Center"
+                     Text="{Binding WeightText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      PreviewTextInput="WeightTextBox_PreviewTextInput"
                      LostFocus="WeightTextBox_LostFocus"/>
 
             <Label Content="{DynamicResource Common_Quantity}" HorizontalAlignment="Center" Margin="0,2,0,0"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Content="▲" Width="25" Click="IncreaseQuantity_Click"/>
+                <Button Content="▲" Width="25" Command="{Binding IncreaseQuantityCommand}"/>
                 <TextBox Name="QuantityTextBox"
                          Width="80"
                          HorizontalContentAlignment="Center"
                          HorizontalAlignment="Center"
+                         Text="{Binding QuantityText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          PreviewTextInput="QuantityTextBox_PreviewTextInput"
                          LostFocus="QuantityTextBox_LostFocus"/>
-                <Button Content="▼" Width="25" Click="DecreaseQuantity_Click"/>
+                <Button Content="▼" Width="25" Command="{Binding DecreaseQuantityCommand}"/>
             </StackPanel>
 
             <Label HorizontalAlignment="Center" Margin="0,2,0,0">
@@ -92,6 +98,7 @@
                      Width="130"
                      HorizontalAlignment="Center"
                      HorizontalContentAlignment="Center"
+                     Text="{Binding PurchasePriceText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      PreviewTextInput="PurchasePriceTextBox_PreviewTextInput"
                      LostFocus="PurchasePriceTextBox_LostFocus"/>
 
@@ -99,57 +106,64 @@
             <DatePicker Name="PurchaseDatePicker"
                         Width="130"
                         HorizontalAlignment="Center"
+                        SelectedDate="{Binding PurchaseDate, Mode=TwoWay}"
                         LostFocus="PurchaseDatePicker_LostFocus"/>
 
             <Label Content="{DynamicResource Common_CollectableType}" HorizontalAlignment="Center" Margin="0,2,0,0"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <RadioButton Name="CollectableType_BullionRadioButton"
                              Content="{DynamicResource CollectableType_Bullion}"
-                             IsChecked="{Binding SelectedCollectableType, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Bullion, Mode=TwoWay}"
+                             IsChecked="{Binding SelectedCollectableType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Bullion, Mode=TwoWay}"
                              GroupName="CollectableType"
                              Margin="0,0,20,0"/>
                 <RadioButton Name="CollectableType_SemiNumismaticRadioButton"
                              Content="{DynamicResource CollectableType_SemiNumismatic}"
-                             IsChecked="{Binding SelectedCollectableType, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=SemiNumismatic, Mode=TwoWay}"
+                             IsChecked="{Binding SelectedCollectableType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=SemiNumismatic, Mode=TwoWay}"
                              GroupName="CollectableType"
                              Margin="0,0,20,0"/>
                 <RadioButton Name="CollectableType_NumismaticRadioButton"
                              Content="{DynamicResource CollectableType_Numismatic}"
-                             IsChecked="{Binding SelectedCollectableType, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Numismatic, Mode=TwoWay}"
+                             IsChecked="{Binding SelectedCollectableType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Numismatic, Mode=TwoWay}"
                              GroupName="CollectableType"/>
             </StackPanel>
         </StackPanel>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
-            <Button Name="SaveButton" Width="80" Margin="5" Click="SaveButton_Click">
+            <Button Name="SaveButton" Width="80" Margin="5" Command="{Binding SaveCommand}">
                 <Button.Style>
                     <Style TargetType="Button">
                         <Setter Property="Content" Value="{DynamicResource HoldingDialog_Btn_Add}" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsEditMode, RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
+                            <DataTrigger Binding="{Binding IsEditMode}" Value="True">
                                 <Setter Property="Content" Value="{DynamicResource HoldingDialog_Btn_Save}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </Button.Style>
             </Button>
+
             <Button Name="AddAnotherButton"
                     Content="{DynamicResource HoldingDialog_Btn_AddAnother}"
                     Width="120"
                     Margin="5"
-                    Click="AddAnotherButton_Click">
+                    Command="{Binding AddAnotherCommand}">
                 <Button.Style>
                     <Style TargetType="Button">
                         <Setter Property="Visibility" Value="Visible" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsEditMode, RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
+                            <DataTrigger Binding="{Binding IsEditMode}" Value="True">
                                 <Setter Property="Visibility" Value="Collapsed" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </Button.Style>
             </Button>
-            <Button Name="CancelButton" Content="{DynamicResource HoldingDialog_Btn_Cancel}" Width="80" Margin="5" Click="CancelButton_Click"/>
+
+            <Button Name="CancelButton"
+                    Content="{DynamicResource HoldingDialog_Btn_Cancel}"
+                    Width="80"
+                    Margin="5"
+                    Command="{Binding CancelCommand}"/>
         </StackPanel>
     </Grid>
 </Window>

@@ -1,4 +1,3 @@
-using System.Globalization;
 using System.Linq;
 using System.Windows;
 using PreciousMetalsManager.Models;
@@ -11,37 +10,29 @@ namespace PreciousMetalsManager.Services
     {
         public HoldingDialogResult ShowAddDialog(ViewModel viewModel)
         {
-            var dialog = new HoldingDialog
+            var dialogViewModel = new HoldingDialogViewModel();
+
+            var dialog = new HoldingDialog(dialogViewModel)
             {
-                DataContext = viewModel,
                 Owner = GetOwnerWindow()
             };
 
-            if (dialog.ShowDialog() == true && dialog.NewHolding is { } holding)
-                return new HoldingDialogResult(true, holding, dialog.AddAnotherRequested);
+            if (dialog.ShowDialog() == true && dialogViewModel.CreatedHolding is { } holding)
+                return new HoldingDialogResult(true, holding, dialogViewModel.AddAnotherRequested);
 
             return HoldingDialogResult.Cancelled;
         }
 
         public HoldingDialogResult ShowEditDialog(ViewModel viewModel, MetalHolding holding)
         {
-            var dialog = new HoldingDialog
+            var dialogViewModel = new HoldingDialogViewModel(holding);
+
+            var dialog = new HoldingDialog(dialogViewModel)
             {
-                DataContext = viewModel,
-                Owner = GetOwnerWindow(),
-                IsEditMode = true
+                Owner = GetOwnerWindow()
             };
 
-            dialog.MetalTypeComboBox.SelectedItem = holding.MetalType;
-            dialog.FormTextBox.Text = holding.Form;
-            dialog.PurityComboBox.Text = holding.Purity.ToString(CultureInfo.InvariantCulture);
-            dialog.WeightTextBox.Text = holding.Weight.ToString(CultureInfo.InvariantCulture);
-            dialog.QuantityTextBox.Text = holding.Quantity.ToString(CultureInfo.InvariantCulture);
-            dialog.PurchasePriceTextBox.Text = holding.PurchasePrice.ToString(CultureInfo.InvariantCulture);
-            dialog.PurchaseDatePicker.SelectedDate = holding.PurchaseDate;
-            dialog.SelectedCollectableType = holding.CollectableType;
-
-            if (dialog.ShowDialog() == true && dialog.NewHolding is { } editedHolding)
+            if (dialog.ShowDialog() == true && dialogViewModel.CreatedHolding is { } editedHolding)
                 return new HoldingDialogResult(true, editedHolding, false);
 
             return HoldingDialogResult.Cancelled;
