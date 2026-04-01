@@ -48,13 +48,13 @@ namespace PreciousMetalsManager.ViewModels
             }
         }
 
-        private object? _selectedMetalTypeFilter;
-        public object? SelectedMetalTypeFilter
+        private FilterOption<MetalType?>? _selectedMetalTypeFilter;
+        public FilterOption<MetalType?>? SelectedMetalTypeFilter
         {
             get => _selectedMetalTypeFilter;
             set
             {
-                if (_selectedMetalTypeFilter != value)
+                if (!ReferenceEquals(_selectedMetalTypeFilter, value))
                 {
                     _selectedMetalTypeFilter = value;
                     OnPropertyChanged(nameof(SelectedMetalTypeFilter));
@@ -63,8 +63,8 @@ namespace PreciousMetalsManager.ViewModels
             }
         }
 
-        private ObservableCollection<object> _metalTypeFilterOptions = new ObservableCollection<object>();
-        public ObservableCollection<object> MetalTypeFilterOptions
+        private ObservableCollection<FilterOption<MetalType?>> _metalTypeFilterOptions = new();
+        public ObservableCollection<FilterOption<MetalType?>> MetalTypeFilterOptions
         {
             get => _metalTypeFilterOptions;
             private set
@@ -77,13 +77,13 @@ namespace PreciousMetalsManager.ViewModels
             }
         }
 
-        private object? _selectedCollectableTypeFilter;
-        public object? SelectedCollectableTypeFilter
+        private FilterOption<CollectableType?>? _selectedCollectableTypeFilter;
+        public FilterOption<CollectableType?>? SelectedCollectableTypeFilter
         {
             get => _selectedCollectableTypeFilter;
             set
             {
-                if (_selectedCollectableTypeFilter != value)
+                if (!ReferenceEquals(_selectedCollectableTypeFilter, value))
                 {
                     _selectedCollectableTypeFilter = value;
                     OnPropertyChanged(nameof(SelectedCollectableTypeFilter));
@@ -92,8 +92,8 @@ namespace PreciousMetalsManager.ViewModels
             }
         }
 
-        private ObservableCollection<object> _collectableTypeFilterOptions = new ObservableCollection<object>();
-        public ObservableCollection<object> CollectableTypeFilterOptions
+        private ObservableCollection<FilterOption<CollectableType?>> _collectableTypeFilterOptions = new();
+        public ObservableCollection<FilterOption<CollectableType?>> CollectableTypeFilterOptions
         {
             get => _collectableTypeFilterOptions;
             private set
@@ -217,10 +217,12 @@ namespace PreciousMetalsManager.ViewModels
             if (obj is not MetalHolding holding)
                 return false;
 
-            if (SelectedMetalTypeFilter is MetalType type && holding.MetalType != type)
+            var selectedMetalType = SelectedMetalTypeFilter?.Value;
+            if (selectedMetalType is MetalType type && holding.MetalType != type)
                 return false;
 
-            if (SelectedCollectableTypeFilter is CollectableType collectableType &&
+            var selectedCollectableType = SelectedCollectableTypeFilter?.Value;
+            if (selectedCollectableType is CollectableType collectableType &&
                 holding.CollectableType != collectableType)
                 return false;
 
@@ -494,34 +496,8 @@ namespace PreciousMetalsManager.ViewModels
 
         public void ToggleLanguage()
         {
-            bool wasAllMetalType = SelectedMetalTypeFilter is string;
-            bool wasAllCollectableType = SelectedCollectableTypeFilter is string;
-
-            var oldMetalType = SelectedMetalTypeFilter;
-            var oldCollectableType = SelectedCollectableTypeFilter;
-
             _languageService.ToggleLanguage();
             UpdateFilterOptions(resetSelection: false);
-
-            var allOption = L("Filter_All");
-            if (wasAllMetalType)
-                SelectedMetalTypeFilter = allOption;
-            else
-            {
-                // Needed Workaround to trigger filter refresh
-                SelectedMetalTypeFilter = null;
-                SelectedMetalTypeFilter = oldMetalType;
-            }
-
-            if (wasAllCollectableType)
-                SelectedCollectableTypeFilter = allOption;
-            else
-            {
-                // Needed Workaround to trigger filter refresh
-                SelectedCollectableTypeFilter = null;
-                SelectedCollectableTypeFilter = oldCollectableType;
-            }
-
             RefreshFilteredView();
         }
 
@@ -553,74 +529,58 @@ namespace PreciousMetalsManager.ViewModels
 
         private void UpdateMetalTypeFilterOptions(bool resetSelection)
         {
+            var selectedValue = resetSelection ? null : SelectedMetalTypeFilter?.Value;
+            var comparer = EqualityComparer<MetalType?>.Default;
+
             var typesInHoldings = Holdings
                 .Select(h => h.MetalType)
                 .Distinct()
-                .Cast<object>()
                 .ToList();
 
-            var allOption = L("Filter_All");
-            typesInHoldings.Insert(0, allOption);
-
-            MetalTypeFilterOptions = new ObservableCollection<object>(typesInHoldings);
-
-            object? newSelection = _selectedMetalTypeFilter;
-
-            if (resetSelection)
+            var options = new List<FilterOption<MetalType?>>
             {
-                newSelection = allOption;
-            }
-            else if (_selectedMetalTypeFilter is string)
-            {
-                newSelection = allOption;
-            }
-            else if (_selectedMetalTypeFilter is MetalType selectedType &&
-                     !typesInHoldings.Contains(selectedType))
-            {
-                newSelection = allOption;
-            }
+                new() { Value = null, DisplayText = L("Filter_All") }
+            };
 
-            if (!Equals(_selectedMetalTypeFilter, newSelection))
+            options.AddRange(typesInHoldings.Select(type => new FilterOption<MetalType?>
             {
-                _selectedMetalTypeFilter = newSelection;
-                OnPropertyChanged(nameof(SelectedMetalTypeFilter));
-            }
+                Value = type,
+                DisplayText = GetMetalTypeFilterDisplayText(type)
+            }));
+
+            MetalTypeFilterOptions = new ObservableCollection<FilterOption<MetalType?>>(options);
+
+            SelectedMetalTypeFilter = MetalTypeFilterOptions
+                .FirstOrDefault(option => comparer.Equals(option.Value, selectedValue))
+                ?? MetalTypeFilterOptions.FirstOrDefault();
         }
 
         private void UpdateCollectableTypeFilterOptions(bool resetSelection)
         {
+            var selectedValue = resetSelection ? null : SelectedCollectableTypeFilter?.Value;
+            var comparer = EqualityComparer<CollectableType?>.Default;
+
             var typesInHoldings = Holdings
                 .Select(h => h.CollectableType)
                 .Distinct()
-                .Cast<object>()
                 .ToList();
 
-            var allOption = L("Filter_All");
-            typesInHoldings.Insert(0, allOption);
-
-            CollectableTypeFilterOptions = new ObservableCollection<object>(typesInHoldings);
-
-            object? newSelection = _selectedCollectableTypeFilter;
-
-            if (resetSelection)
+            var options = new List<FilterOption<CollectableType?>>
             {
-                newSelection = allOption;
-            }
-            else if (_selectedCollectableTypeFilter is string)
-            {
-                newSelection = allOption;
-            }
-            else if (_selectedCollectableTypeFilter is CollectableType selectedType &&
-                     !typesInHoldings.Contains(selectedType))
-            {
-                newSelection = allOption;
-            }
+                new() { Value = null, DisplayText = L("Filter_All") }
+            };
 
-            if (!Equals(_selectedCollectableTypeFilter, newSelection))
+            options.AddRange(typesInHoldings.Select(type => new FilterOption<CollectableType?>
             {
-                _selectedCollectableTypeFilter = newSelection;
-                OnPropertyChanged(nameof(SelectedCollectableTypeFilter));
-            }
+                Value = type,
+                DisplayText = GetCollectableTypeFilterDisplayText(type)
+            }));
+
+            CollectableTypeFilterOptions = new ObservableCollection<FilterOption<CollectableType?>>(options);
+
+            SelectedCollectableTypeFilter = CollectableTypeFilterOptions
+                .FirstOrDefault(option => comparer.Equals(option.Value, selectedValue))
+                ?? CollectableTypeFilterOptions.FirstOrDefault();
         }
 
         private void UpdateFilterOptions(bool resetSelection)
@@ -799,6 +759,31 @@ namespace PreciousMetalsManager.ViewModels
             };
         }
 
+        private static string TrimTrailingColon(string text)
+            => text.TrimEnd().TrimEnd(':');
+
+        private string GetMetalTypeFilterDisplayText(MetalType type)
+        {
+            if (!DomainReferenceData.TryGetMetalLabelResourceKey(type, out var key))
+                return type.ToString();
+
+            var label = L(key);
+            return string.IsNullOrWhiteSpace(label)
+                ? type.ToString()
+                : TrimTrailingColon(label);
+        }
+
+        private string GetCollectableTypeFilterDisplayText(CollectableType type)
+        {
+            if (!DomainReferenceData.TryGetCollectableLabelResourceKey(type, out var key))
+                return type.ToString();
+
+            var label = L(key);
+            return string.IsNullOrWhiteSpace(label)
+                ? type.ToString()
+                : TrimTrailingColon(label);
+        }
+
         public ICommand RefreshPricesCommand { get; }
         public ICommand ExportSimpleCommand { get; }
         public ICommand ExportDetailedCommand { get; }
@@ -961,5 +946,11 @@ namespace PreciousMetalsManager.ViewModels
                 _messageService.ShowError($"{L("ImportDialog_Error")}: {ex.Message}", L("ImportButton"));
             }
         }
+    }
+
+    public sealed class FilterOption<T>
+    {
+        public T Value { get; init; } = default!;
+        public string DisplayText { get; init; } = string.Empty;
     }
 }
