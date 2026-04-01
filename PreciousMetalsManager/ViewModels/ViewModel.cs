@@ -494,8 +494,34 @@ namespace PreciousMetalsManager.ViewModels
 
         public void ToggleLanguage()
         {
+            bool wasAllMetalType = SelectedMetalTypeFilter is string;
+            bool wasAllCollectableType = SelectedCollectableTypeFilter is string;
+
+            var oldMetalType = SelectedMetalTypeFilter;
+            var oldCollectableType = SelectedCollectableTypeFilter;
+
             _languageService.ToggleLanguage();
             UpdateFilterOptions(resetSelection: false);
+
+            var allOption = L("Filter_All");
+            if (wasAllMetalType)
+                SelectedMetalTypeFilter = allOption;
+            else
+            {
+                // Needed Workaround to trigger filter refresh
+                SelectedMetalTypeFilter = null;
+                SelectedMetalTypeFilter = oldMetalType;
+            }
+
+            if (wasAllCollectableType)
+                SelectedCollectableTypeFilter = allOption;
+            else
+            {
+                // Needed Workaround to trigger filter refresh
+                SelectedCollectableTypeFilter = null;
+                SelectedCollectableTypeFilter = oldCollectableType;
+            }
+
             RefreshFilteredView();
         }
 
