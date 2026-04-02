@@ -55,12 +55,12 @@
         </StackPanel>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="{DynamicResource EditPricesDialog_Btn_Save}"
+            <Button Content="{DynamicResource Common_Save}"
                     Width="90"
                     Margin="5"
                     IsDefault="True"
                     Command="{Binding SaveCommand}"/>
-            <Button Content="{DynamicResource EditPricesDialog_Btn_Cancel}"
+            <Button Content="{DynamicResource Common_Cancel}"
                     Width="90"
                     Margin="5"
                     IsCancel="True"

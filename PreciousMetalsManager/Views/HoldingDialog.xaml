@@ -141,10 +141,10 @@
             <Button Name="SaveButton" Width="80" Margin="5" Command="{Binding SaveCommand}">
                 <Button.Style>
                     <Style TargetType="Button">
-                        <Setter Property="Content" Value="{DynamicResource HoldingDialog_Btn_Add}" />
+                        <Setter Property="Content" Value="{DynamicResource Common_Add}" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsEditMode}" Value="True">
-                                <Setter Property="Content" Value="{DynamicResource HoldingDialog_Btn_Save}" />
+                                <Setter Property="Content" Value="{DynamicResource Common_Save}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -169,7 +169,7 @@
             </Button>
 
             <Button Name="CancelButton"
-                    Content="{DynamicResource HoldingDialog_Btn_Cancel}"
+                    Content="{DynamicResource Common_Cancel}"
                     Width="80"
                     Margin="5"
                     Command="{Binding CancelCommand}"/>
