@@ -35,13 +35,13 @@
     <sys:String x:Key="TaxFreeStatus_Yes">Ja</sys:String>
 
     <!-- MainWindow empty text -->
-    <sys:String x:Key="Txt_NoHoldingsMatch">Keine Einträge passen zu deinen Kriterien.</sys:String>
+    <sys:String x:Key="Txt_NoHoldingsMatch">Keine Bestände entsprechen den aktuellen Filtern.</sys:String>
 
     <!-- MessageBoxes -->
-    <sys:String x:Key="Msg_SelectHoldingToEdit">Bitte wähle einen Eintrag zum Bearbeiten aus.</sys:String>
-    <sys:String x:Key="Msg_SelectHoldingToDelete">Bitte wähle einen Eintrag zum Löschen aus.</sys:String>
-    <sys:String x:Key="Msg_ConfirmDeleteText">Möchtest du diesen Eintrag wirklich löschen?</sys:String>
-    <sys:String x:Key="Msg_ConfirmDeleteMultipleText">Möchtest du diese {0} Einträge wirklich löschen?</sys:String>
+    <sys:String x:Key="Msg_SelectHoldingToEdit">Bitte wählen Sie einen Eintrag zum Bearbeiten aus.</sys:String>
+    <sys:String x:Key="Msg_SelectHoldingToDelete">Bitte wählen Sie einen Eintrag zum Löschen aus.</sys:String>
+    <sys:String x:Key="Msg_ConfirmDeleteText">Möchten Sie diesen Eintrag wirklich löschen?</sys:String>
+    <sys:String x:Key="Msg_ConfirmDeleteMultipleText">Möchten Sie diese {0} Einträge wirklich löschen?</sys:String>
     <sys:String x:Key="Msg_ConfirmDeleteTitle">Löschen bestätigen</sys:String>
 
     <!-- Language Button -->
@@ -49,17 +49,13 @@
 
     <!-- HoldingDialog -->
     <sys:String x:Key="HoldingDialog_Title">Eintrag</sys:String>
-    <sys:String x:Key="HoldingDialog_Lbl_FormVariant">Form / Variante</sys:String>
+    <sys:String x:Key="HoldingDialog_Lbl_FormVariant">Form/Variante</sys:String>
     <sys:String x:Key="HoldingDialog_Btn_Add">Hinzufügen</sys:String>
-    <sys:String x:Key="HoldingDialog_Btn_Save">Speichern</sys:String>
-    <sys:String x:Key="HoldingDialog_Btn_Cancel">Abbrechen</sys:String>
     <sys:String x:Key="HoldingDialog_Btn_AddAnother">Weiteren hinzufügen</sys:String>
 
     <!-- EditPricesDialog -->
     <sys:String x:Key="EditPricesDialog_Title">Metallpreise bearbeiten</sys:String>
     <sys:String x:Key="EditPricesDialog_HintText">Bitte geben Sie die aktuellen Preise ein:</sys:String>
-    <sys:String x:Key="EditPricesDialog_Btn_Save">Speichern</sys:String>
-    <sys:String x:Key="EditPricesDialog_Btn_Cancel">Abbrechen</sys:String>
 
     <!-- Window titles -->
     <sys:String x:Key="MainWindow_Title">Edelmetall-Manager</sys:String>
@@ -82,6 +78,8 @@
     <sys:String x:Key="Msg_ErrorTitle">Fehler</sys:String>
 
     <!-- Common terms -->
+    <sys:String x:Key="Common_Save">Speichern</sys:String>
+    <sys:String x:Key="Common_Cancel">Abbrechen</sys:String>
     <sys:String x:Key="Common_MetalType">Metalltyp</sys:String>
     <sys:String x:Key="Common_Form">Form</sys:String>
     <sys:String x:Key="Common_Purity">Feingehalt</sys:String>
@@ -98,7 +96,7 @@
     <sys:String x:Key="ExportDialog_Filter">CSV-Datei (*.csv)|*.csv</sys:String>
     <sys:String x:Key="ExportDialog_Success">Export erfolgreich.</sys:String>
     <sys:String x:Key="ExportDialog_Error">Fehler beim Export</sys:String>
-    <sys:String x:Key="ExportDialog_NoHoldings">Keine Bestände zum Exportieren vorhanden.</sys:String>
+    <sys:String x:Key="ExportDialog_NoHoldings">Keine sichtbaren Bestände zum Exportieren vorhanden.</sys:String>
 
     <!-- Import Dialog -->
     <sys:String x:Key="ImportDialog_Title">Bestände importieren</sys:String>

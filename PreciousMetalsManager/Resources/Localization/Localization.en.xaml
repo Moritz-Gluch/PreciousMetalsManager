@@ -6,8 +6,8 @@
     <sys:String x:Key="AddButton">Add</sys:String>
     <sys:String x:Key="EditButton">Edit</sys:String>
     <sys:String x:Key="DeleteButton">Delete</sys:String>
-    <sys:String x:Key="EditPricesButton">Edit prices</sys:String>
-    <sys:String x:Key="RefreshPricesButton">Refresh prices</sys:String>
+    <sys:String x:Key="EditPricesButton">Edit Prices</sys:String>
+    <sys:String x:Key="RefreshPricesButton">Refresh Prices</sys:String>
     <sys:String x:Key="ExportButton">Export</sys:String>
     <sys:String x:Key="ExportDialog_Simple">Simple</sys:String>
     <sys:String x:Key="ExportDialog_Detailed">Detailed</sys:String>
@@ -18,11 +18,11 @@
     <sys:String x:Key="Lbl_Silver">Silver:</sys:String>
     <sys:String x:Key="Lbl_Platinum">Platinum:</sys:String>
     <sys:String x:Key="Lbl_Palladium">Palladium:</sys:String>
-    <sys:String x:Key="Lbl_Bronce">Bronce:</sys:String>
+    <sys:String x:Key="Lbl_Bronce">Bronze:</sys:String>
 
     <sys:String x:Key="Lbl_MetalTypeFilter">Metal Type:</sys:String>
     <sys:String x:Key="Lbl_FormVariantFilter">Form/Variant:</sys:String>
-    <sys:String x:Key="TaxFreeOnly_Checkbox">Tax-free only</sys:String>
+    <sys:String x:Key="TaxFreeOnly_Checkbox">Tax-Free Only</sys:String>
     <sys:String x:Key="Lbl_TotalValueDisplayed">Total Value:</sys:String>
 
     <!-- MainWindow DataGrid headers -->
@@ -33,15 +33,15 @@
     <!-- MainWindow DataGrid -->
     <sys:String x:Key="TaxFreeStatus_DaysLeft">days</sys:String>
     <sys:String x:Key="TaxFreeStatus_Yes">Yes</sys:String>
-    
+
     <!-- MainWindow empty text -->
-    <sys:String x:Key="Txt_NoHoldingsMatch">No holdings match your criteria.</sys:String>
+    <sys:String x:Key="Txt_NoHoldingsMatch">No holdings match the current filters.</sys:String>
 
     <!-- MessageBoxes -->
     <sys:String x:Key="Msg_SelectHoldingToEdit">Please select a holding to edit.</sys:String>
     <sys:String x:Key="Msg_SelectHoldingToDelete">Please select a holding to delete.</sys:String>
     <sys:String x:Key="Msg_ConfirmDeleteText">Are you sure you want to delete this holding?</sys:String>
-    <sys:String x:Key="Msg_ConfirmDeleteMultipleText">Are you sure you want to delete this {0} holding?</sys:String>
+    <sys:String x:Key="Msg_ConfirmDeleteMultipleText">Are you sure you want to delete these {0} holdings?</sys:String>
     <sys:String x:Key="Msg_ConfirmDeleteTitle">Confirm Delete</sys:String>
 
     <!-- Language Button -->
@@ -49,18 +49,13 @@
 
     <!-- HoldingDialog -->
     <sys:String x:Key="HoldingDialog_Title">Holding</sys:String>
-    <sys:String x:Key="HoldingDialog_Lbl_FormVariant">Form / Variant</sys:String>
-
+    <sys:String x:Key="HoldingDialog_Lbl_FormVariant">Form/Variant</sys:String>
     <sys:String x:Key="HoldingDialog_Btn_Add">Add</sys:String>
-    <sys:String x:Key="HoldingDialog_Btn_Save">Save</sys:String>
-    <sys:String x:Key="HoldingDialog_Btn_Cancel">Cancel</sys:String>
-    <sys:String x:Key="HoldingDialog_Btn_AddAnother">Add another</sys:String>
+    <sys:String x:Key="HoldingDialog_Btn_AddAnother">Add Another</sys:String>
 
     <!-- EditPricesDialog -->
-    <sys:String x:Key="EditPricesDialog_Title">Edit metal prices</sys:String>
+    <sys:String x:Key="EditPricesDialog_Title">Edit Metal Prices</sys:String>
     <sys:String x:Key="EditPricesDialog_HintText">Please enter the current prices:</sys:String>
-    <sys:String x:Key="EditPricesDialog_Btn_Save">Save</sys:String>
-    <sys:String x:Key="EditPricesDialog_Btn_Cancel">Cancel</sys:String>
 
     <!-- Window titles -->
     <sys:String x:Key="MainWindow_Title">Precious Metals Manager</sys:String>
@@ -77,12 +72,14 @@
     <sys:String x:Key="Db_Msg_SaveError">Error saving to the database:</sys:String>
     <sys:String x:Key="Db_Msg_UpdateError">Error updating the database:</sys:String>
     <sys:String x:Key="Db_Msg_DeleteError">Error deleting from the database:</sys:String>
-    
+
     <!-- API call error messages-->
     <sys:String x:Key="Msg_PriceApiError">Failed to fetch market prices.</sys:String>
     <sys:String x:Key="Msg_ErrorTitle">Error</sys:String>
 
     <!-- Common terms -->
+    <sys:String x:Key="Common_Save">Save</sys:String>
+    <sys:String x:Key="Common_Cancel">Cancel</sys:String>
     <sys:String x:Key="Common_MetalType">Metal Type</sys:String>
     <sys:String x:Key="Common_Form">Form</sys:String>
     <sys:String x:Key="Common_Purity">Purity</sys:String>
@@ -99,7 +96,7 @@
     <sys:String x:Key="ExportDialog_Filter">CSV file (*.csv)|*.csv</sys:String>
     <sys:String x:Key="ExportDialog_Success">Export successful.</sys:String>
     <sys:String x:Key="ExportDialog_Error">Error during export</sys:String>
-    <sys:String x:Key="ExportDialog_NoHoldings">No holdings to export.</sys:String>
+    <sys:String x:Key="ExportDialog_NoHoldings">No visible holdings to export.</sys:String>
 
     <!-- Import Dialog -->
     <sys:String x:Key="ImportDialog_Title">Import Holdings</sys:String>
