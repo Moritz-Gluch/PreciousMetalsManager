@@ -3,7 +3,6 @@
                     xmlns:sys="clr-namespace:System;assembly=System.Runtime">
 
     <!-- Buttons -->
-    <sys:String x:Key="AddButton">Add</sys:String>
     <sys:String x:Key="EditButton">Edit</sys:String>
     <sys:String x:Key="DeleteButton">Delete</sys:String>
     <sys:String x:Key="EditPricesButton">Edit Prices</sys:String>
@@ -50,7 +49,6 @@
     <!-- HoldingDialog -->
     <sys:String x:Key="HoldingDialog_Title">Holding</sys:String>
     <sys:String x:Key="HoldingDialog_Lbl_FormVariant">Form/Variant</sys:String>
-    <sys:String x:Key="HoldingDialog_Btn_Add">Add</sys:String>
     <sys:String x:Key="HoldingDialog_Btn_AddAnother">Add Another</sys:String>
 
     <!-- EditPricesDialog -->
@@ -78,6 +76,7 @@
     <sys:String x:Key="Msg_ErrorTitle">Error</sys:String>
 
     <!-- Common terms -->
+    <sys:String x:Key="Common_Add">Add</sys:String>
     <sys:String x:Key="Common_Save">Save</sys:String>
     <sys:String x:Key="Common_Cancel">Cancel</sys:String>
     <sys:String x:Key="Common_MetalType">Metal Type</sys:String>

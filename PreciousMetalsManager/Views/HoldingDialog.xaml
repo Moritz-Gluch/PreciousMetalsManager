@@ -141,7 +141,7 @@
             <Button Name="SaveButton" Width="80" Margin="5" Command="{Binding SaveCommand}">
                 <Button.Style>
                     <Style TargetType="Button">
-                        <Setter Property="Content" Value="{DynamicResource HoldingDialog_Btn_Add}" />
+                        <Setter Property="Content" Value="{DynamicResource Common_Add}" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsEditMode}" Value="True">
                                 <Setter Property="Content" Value="{DynamicResource Common_Save}" />
