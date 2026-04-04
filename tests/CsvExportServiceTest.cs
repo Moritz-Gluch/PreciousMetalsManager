@@ -31,19 +31,6 @@ namespace PreciousMetalsManager.Tests
                 File.Delete(_tempFile);
         }
 
-        private static void AssertThrows<TException>(Action action) where TException : Exception
-        {
-            try
-            {
-                action();
-                Assert.Fail($"Expected exception '{typeof(TException).Name}' was not thrown.");
-            }
-            catch (TException)
-            {
-                // expected
-            }
-        }
-
         private static List<MetalHolding> GetSampleHoldings() =>
             new()
             {
@@ -58,6 +45,27 @@ namespace PreciousMetalsManager.Tests
                     PurchasePrice = 1000m,
                     PurchaseDate = new DateTime(2024, 1, 1)
                 }
+            };
+
+        private static DetailedExportTexts CreateDetailedExportTexts() =>
+            new()
+            {
+                MetalTypeHeader = "Metal Type",
+                FormHeader = "Form",
+                CollectableTypeHeader = "Collectable Type",
+                PurityHeader = "Purity",
+                WeightHeader = "Weight",
+                QuantityHeader = "Quantity",
+                PurchasePriceHeader = "Purchase Price",
+                PurchaseDateHeader = "Purchase Date",
+                GoldLabel = "Gold",
+                SilverLabel = "Silver",
+                BronceLabel = "Bronze",
+                PlatinumLabel = "Platinum",
+                PalladiumLabel = "Palladium",
+                BullionLabel = "Bullion",
+                SemiNumismaticLabel = "Semi-numismatic",
+                NumismaticLabel = "Numismatic"
             };
 
         [TestMethod]
@@ -108,69 +116,98 @@ namespace PreciousMetalsManager.Tests
             Assert.AreEqual("1;Coin;2;900;31,1;1;123,45;2023-12-31", lines[1]);
         }
 
-        // Not working anymore after refactoring, will be fixed in a future story
-        //[TestMethod]
-        //public void ExportHoldingsDetailed_WritesHeaderRow()
-        //{
-        //    App.SetLanguage("en");
-        //    var holdings = GetSampleHoldings();
+        [TestMethod]
+        public void ExportHoldingsDetailed_WritesHeaderRow_FromProvidedTexts()
+        {
+            var holdings = GetSampleHoldings();
+            var texts = CreateDetailedExportTexts();
 
-        //    CsvExportService.ExportHoldingsDetailed(holdings, _tempFile);
+            CsvExportService.ExportHoldingsDetailed(holdings, _tempFile, texts);
 
-        //    var lines = File.ReadAllLines(_tempFile);
-        //    Assert.HasCount(2, lines);
+            var lines = File.ReadAllLines(_tempFile);
+            Assert.HasCount(2, lines);
 
-        //    string L(string key) => Application.Current?.TryFindResource(key) as string ?? key;
-        //    var expectedHeader = $"{L("Common_MetalType")}; {L("Common_Form")}; {L("Common_CollectableType")}; {L("Common_Purity")}; {L("Common_Weight")}; {L("Common_Quantity")}; {L("Common_PurchasePrice")}; {L("Common_PurchaseDate")}; ";
-        //    Assert.AreEqual(expectedHeader, lines[0]);
-        //}
+            Assert.AreEqual(
+                "Metal Type; Form; Collectable Type; Purity; Weight; Quantity; Purchase Price; Purchase Date; ",
+                lines[0]);
+        }
 
-        //[TestMethod]
-        //public void ExportHoldingsDetailed_WritesLocalizedHeaders_DE()
-        //{
-        //    App.SetLanguage("de");
-        //    var holdings = GetSampleHoldings();
+        [TestMethod]
+        public void ExportHoldingsDetailed_WritesLocalizedValues_UsingProvidedTexts()
+        {
+            var holdings = GetSampleHoldings();
+            var texts = CreateDetailedExportTexts();
 
-        //    CsvExportService.ExportHoldingsDetailed(holdings, _tempFile);
+            CsvExportService.ExportHoldingsDetailed(holdings, _tempFile, texts);
 
-        //    string L(string key) => Application.Current?.TryFindResource(key) as string ?? key;
-        //    var expectedHeader = $"{L("Common_MetalType")}; {L("Common_Form")}; {L("Common_CollectableType")}; {L("Common_Purity")}; {L("Common_Weight")}; {L("Common_Quantity")}; {L("Common_PurchasePrice")}; {L("Common_PurchaseDate")}; ";
-        //    var header = File.ReadAllLines(_tempFile)[0];
-        //    Assert.AreEqual(expectedHeader, header);
-        //}
+            var dataLine = File.ReadAllLines(_tempFile)[1];
 
-        //[TestMethod]
-        //public void ExportHoldingsDetailed_EmptyHoldings_WritesOnlyHeader()
-        //{
-        //    App.SetLanguage("en");
+            StringAssert.Contains(dataLine, "Gold; ");
+            StringAssert.Contains(dataLine, "Bullion; ");
+            StringAssert.Contains(dataLine, "1000.00; ");
+            StringAssert.Contains(dataLine, "01.01.2024; ");
+        }
 
-        //    CsvExportService.ExportHoldingsDetailed(Array.Empty<MetalHolding>(), _tempFile);
+        [TestMethod]
+        public void ExportHoldings_WithNoHoldings_WritesEmptyFile()
+        {
+            CsvExportService.ExportHoldings(Array.Empty<MetalHolding>(), _tempFile);
 
-        //    string L(string key) => Application.Current?.TryFindResource(key) as string ?? key;
-        //    var expectedHeader = $"{L("Common_MetalType")}; {L("Common_Form")}; {L("Common_CollectableType")}; {L("Common_Purity")}; {L("Common_Weight")}; {L("Common_Quantity")}; {L("Common_PurchasePrice")}; {L("Common_PurchaseDate")}; ";
+            var content = File.ReadAllText(_tempFile);
 
-        //    var lines = File.ReadAllLines(_tempFile);
-        //    Assert.HasCount(1, lines);
-        //    Assert.AreEqual(expectedHeader, lines[0]);
-        //}
+            Assert.AreEqual(string.Empty, content);
+        }
 
-        //[TestMethod]
-        //public void ExportHoldingsDetailed_ThrowsOnInvalidPath()
-        //{
-        //    App.SetLanguage("en");
-        //    var holdings = GetSampleHoldings();
+        [TestMethod]
+        public void ExportHoldingsDetailed_WithNoHoldings_WritesOnlyHeaderRow()
+        {
+            var texts = CreateDetailedExportTexts();
 
-        //    AssertThrows<DirectoryNotFoundException>(() =>
-        //        CsvExportService.ExportHoldingsDetailed(holdings, @"Z:\definitely\not\a\real\path\file.csv"));
-        //}
+            CsvExportService.ExportHoldingsDetailed(Array.Empty<MetalHolding>(), _tempFile, texts);
 
-        //[TestMethod]
-        //public void ExportHoldings_ThrowsOnInvalidPath()
-        //{
-        //    var holdings = GetSampleHoldings();
+            var lines = File.ReadAllLines(_tempFile);
 
-        //    AssertThrows<DirectoryNotFoundException>(() =>
-        //        CsvExportService.ExportHoldings(holdings, @"Z:\definitely\not\a\real\path\file.csv"));
-        //}
+            Assert.HasCount(1, lines);
+            Assert.AreEqual(
+                "Metal Type; Form; Collectable Type; Purity; Weight; Quantity; Purchase Price; Purchase Date; ",
+                lines[0]);
+        }
+
+        [TestMethod]
+        public void ExportHoldingsDetailed_WritesExpectedDetailedLine_ForSilverNumismaticHolding()
+        {
+            var holding = new MetalHolding
+            {
+                MetalType = MetalType.Silver,
+                Form = "Coin",
+                CollectableType = CollectableType.Numismatic,
+                Purity = 900m,
+                Weight = 31.1m,
+                Quantity = 1,
+                PurchasePrice = 123.45m,
+                PurchaseDate = new DateTime(2023, 12, 31)
+            };
+
+            var holdings = new List<MetalHolding> { holding };
+            var texts = CreateDetailedExportTexts();
+
+            CsvExportService.ExportHoldingsDetailed(holdings, _tempFile, texts);
+
+            var lines = File.ReadAllLines(_tempFile);
+
+            Assert.HasCount(2, lines);
+
+            var expected =
+                $"{texts.SilverLabel}; " +
+                $"{holding.Form}; " +
+                $"{texts.NumismaticLabel}; " +
+                $"{holding.Purity}; " +
+                $"{holding.Weight}; " +
+                $"{holding.Quantity}; " +
+                $"{holding.PurchasePrice.ToString("F2", CultureInfo.InvariantCulture)}; " +
+                $"{holding.PurchaseDate.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture)}; ";
+
+            Assert.AreEqual(expected, lines[1]);
+        }
     }
 }
