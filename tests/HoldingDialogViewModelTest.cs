@@ -262,7 +262,7 @@ namespace PreciousMetalsManager.Tests
 
             vm.SaveCommand.Execute(null);
 
-            Assert.IsFalse(accepted);
+            Assert.IsTrue(accepted);
             Assert.IsNotNull(vm.CreatedHolding);
             Assert.IsFalse(vm.AddAnotherRequested);
 
@@ -320,7 +320,7 @@ namespace PreciousMetalsManager.Tests
 
             vm.AddAnotherCommand.Execute(null);
 
-            Assert.IsFalse(accepted);
+            Assert.IsTrue(accepted);
             Assert.IsTrue(vm.AddAnotherRequested);
             Assert.IsNotNull(vm.CreatedHolding);
             Assert.AreEqual("Krugerrand", vm.CreatedHolding.Form);

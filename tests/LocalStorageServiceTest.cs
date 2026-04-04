@@ -157,7 +157,7 @@ namespace PreciousMetalsManager.Tests
 
             _service.AddHolding(holding);
 
-            Assert.IsGreaterThan(holding.Id, 0);
+            Assert.IsGreaterThan(0, holding.Id);
             Assert.IsEmpty(_messageService.ErrorMessages);
         }
 
