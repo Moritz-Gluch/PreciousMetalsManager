@@ -1,7 +1,6 @@
-﻿using System;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿using System.Net.Http;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace PreciousMetalsManager.Services
 {
@@ -9,7 +8,7 @@ namespace PreciousMetalsManager.Services
     {
         private static readonly string ApiUrl = "https://api.edelmetalle.de/public.json";
 
-        public async Task<string?> FetchMetalPricesRawAsync()
+        public virtual async Task<string?> FetchMetalPricesRawAsync()
         {
             using var httpClient = new HttpClient();
             try
