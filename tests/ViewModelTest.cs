@@ -92,7 +92,7 @@ namespace PreciousMetalsManager.Tests
             _vm.FormFilter = "Bar";
             var filtered = _vm.FilteredHoldings.Cast<MetalHolding>().ToList();
 
-            Assert.AreEqual(1, filtered.Count);
+            Assert.HasCount(1, filtered);
             Assert.AreEqual("Barren", filtered[0].Form);
         }
 
@@ -105,7 +105,7 @@ namespace PreciousMetalsManager.Tests
             _vm.SelectedMetalTypeFilter = _vm.MetalTypeFilterOptions.Single(o => o.Value == MetalType.Gold);
             var filtered = _vm.FilteredHoldings.Cast<MetalHolding>().ToList();
 
-            Assert.AreEqual(1, filtered.Count);
+            Assert.HasCount(1, filtered);
             Assert.AreEqual(MetalType.Gold, filtered[0].MetalType);
         }
 
@@ -118,7 +118,7 @@ namespace PreciousMetalsManager.Tests
             _vm.SelectedCollectableTypeFilter = _vm.CollectableTypeFilterOptions.Single(o => o.Value == CollectableType.Numismatic);
             var filtered = _vm.FilteredHoldings.Cast<MetalHolding>().ToList();
 
-            Assert.AreEqual(1, filtered.Count);
+            Assert.HasCount(1, filtered);
             Assert.AreEqual(CollectableType.Numismatic, filtered[0].CollectableType);
         }
 
@@ -207,7 +207,7 @@ namespace PreciousMetalsManager.Tests
         [TestMethod]
         public void MetalTypeFilterOptions_FirstEntry_IsAllOption()
         {
-            Assert.IsTrue(_vm.MetalTypeFilterOptions.Count >= 1);
+            Assert.IsGreaterThanOrEqualTo(_vm.MetalTypeFilterOptions.Count, 1);
 
             var first = _vm.MetalTypeFilterOptions[0];
             Assert.IsNull(first.Value);
@@ -218,7 +218,7 @@ namespace PreciousMetalsManager.Tests
         [TestMethod]
         public void CollectableTypeFilterOptions_FirstEntry_IsAllOption()
         {
-            Assert.IsTrue(_vm.CollectableTypeFilterOptions.Count >= 1);
+            Assert.IsGreaterThanOrEqualTo(_vm.CollectableTypeFilterOptions.Count, 1);
 
             var first = _vm.CollectableTypeFilterOptions[0];
             Assert.IsNull(first.Value);
@@ -238,7 +238,7 @@ namespace PreciousMetalsManager.Tests
             _vm.TaxFreeOnly = true;
             var filtered = _vm.FilteredHoldings.Cast<MetalHolding>().ToList();
 
-            Assert.AreEqual(1, filtered.Count);
+            Assert.HasCount(1, filtered);
             Assert.AreEqual("Old", filtered[0].Form);
         }
 
@@ -300,8 +300,8 @@ namespace PreciousMetalsManager.Tests
 
             _vm.DeleteSelectedHoldingsCommand.Execute(null);
 
-            Assert.AreEqual(0, _vm.Holdings.Count);
-            Assert.IsTrue(_messageService.ConfirmationRequests.Count >= 1);
+            Assert.IsEmpty(_vm.Holdings);
+            Assert.IsGreaterThanOrEqualTo(_messageService.ConfirmationRequests.Count, 1);
         }
 
         [TestMethod]

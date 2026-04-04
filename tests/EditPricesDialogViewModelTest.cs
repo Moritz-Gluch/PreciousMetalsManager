@@ -186,7 +186,7 @@ namespace PreciousMetalsManager.Tests
 
             vm.SaveCommand.Execute(null);
 
-            Assert.AreEqual(true, accepted);
+            Assert.IsTrue(accepted);
             Assert.AreEqual(100.50m, vm.GoldPrice);
             Assert.AreEqual(20.25m, vm.SilverPrice);
             Assert.AreEqual(30m, vm.PlatinumPrice);
@@ -229,7 +229,7 @@ namespace PreciousMetalsManager.Tests
 
             vm.CancelCommand.Execute(null);
 
-            Assert.AreEqual(false, accepted);
+            Assert.IsFalse(accepted);
         }
 
         [TestMethod]

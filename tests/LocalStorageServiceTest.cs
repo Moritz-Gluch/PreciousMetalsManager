@@ -1,11 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.Data.Sqlite;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PreciousMetalsManager.Models;
 using PreciousMetalsManager.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.Data.Sqlite;
 
 namespace PreciousMetalsManager.Tests
 {
@@ -55,7 +55,7 @@ namespace PreciousMetalsManager.Tests
             var holdings = _service.LoadHoldings();
 
             Assert.IsTrue(holdings.Any(h => h.Form == holding.Form && h.MetalType == holding.MetalType));
-            Assert.AreEqual(0, _messageService.ErrorMessages.Count);
+            Assert.IsEmpty(_messageService.ErrorMessages);
         }
 
         [TestMethod]
@@ -69,7 +69,7 @@ namespace PreciousMetalsManager.Tests
             var holdings = _service.LoadHoldings();
 
             Assert.IsTrue(holdings.Any(h => h.Id == holding.Id && h.Form == "UpdatedForm"));
-            Assert.AreEqual(0, _messageService.ErrorMessages.Count);
+            Assert.IsEmpty(_messageService.ErrorMessages);
         }
 
         [TestMethod]
@@ -85,7 +85,7 @@ namespace PreciousMetalsManager.Tests
             var holdingsAfterDelete = _service.LoadHoldings();
 
             Assert.IsFalse(holdingsAfterDelete.Any(h => h.Id == holding.Id));
-            Assert.AreEqual(0, _messageService.ErrorMessages.Count);
+            Assert.IsEmpty(_messageService.ErrorMessages);
         }
 
         [TestMethod]
@@ -95,7 +95,7 @@ namespace PreciousMetalsManager.Tests
 
             Assert.IsNotNull(holdings);
             Assert.IsInstanceOfType(holdings, typeof(List<MetalHolding>));
-            Assert.AreEqual(0, _messageService.ErrorMessages.Count);
+            Assert.IsEmpty(_messageService.ErrorMessages);
         }
 
         [TestMethod]
@@ -122,7 +122,7 @@ namespace PreciousMetalsManager.Tests
                 Assert.AreEqual(type, loaded.CollectableType);
             }
 
-            Assert.AreEqual(0, _messageService.ErrorMessages.Count);
+            Assert.IsEmpty(_messageService.ErrorMessages);
         }
 
         [TestMethod]
@@ -147,7 +147,7 @@ namespace PreciousMetalsManager.Tests
             var loaded = _service.LoadHoldings().FirstOrDefault(h => h.Id == holding.Id);
             Assert.IsNotNull(loaded);
             Assert.AreEqual(CollectableType.Numismatic, loaded.CollectableType);
-            Assert.AreEqual(0, _messageService.ErrorMessages.Count);
+            Assert.IsEmpty(_messageService.ErrorMessages);
         }
 
         [TestMethod]
@@ -157,8 +157,8 @@ namespace PreciousMetalsManager.Tests
 
             _service.AddHolding(holding);
 
-            Assert.IsTrue(holding.Id > 0);
-            Assert.AreEqual(0, _messageService.ErrorMessages.Count);
+            Assert.IsGreaterThan(holding.Id, 0);
+            Assert.IsEmpty(_messageService.ErrorMessages);
         }
 
         [TestMethod]
@@ -169,8 +169,8 @@ namespace PreciousMetalsManager.Tests
             var loaded = _service.LoadHoldings().Single();
 
             Assert.AreEqual(CollectableType.Bullion, loaded.CollectableType);
-            Assert.AreEqual(0, _messageService.ErrorMessages.Count);
-            Assert.AreEqual(0, _messageService.WarningMessages.Count);
+            Assert.IsEmpty(_messageService.ErrorMessages);
+            Assert.IsEmpty(_messageService.WarningMessages);
         }
 
         private static MetalHolding CreateTestHolding()
