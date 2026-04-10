@@ -1,8 +1,8 @@
 # Precious Metals Manager
 
-Precious Metals Manager is a modern WPF desktop application designed for individuals who want to efficiently track and manage their personal holdings of gold, silver, platinum and other precious metals. The application uses SQLite for local data storage, provides an intuitive interface for managing assets, supports multi-language localization (German and English), integrates live market price APIs and offers CSV import/export functionality (simple for later re-import, detailed for use in e.g. Excel). Built with the MVVM pattern and .NET 10, it offers a robust and maintainable solution for managing precious metal portfolios.
+Precious Metals Manager is a modern WPF desktop application for tracking personal holdings in gold, silver, platinum, palladium, and bronze. The application uses SQLite for local data storage, provides an intuitive interface for managing assets, supports multi-langu age localization (German and English), integrates an external market price API and offers CSV import/export functionality for both re-import and spreadsheet use. Built with the MVVM pattern and .NET 10, it offers a robust and maintainable solution for managing metal holdings.
 
-For a complete end-user walkthrough with annotated screenshots, see [USER_GUIDE](USER_GUIDE.md).
+For a complete end-user walkthrough with annotated screenshots, see the [User Guide](USER_GUIDE.md).
 
 ## Technologies Used
 - WPF
@@ -27,7 +27,7 @@ _Dialog for manually updating the current market prices for each metal._
 
 ## Overview
 
-Refer to [USER_GUIDE](USER_GUIDE.md) for the full end-user documentation and to [docs/00-project-overview.md](docs/00-project-overview.md) for the project overview.
+Refer to the [User Guide](USER_GUIDE.md) for the full end-user documentation and to [docs/00-project-overview.md](docs/00-project-overview.md) for the project overview.
 
 ## Important Conventions
 - The highest possible purity for precious metals is considered to be 999.9.
@@ -37,7 +37,7 @@ Refer to [USER_GUIDE](USER_GUIDE.md) for the full end-user documentation and to 
 
 ## Getting Started
 
-Follow these steps to set up and run Precious Metals Portfolio Manager on your machine:
+Follow these steps to set up and run Precious Metals Manager on Windows:
 
 1. **Install prerequisites:**
    - [.NET SDK 10.0 or newer](https://dotnet.microsoft.com/download)
@@ -109,7 +109,7 @@ sequenceDiagram
 
 ## Features, Backlog & Tasks
 
-For the current feature list, backlogs and tasks, see the [GitHub Issues](https://github.com/Moritz-Gluch/PreciousMetalsManager/issues) page. Additional project documentation is available in the [docs](docs) folder.
+For the current feature list, backlog items and follow-up tasks, see the [GitHub Issues](https://github.com/Moritz-Gluch/PreciousMetalsManager/issues) page. Additional project, design and QA documentation is available in the [docs](docs) folder.
 
 ## Build & Automation (Makefile)
 

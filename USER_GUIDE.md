@@ -5,6 +5,7 @@
 - [Precious Metals Manager — User Guide](#precious-metals-manager--user-guide)
   - [Table of Contents](#table-of-contents)
   - [Overview](#overview)
+  - [Getting Started](#getting-started)
   - [Main Window](#main-window)
   - [Managing Holdings](#managing-holdings)
     - [Add a Holding](#add-a-holding)
@@ -29,6 +30,15 @@
 Precious Metals Manager is a desktop application for tracking precious metal holdings, monitoring market prices, and evaluating portfolio value. It currently supports **Gold**, **Silver**, **Platinum**, **Palladium** and **Bronze**.
 
 The application is intended for day-to-day portfolio tracking. Holdings, prices, filters and language settings are designed to be easy to review and update through the user interface.
+
+---
+
+## Getting Started
+
+1. Launch the application.
+2. Market prices are fetched automatically on startup.
+3. Click **Add** to create your first holding.
+4. Use the filters above the table to narrow down visible entries if needed.
 
 ---
 
@@ -98,7 +108,7 @@ Prices are displayed in **€/g** and are used to calculate the *Current Value* 
 
 Prices are refreshed automatically on startup and again every **15 minutes**.
 
-> **Note:** The API provides prices for Gold, Silver, Platinum and Palladium, based on troy-ounce values that are converted automatically using `1 troy ounce = 31.1 g`. **Bronze** prices are not available via the API and must be entered manually through **Edit prices**.
+> **Note:** The API provides prices for Gold, Silver, Platinum and Palladium, based on troy-ounce values that are converted automatically using `1 troy ounce = 31.1 g`. **Bronze** prices are not available via the API and must be entered manually through **Edit prices**. Manually edited prices are applied immediately, but are not persisted across application restarts.
 
 ---
 
@@ -109,9 +119,9 @@ Use the filter bar above the holdings table to narrow down visible entries.
 
 | Filter | Type | Description |
 |---|---|---|
-| <span style="color: red; font-weight: bold;">Metal Type</span> | Dropdown | Show only a specific existing metal or *All*. |
+| <span style="color: red; font-weight: bold;">Metal Type</span> | Dropdown | Filter by a metal type that exists in the current holdings or *All*. |
 | <span style="color: blue; font-weight: bold;">Form/Variant</span> | Text | Free-text search within the form/variant column. |
-| <span style="color: green; font-weight: bold;">Classification</span> | Dropdown | Filter by Bullion, Semi-numismatic, Numismatic or *All*. |
+| <span style="color: green; font-weight: bold;">Classification</span> | Dropdown | Filter by a classification that exists in the current holdings or *All*. |
 | <span style="color: purple; font-weight: bold;">Tax-free only</span> | Checkbox | Show only holdings that have reached the 1-year tax-free threshold. |
 
 The <span style="color: orange; font-weight: bold;">Total Value</span> shown next to the filters always reflects only the currently visible, filtered holdings.
@@ -167,7 +177,7 @@ Both export options include **only the currently visible (filtered) holdings**, 
 - Generates a semicolon-separated CSV **without** a header row.
 - Uses a technical format intended for re-import.
 - Uses enum indices and ISO date format `yyyy-MM-dd`.
-- Default filename: `Export_dd-MM-yyyy.csv`.
+- Default filename pattern: localized export label + date, for example `Export_10-04-2026.csv`.
 <img src="docs/assets/PMM_ExportSimplyfied.png" alt="Main Window" style="border:3px solid #000000; border-radius:6px; max-width:100%;">
 
 ### Detailed Export
@@ -176,7 +186,7 @@ Both export options include **only the currently visible (filtered) holdings**, 
 - Uses human-readable labels in the current UI language.
 - Dates are formatted as `dd.MM.yyyy`.
 - Prices are formatted with two decimal places.
-- Default filename: `Export_dd-MM-yyyy_Detailed.csv`.
+- Default filename pattern: localized export label + date + localized detailed suffix, for example `Export_10-04-2026_Detailed.csv`.
 <img src="docs/assets/PMM_ExportDetailed.png" alt="Main Window" style="border:3px solid #000000; border-radius:6px; max-width:100%;">
 
 > **Tip:** Apply filters before exporting if only part of the portfolio should be included.
@@ -216,9 +226,9 @@ All labels, column headers, and messages update immediately. The selected langua
 
 All holding data is stored locally in a SQLite database named `holdings.db`.
 
-Changes are saved automatically when holdings are added, edited, deleted, imported or updated through the application.
+Changes to holdings are saved automatically when entries are added, edited, deleted or imported.
 
-The language preference is stored separately under:
+The language preference is stored separately in:
 
 `%AppData%\PreciousMetalsManager\`
 
