@@ -62,7 +62,7 @@ A language button in the top-right corner toggles between English and German.
 
 1. Click <span style="color: red; font-weight: bold;">Add</span>.
    <img src="docs/assets/PMM_MainWindow_AddBtn.png" alt="Main Window" style="border:1px solid #888; border-radius:6px; max-width:100%;">
-2. Fill in the holding details:
+2. Fill in the holding details: <br>
 <img src="docs/assets/PMM_AddWindow_Colourized.png" alt="Main Window" style="border:1px solid #888; border-radius:6px; max-width:100%;"> <br>
    - **Metal Type** — Gold, Silver, Platinum, Palladium or Bronze.
    - **Form / Variant** — Free text, for example `1 oz Maple Leaf` or `10g Bar`.
@@ -81,7 +81,7 @@ A language button in the top-right corner toggles between English and German.
    <img src="docs/assets/PMM_MainWindow_HoldingSelected.png" alt="Main Window" style="border:3px solid #000000; border-radius:6px; max-width:100%;">
 2. Click <span style="color: red; font-weight: bold;">Edit</span>.
    <img src="docs/assets/PMM_MainWindow_HoldingSelected _Edit.png" alt="Main Window" style="border:3px solid #000000; border-radius:6px; max-width:100%;">
-3. Update the fields.
+3. Update the fields. <br>
    <img src="docs/assets/PMM_EditWindow_Save.png" alt="Main Window" style="border:1px solid #888; border-radius:6px; max-width:100%;"> <br>
 4. Click <span style="color: red; font-weight: bold;">Save</span>.
 
@@ -91,7 +91,7 @@ A language button in the top-right corner toggles between English and German.
    <img src="docs/assets/PMM_MainWindow_MultipleHoldingsSelected.png" alt="Main Window" style="border:3px solid #000000; border-radius:6px; max-width:100%;">
 2. Click <span style="color: red; font-weight: bold;">Delete</span>.
    <img src="docs/assets/PMM_MainWindow_MultipleHoldingsSelecte_Delete.png" alt="Main Window" style="border:3px solid #000000; border-radius:6px; max-width:100%;">
-3. Confirm the deletion in the dialog.
+3. Confirm the deletion in the dialog. <br>
    <img src="docs/assets/PMM_DeleteDialog.png" alt="Main Window" style="border:1px solid #888; border-radius:6px; max-width:100%;">
 
 ---
@@ -103,8 +103,8 @@ Prices are displayed in **€/g** and are used to calculate the *Current Value* 
 
 
 - <span style="color: red; font-weight: bold;">Refresh prices</span> — Fetches the latest market prices from an online API.
-- <span style="color: blue; font-weight: bold;">Edit prices</span> — Opens a dialog to manually set the price per gram for each metal type.
-<img src="docs/assets/PMM_EditPriceWindow.png" alt="Main Window" style="border:1px solid #888; border-radius:6px; max-width:100%;">
+- <span style="color: blue; font-weight: bold;">Edit prices</span> — Opens a dialog to manually set the price per gram for each metal type. <br>
+  <img src="docs/assets/PMM_EditPriceWindow.png" alt="Main Window" style="border:1px solid #888; border-radius:6px; max-width:100%;">
 
 Prices are refreshed automatically on startup and again every **15 minutes**.
 
@@ -198,7 +198,7 @@ Both export options include **only the currently visible (filtered) holdings**, 
 1. Click <span style="color: red; font-weight: bold;">Import</span>.
    <img src="docs/assets/PMM_MainWindow_ImportBtn_Coloured.png" alt="Main Window" style="border:3px solid #000000; border-radius:6px; max-width:100%;">
 2. Select a `.csv` file in the **Simple Export** format.
-3. If holdings already exist, choose whether to:
+3. If holdings already exist, choose whether to: <br>
    <img src="docs/assets/PMM_ImportOptions_Colourized.png" alt="Main Window" style="border:0px solid #888; border-radius:6px; max-width:100%;">
    - <span style="color: red; font-weight: bold;">Delete all existing holdings</span> before import, or
    - <span style="color: blue; font-weight: bold;">Append</span> the imported holdings to the existing data.
