@@ -103,11 +103,9 @@ A language button in the top-right corner toggles between English and German.
 Prices are displayed in **€/g** and are used to calculate the *Current Value* and *Total Value* columns.
 <img src="docs/assets/PMM_MainWindow_MarkedPrices_Colourized.png" alt="Main Window" style="border:1px solid #888; border-radius:6px; max-width:100%;">
 
-| Action | Description |
-|---|---|
-| **Refresh prices** | Fetches the latest market prices from an online API. |
-| **Edit prices** | Opens a dialog to manually set the price per gram for each metal type. |
 
+- <span style="color: red; font-weight: bold;">Refresh prices</span> — Fetches the latest market prices from an online API.
+- <span style="color: blue; font-weight: bold;">Edit prices</span> — Opens a dialog to manually set the price per gram for each metal type.
 <img src="docs/assets/PMM_EditPriceWindow.png" alt="Main Window" style="border:1px solid #888; border-radius:6px; max-width:100%;">
 
 Prices are refreshed automatically on startup and again every **15 minutes**.
@@ -199,13 +197,13 @@ Both export options include **only the currently visible (filtered) holdings**, 
 
 ## Import
 
-1. Click **Import**.
+1. Click <span style="color: red; font-weight: bold;">Import</span>.
    <img src="docs/assets/PMM_MainWindow_ImportBtn_Coloured.png" alt="Main Window" style="border:3px solid #000000; border-radius:6px; max-width:100%;">
 2. Select a `.csv` file in the **Simple Export** format.
 3. If holdings already exist, choose whether to:
    <img src="docs/assets/PMM_ImportOptions_Colourized.png" alt="Main Window" style="border:0px solid #888; border-radius:6px; max-width:100%;">
-   - **Delete all existing holdings** before import, or
-   - **Append** the imported holdings to the existing data.
+   - <span style="color: red; font-weight: bold;">Delete all existing holdings</span> before import, or
+   - <span style="color: blue; font-weight: bold;">Append</span> the imported holdings to the existing data.
 
 > **Important:** Import is only intended for files created by this application through **Simple Export**. Detailed exports and externally created CSV files are not supported.
 
