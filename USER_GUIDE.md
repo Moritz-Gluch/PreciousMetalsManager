@@ -66,7 +66,7 @@ A language button in the top-right corner toggles between English and German.
 <img src="docs/assets/PMM_AddWindow_Colourized.png" alt="Main Window" style="border:1px solid #888; border-radius:6px; max-width:100%;"> <br>
    - **Metal Type** — Gold, Silver, Platinum, Palladium or Bronze.
    - **Form / Variant** — Free text, for example `1 oz Maple Leaf` or `10g Bar`.
-   - **Purity (‰)** — Select a common value (`999.9`, `925`, `900`, `835`, `800`, `750`, `625`) or enter a custom value between `0.1` and `999.9`.
+   - **Purity (‰)** — Select a common value (`999.9`, `925.0`, `900.0`, `835.0`, `800.0`, `750.0`, `625.0`) or enter a custom value between `0.1` and `999.9`.
    - **Weight (g)** — Weight per piece in grams.
    - **Quantity** — Number of identical pieces.
    - **Purchase Price (€)** — Purchase price in EUR.
@@ -140,7 +140,7 @@ The *Tax-Free* column shows:
 - **Yes** — The holding has reached the tax-free threshold.
 - **X days** — The number of days remaining until the holding becomes tax-free.
 
-The column is sortable. Sorting ascending brings holdings closest to becoming tax-free to the top.
+The column is sortable. Sorting ascending shows already tax-free holdings first, followed by holdings with the fewest remaining days.
 
 ---
 

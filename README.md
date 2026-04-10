@@ -1,6 +1,6 @@
 # Precious Metals Manager
 
-Precious Metals Manager is a modern WPF desktop application for tracking personal holdings in gold, silver, platinum, palladium, and bronze. The application uses SQLite for local data storage, provides an intuitive interface for managing assets, supports multi-langu age localization (German and English), integrates an external market price API and offers CSV import/export functionality for both re-import and spreadsheet use. Built with the MVVM pattern and .NET 10, it offers a robust and maintainable solution for managing metal holdings.
+Precious Metals Manager is a modern WPF desktop application for tracking personal holdings in gold, silver, platinum, palladium, and bronze. The application uses SQLite for local data storage, provides an intuitive interface for managing assets, supports multi-language localization (German and English), integrates an external market price API and offers CSV import/export functionality for both re-import and spreadsheet use. Built with the MVVM pattern and .NET 10, it offers a robust and maintainable solution for managing metal holdings.
 
 For a complete end-user walkthrough with annotated screenshots, see the [User Guide](USER_GUIDE.md).
 
@@ -122,9 +122,9 @@ A Makefile is included to automate building, testing, running, cleaning and form
 ### Usage
 Open a terminal in the project root and run:
 
-- `make build`   Build the project in Release mode
-- `make run`    Run the WPF application
-- `make test`    Run all unit tests
-- `make clean`   Clean build artifacts
-- `make format`  Format code using dotnet-format
-- `make restore`  Restore NuGet packages
+- `make build`    Build the project in Release mode
+- `make run`      Run the WPF application
+- `make test`     Run all unit tests after a successful build
+- `make clean`    Clean build artifacts
+- `make format`     Format code using dotnet-format
+- `make restore`   Restore NuGet packages
