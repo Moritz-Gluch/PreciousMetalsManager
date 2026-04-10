@@ -5,7 +5,6 @@
 - [Precious Metals Manager — User Guide](#precious-metals-manager--user-guide)
   - [Table of Contents](#table-of-contents)
   - [Overview](#overview)
-  - [Getting Started](#getting-started)
   - [Main Window](#main-window)
   - [Managing Holdings](#managing-holdings)
     - [Add a Holding](#add-a-holding)
@@ -30,17 +29,6 @@
 Precious Metals Manager is a desktop application for tracking precious metal holdings, monitoring market prices, and evaluating portfolio value. It currently supports **Gold**, **Silver**, **Platinum**, **Palladium** and **Bronze**.
 
 The application is intended for day-to-day portfolio tracking. Holdings, prices, filters and language settings are designed to be easy to review and update through the user interface.
-
----
-
-## Getting Started
-
-1. Launch the application.
-2. Market prices are fetched automatically on startup.
-3. Click **Add** to create your first holding.
-4. Use the filters above the table to narrow down visible entries if needed.
-
-All changes are persisted automatically. There is no manual save step.
 
 ---
 
